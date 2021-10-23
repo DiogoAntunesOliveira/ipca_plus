@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "209455028652",
+    "project_id": "ipcaplus",
+    "storage_bucket": "ipcaplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209455028652:android:ce5340decf9025e37f4209",
+        "android_client_info": {
+          "package_name": "com.singularity.ipcaplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209455028652-vi346q0p0kihhkmvevqti2d7undo56t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6ywAtHtmkrIMHtgjoS0ciDuw8nfEs0to"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209455028652-vi346q0p0kihhkmvevqti2d7undo56t5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
