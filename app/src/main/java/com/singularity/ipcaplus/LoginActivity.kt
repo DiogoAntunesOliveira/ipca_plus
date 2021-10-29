@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
                         val user = auth.currentUser
                         updateUI(user, email)
                         // Sign in success, update UI with the signed-in user's information
-                        startActivity(Intent(this@LoginActivity, ChatActivity::class.java ))
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java ))
                     } else {
                         Toast.makeText(baseContext, "Authentication failed.",
                             Toast.LENGTH_SHORT).show()
