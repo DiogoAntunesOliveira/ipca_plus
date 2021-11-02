@@ -58,9 +58,14 @@ class MainActivity : AppCompatActivity() {
             db.collection("chat")
                 .add(chat.toHash())
                 .addOnSuccessListener { documentReference ->
-                    db.collection("chat").document("${documentReference.id}").collection("message")
+                    db.collection("chat")
+                        .document("${documentReference.id}")
+                        .collection("message")
                         .add(message.toHash())
-                    db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat").document("${documentReference.id}")
+                    db.collection("profile")
+                        .document("${Firebase.auth.currentUser!!.uid}")
+                        .collection("chat")
+                        .document("${documentReference.id}")
                         .set(chat)
 
                 }
@@ -70,7 +75,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
+        db.collection("profile")
+            .document("${Firebase.auth.currentUser!!.uid}")
+            .collection("chat")
             .addSnapshotListener { documents, e ->
 
                 documents?.let {
