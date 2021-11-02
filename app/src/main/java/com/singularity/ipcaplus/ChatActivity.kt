@@ -57,6 +57,7 @@ class ChatActivity : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
+            binding.editTextMessage.text.clear()
         }
 
         db.collection("chat").document("$chat_id").collection("message")

@@ -13,15 +13,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.Chat
+import com.singularity.ipcaplus.models.Message
+import kotlin.io.path.Path
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
+    var user_groups = arrayListOf<String>()
 
     private lateinit var binding: ActivityMainBinding
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -35,11 +41,41 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db.collection("chat")
+        // Criação de Chat
+        binding.fabAddChat.setOnClickListener {
+            val chat = Chat(
+                "Chat ${Random.nextInt(0, 100)}"
+
+            )
+            val message = Message(
+                Firebase.auth.currentUser!!.uid,
+                "Teste",
+                "",
+                "",
+                ""
+
+            )
+            db.collection("chat")
+                .add(chat.toHash())
+                .addOnSuccessListener { documentReference ->
+                    db.collection("chat").document("${documentReference.id}").collection("message")
+                        .add(message.toHash())
+                    db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat").document("${documentReference.id}")
+                        .set(chat)
+
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error adding document", e)
+                }
+
+        }
+
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
             .addSnapshotListener { documents, e ->
 
                 documents?.let {
                     chats.clear()
+                    chatIds.clear()
                     for (document in it) {
                         Log.d(ContentValues.TAG, "${document.id} => ${document.data}")
                         val chat = Chat.fromHash(document)
@@ -74,12 +110,12 @@ class MainActivity : AppCompatActivity() {
 
 
             holder.v.apply {
-
                 val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
                 val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
-                textViewMessage.text = chats[position].chat_name
-                imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
 
+
+                textViewMessage.text = chats[position].name
+                imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
             }
             holder.v.setOnClickListener {
                 val intent = Intent(this@MainActivity, ChatActivity::class.java)
