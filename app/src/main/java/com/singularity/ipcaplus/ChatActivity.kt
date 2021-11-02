@@ -39,27 +39,28 @@ class ChatActivity : AppCompatActivity() {
 
         val chat_id = intent.getStringExtra("chat_id")
 
-        binding.fabSend.setOnClickListener {
-            val message = Message(
-                Firebase.auth.currentUser!!.uid,
-                binding.editTextMessage.text.toString(),
-                "",
-                "",
-                ""
+            binding.fabSend.setOnClickListener {
+                if(!binding.editTextMessage.text.isNullOrBlank()) {
+                    val message = Message(
+                        Firebase.auth.currentUser!!.uid,
+                        binding.editTextMessage.text.toString(),
+                        "",
+                        "",
+                        ""
 
-            )
-            db.collection("chat").document("$chat_id").collection("message")
-                .add(message.toHash())
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                    )
+                    db.collection("chat").document("$chat_id").collection("message")
+                        .add(message.toHash())
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
 
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding document", e)
+                        }
+                    binding.editTextMessage.text.clear()
                 }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                }
-            binding.editTextMessage.text.clear()
         }
-
         db.collection("chat").document("$chat_id").collection("message")
             .addSnapshotListener { documents, e ->
 
