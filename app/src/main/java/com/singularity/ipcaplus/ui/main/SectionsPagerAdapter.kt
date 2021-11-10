@@ -9,6 +9,7 @@ import com.singularity.ipcaplus.R
 private val TAB_TITLES = arrayOf(
     R.string.chats,
     R.string.oficiais
+    //teste commit
 )
 
 /**
