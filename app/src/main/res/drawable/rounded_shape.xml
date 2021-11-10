@@ -13,8 +13,8 @@
 
     <!-- Control the width and height of the shape -->
     <size
-        android:width="200dp"
-        android:height="70dp"/>
+        android:width="0dp"
+        android:height="20dp"/>
 
     <!-- Control the radius of each corners -->
     <corners

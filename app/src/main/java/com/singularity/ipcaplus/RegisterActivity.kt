@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.cryptography.decryptWithAES
+import com.singularity.ipcaplus.cryptography.encrypt
 import com.singularity.ipcaplus.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
@@ -26,9 +28,11 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+
         binding.buttonRegister.setOnClickListener {
             val email : String = binding.editTextEmail.text.toString()
             val password : String = binding.editTextTextPassword.text.toString()
+
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
