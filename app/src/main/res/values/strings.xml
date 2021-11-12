@@ -17,4 +17,8 @@
     <string name="oficiais">Oficiais</string>
     <string name="chats">Chats</string>
     <string name="search_bar_icon">search_bar_icon</string>
+    <string name="horario">Horário</string>
+    <string name="calendario">Calendário</string>
+    <string name="convidar_amigos">Convidar amigos</string>
+    <string name="noticias">Notícias</string>
 </resources>
