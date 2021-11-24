@@ -25,10 +25,11 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="56dp"
         android:layout_marginBottom="39dp"
         android:fontFamily="@font/poppins_semibold"
@@ -36,11 +37,23 @@
         android:text="Profile Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.411" />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp"
+        android:text="example@singularity.com"
+        android:textColor="@color/green_200"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

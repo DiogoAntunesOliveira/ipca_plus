@@ -22,4 +22,9 @@
     <style name="Theme.IPCA.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.IPCA.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="NewFontStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
 </resources>

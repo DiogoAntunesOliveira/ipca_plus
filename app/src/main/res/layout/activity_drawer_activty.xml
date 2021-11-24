@@ -15,15 +15,41 @@
       android:layout_height="match_parent" />
 
 
-  <com.google.android.material.navigation.NavigationView
-      android:id="@+id/nav_view"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_gravity="start"
-      android:fitsSystemWindows="true"
-      app:headerLayout="@layout/nav_header_main"
-      app:menu="@menu/activity_drawer">
-  </com.google.android.material.navigation.NavigationView>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/round_corner_drawer"
+        android:fitsSystemWindows="true"
+        app:itemIconPadding="30dp"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_drawer">
 
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:orientation="horizontal"
+          android:padding="16dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+          android:src="@drawable/ic_logout"/>
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="start"
+            android:text="Log out"
+            android:textColor="@color/black"/>
+      </LinearLayout>
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
