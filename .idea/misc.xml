@@ -15,12 +15,14 @@
         <entry key="app/src/main/res/drawable/ic_frame_4.xml" value="0.3671875" />
         <entry key="app/src/main/res/drawable/ic_menu_camera.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.36153846153846153" />
+        <entry key="app/src/main/res/drawable/pop_up_round_corners.xml" value="0.34814814814814815" />
         <entry key="app/src/main/res/drawable/rounded_shape.xml" value="0.20208333333333334" />
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.36153846153846153" />
         <entry key="app/src/main/res/layout/activity_drawer.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_drawer_activty.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/activity_tab.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_welcome.xml" value="0.32065217391304346" />
         <entry key="app/src/main/res/layout/app_bar_drawer.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/content_drawer.xml" value="0.35104166666666664" />
