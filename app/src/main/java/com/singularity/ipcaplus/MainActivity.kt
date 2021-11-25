@@ -100,8 +100,8 @@ class MainActivity : AppCompatActivity() {
         mAdapter = ChatAdapter()
         binding.recyclerViewGroups.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewGroups.adapter = mAdapter
-    }
 
+    }
 
     inner class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -135,4 +135,5 @@ class MainActivity : AppCompatActivity() {
             return chats.size
         }
     }
+
 }
