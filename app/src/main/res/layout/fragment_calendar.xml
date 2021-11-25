@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".calendar.CalendarFragment">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
@@ -21,33 +20,79 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-            <com.github.sundeepk.compactcalendarview.CompactCalendarView
-                android:id="@+id/compactcalendar_view"
-                android:layout_width="353dp"
-                android:layout_height="360dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="50dp"
-                android:paddingRight="10dp"
-                android:soundEffectsEnabled="true"
-                android:padding="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                app:compactCalendarBackgroundColor="@color/white"
-                app:compactCalendarCurrentDayBackgroundColor="@color/white"
-                app:compactCalendarCurrentDayTextColor="@color/green_200"
-                app:compactCalendarCurrentSelectedDayBackgroundColor="@color/green_200"
-                app:compactCalendarCurrentSelectedDayTextColor="#FFFFFF"
-                app:compactCalendarMultiEventIndicatorColor="@color/green_200"
-                app:compactCalendarOtherMonthDaysTextColor="#FFFFFF"
-                app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
-                app:compactCalendarTargetHeight="340dp"
-                app:compactCalendarTextColor="@color/black"
-                app:compactCalendarTextSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/compactcalendar_view"
+            android:layout_width="353dp"
+            android:layout_height="360dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="50dp"
+            android:paddingRight="10dp"
+            android:soundEffectsEnabled="true"
+            app:compactCalendarBackgroundColor="@color/white"
+            app:compactCalendarCurrentDayBackgroundColor="@color/white"
+            app:compactCalendarCurrentDayTextColor="@color/green_200"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/green_200"
+            app:compactCalendarCurrentSelectedDayTextColor="#FFFFFF"
+            app:compactCalendarMultiEventIndicatorColor="@color/green_200"
+            app:compactCalendarOtherMonthDaysTextColor="#FFFFFF"
+            app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
+            app:compactCalendarTargetHeight="340dp"
+            app:compactCalendarTextColor="@color/black"
+            app:compactCalendarTextSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+        <ImageView
+            android:id="@+id/green_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:text="November"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/green_circle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleViewEvents"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
