@@ -13,17 +13,22 @@
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/round_corner_drawer.xml" value="0.33" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/rounded_shape.xml" value="0.3828125" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.5" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_tab.xml" value="0.23596014492753623" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.28306159420289856" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.28306159420289856" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_blank.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_blank_2.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_gallery.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_home.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.33" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.28306159420289856" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.14010416666666667" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_tab.xml" value="0.14010416666666667" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_calendar.xml" value="0.264" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_chats.xml" value="0.14010416666666667" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_slideshow.xml" value="0.14010416666666667" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.3671875" />
         <entry key="app/src/main/res/drawable/ic_baseline_dehaze_24.xml" value="0.3671875" />
         <entry key="app/src/main/res/drawable/ic_frame_4.xml" value="0.3671875" />

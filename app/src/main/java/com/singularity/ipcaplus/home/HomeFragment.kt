@@ -1,15 +1,12 @@
-package ipca.example.drawerexample.ui.home
+package com.singularity.ipcaplus.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.singularity.ipcaplus.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -43,8 +40,9 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter = collectionPagerAdapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 
-        fragments.add(BlankFragment())
-        fragments.add(Blank2Fragment())
+        fragments = arrayListOf()
+        fragments.add(ChatsFragment())
+        fragments.add(OfficialChatsFragment())
 
         collectionPagerAdapter.notifyDataSetChanged()
     }

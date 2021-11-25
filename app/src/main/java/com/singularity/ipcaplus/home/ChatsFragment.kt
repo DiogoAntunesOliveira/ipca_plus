@@ -1,4 +1,4 @@
-package ipca.example.drawerexample.ui.home
+package com.singularity.ipcaplus.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.singularity.ipcaplus.R
 
 
-class BlankFragment : Fragment() {
+class ChatsFragment : Fragment() {
 
 
     override fun onCreateView(
@@ -16,7 +16,7 @@ class BlankFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+        return inflater.inflate(R.layout.fragment_chats, container, false)
     }
 
 

@@ -9,19 +9,19 @@
             android:icon="@drawable/ic_homedrawer_icons"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/Schedule"
+            android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_folderdrawer_icons"
             android:title="@string/horario" />
         <item
-            android:id="@+id/Calendar"
+            android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_calendardrawer_icons"
             android:title="@string/calendario" />
         <item
-            android:id="@+id/Invite"
+            android:id="@+id/nav_invite"
             android:icon="@drawable/ic_add_userdrawer_icons"
             android:title="@string/convidar_amigos" />
         <item
-            android:id="@+id/News"
+            android:id="@+id/nav_news"
             android:icon="@drawable/ic_documentdrawer_icons"
             android:title="@string/noticias" />
         <item
