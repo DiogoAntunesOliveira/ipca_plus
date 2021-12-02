@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_photo.xml" value="0.2953703703703704" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/circle.xml" value="0.3101851851851852" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/rounded_shape.xml" value="0.3101851851851852" />
+        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/user_message_photo.xml" value="0.2953703703703704" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.28940217391304346" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.2957427536231884" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
@@ -13,6 +15,7 @@
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/fragment_official_chats.xml" value="0.20520833333333333" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.2554347826086957" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message.xml" value="0.28940217391304346" />
+        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2694746376811594" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.3671875" />
         <entry key="app/src/main/res/drawable/ic_baseline_dehaze_24.xml" value="0.3671875" />
         <entry key="app/src/main/res/drawable/ic_frame_4.xml" value="0.3671875" />

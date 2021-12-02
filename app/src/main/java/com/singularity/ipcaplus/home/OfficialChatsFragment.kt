@@ -111,8 +111,6 @@ class OfficialChatsFragment : Fragment() {
 
 
                 textViewMessage.text = chats[position].name
-                val drawable : Drawable? = AppCompatResources.getDrawable(context, R.drawable.common_full_open_on_phone)
-                DrawableCompat.setTint(drawable!!, Color.GREEN)
                 imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
             }
             holder.v.setOnClickListener {
