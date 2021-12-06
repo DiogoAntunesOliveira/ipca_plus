@@ -1,7 +1,9 @@
 package com.singularity.ipcaplus
 
+import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
 import androidx.drawerlayout.widget.DrawerLayout
@@ -10,15 +12,25 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
+import com.singularity.ipcaplus.databinding.ActivityMainBinding
+import com.singularity.ipcaplus.models.Chat
+import com.singularity.ipcaplus.models.Message
 
 
 class DrawerActivty : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDrawerActivtyBinding
+
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +44,7 @@ class DrawerActivty : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-        binding.appBarMain.fab.setOnClickListener { view ->
+        binding.appBarMain.fabAddChat.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
@@ -46,6 +58,40 @@ class DrawerActivty : AppCompatActivity() {
                 R.id.nav_home
             ), drawerLayout
         )
+
+        // Criação de Chat
+        binding.appBarMain.fabAddChat.setOnClickListener {
+            val chat = Chat(
+                "Encripted"
+
+            )
+            val message = Message(
+                Firebase.auth.currentUser!!.uid,
+                "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
+                "2021-11-15",
+                "11:37",
+                ""
+
+            )
+            db.collection("chat")
+                .add(chat.toHash())
+                .addOnSuccessListener { documentReference ->
+                    db.collection("chat")
+                        .document("${documentReference.id}")
+                        .collection("message")
+                        .add(message.toHash())
+                    db.collection("profile")
+                        .document("${Firebase.auth.currentUser!!.uid}")
+                        .collection("chat")
+                        .document("${documentReference.id}")
+                        .set(chat)
+
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error adding document", e)
+                }
+
+        }
         // Passing each fragment ID as a set of Ids
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

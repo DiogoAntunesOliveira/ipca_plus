@@ -44,14 +44,14 @@ class MainActivity : AppCompatActivity() {
         // Criação de Chat
         binding.fabAddChat.setOnClickListener {
             val chat = Chat(
-                "Chat ${Random.nextInt(0, 100)}"
+                "Encripted"
 
             )
             val message = Message(
                 Firebase.auth.currentUser!!.uid,
-                "Teste",
-                "",
-                "",
+                "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
+                "2021-11-15",
+                "11:37",
                 ""
 
             )
