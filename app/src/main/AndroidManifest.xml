@@ -30,7 +30,8 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/Theme.IPCA.NoActionBar">
         </activity>
         <activity
             android:name=".WelcomeActivity"
