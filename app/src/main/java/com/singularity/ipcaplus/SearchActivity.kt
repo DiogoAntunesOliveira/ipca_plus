@@ -12,7 +12,7 @@ class SearchActivity: AppCompatActivity() {
 
 
         val search = findViewById<SearchView>(R.id.searchView)
-        val searchRecycler = findViewById<RecyclerView>(R.id.searchRecycler)
+        //val searchRecycler = findViewById<RecyclerView>(R.id.searchRecycler)
 
 
         search.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
