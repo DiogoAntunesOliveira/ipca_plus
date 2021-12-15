@@ -23,19 +23,19 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="155dp"
+        android:layout_marginTop="136dp"
         android:background="@drawable/pop_up_round_corners"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_lg_ipca"
             app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_lg_ipca"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editTextEmail"
@@ -67,13 +67,17 @@
 
         <Button
             android:id="@+id/buttonLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="241dp"
+            android:layout_height="46dp"
             android:layout_marginStart="161dp"
             android:layout_marginTop="88dp"
             android:layout_marginEnd="162dp"
             android:layout_marginBottom="108dp"
+            android:background="@drawable/button_register"
+            android:backgroundTint="@color/green_200"
             android:text="Login"
+            android:translationZ="10dp"
+            app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
