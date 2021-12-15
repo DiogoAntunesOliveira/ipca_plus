@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green_200">#037B4A</color>
     <color name="green_100">#037B4A</color>
+    <color name="chat_message_color">#E9E9E9</color>
 </resources>
