@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
 
         android:background="@drawable/button_filtro"
-        android:drawableLeft="@drawable/ic_foto_24"
+        android:drawableLeft="@drawable/ic_gif_24"
 
         android:fontFamily="@font/roboto_regular"
 
@@ -65,7 +65,7 @@
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
 
-        tools:layout_editor_absoluteX="165dp"
+        tools:layout_editor_absoluteX="181dp"
         tools:layout_editor_absoluteY="93dp" />
 
     <Button
@@ -85,6 +85,60 @@
 
         tools:layout_editor_absoluteX="292dp"
         tools:layout_editor_absoluteY="93dp" />
+
+    <Button
+        android:id="@+id/btn_gifs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_gif_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="GIFs"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="15dp"
+        tools:layout_editor_absoluteY="153dp" />
+
+    <Button
+        android:id="@+id/btn_documentos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_paper_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Documentos"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="153dp" />
+
+    <Button
+        android:id="@+id/btn_ligacoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_swap_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Ligações"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="280dp"
+        tools:layout_editor_absoluteY="153dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
