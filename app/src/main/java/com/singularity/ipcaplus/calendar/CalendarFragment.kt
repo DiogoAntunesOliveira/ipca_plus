@@ -1,23 +1,31 @@
 package com.singularity.ipcaplus.calendar
 
+import android.content.ContentValues
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.Utilis
 import com.singularity.ipcaplus.databinding.FragmentCalendarBinding
 import com.singularity.ipcaplus.models.Event
 import com.singularity.ipcaplus.models.Message
 
 class CalendarFragment : Fragment() {
 
+    val db = Firebase.firestore
     var events = arrayListOf<Event>()
     private var eventAdapter: RecyclerView.Adapter<*>? = null
     private var eventLayoutManager: LinearLayoutManager? = null
@@ -30,6 +38,7 @@ class CalendarFragment : Fragment() {
     /*
         This function create the view
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,11 +49,28 @@ class CalendarFragment : Fragment() {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        events.add(Event())
-        events.add(Event())
-        events.add(Event())
-        events.add(Event())
+        // Get Month
+        binding.monthTitle.text = Utilis.getMonthById(Utilis.getCurrentMonthId())
+        // Get Year
 
+        // Set the calendar to this date
+
+        // Get This Month Events <- all months
+        db.collection("event")
+            .addSnapshotListener { documents, e ->
+
+                documents?.let {
+                    events.clear()
+                    for (document in it) {
+                        val event = Event.fromHash(document)
+                        events.add(event)
+                    }
+                    eventAdapter?.notifyDataSetChanged()
+                }
+
+            }
+
+        // Event List
         eventLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         binding.recycleViewEvents.layoutManager = eventLayoutManager
         eventAdapter = EventAdapter()
@@ -80,8 +106,17 @@ class CalendarFragment : Fragment() {
 
             holder.v.apply {
 
-                //val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
-                //textViewMessage.text = events[position].name
+                // Get data
+                val textViewDay = findViewById<TextView>(R.id.day_textview)
+                val textViewName = findViewById<TextView>(R.id.name_textview)
+                val textViewDesc = findViewById<TextView>(R.id.desc_textview)
+                val textViewHour = findViewById<TextView>(R.id.hour_textview)
+
+                // Set data
+                textViewDay.text = events[position].day
+                textViewName.text = events[position].name
+                textViewDesc.text = events[position].desc
+                textViewHour.text = events[position].hour
 
             }
         }

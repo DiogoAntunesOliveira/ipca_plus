@@ -6,6 +6,7 @@ class Event {
     var id : String? =  null
     var name : String = ""
     var desc : String = ""
+    var month: String = ""
     var day : String = ""
     var hour : String = ""
 
@@ -16,11 +17,13 @@ class Event {
     constructor(
         name : String,
         desc : String,
+        month : String,
         day : String,
         hour : String,
     ) {
         this.name = name
         this.desc = desc
+        this.month = month
         this.day = day
         this.hour = hour
     }
@@ -32,11 +35,15 @@ class Event {
     }
 
     companion object {
-        fun fromHash(hashMap: QueryDocumentSnapshot) : Chat {
-            val chat = Chat(
-                hashMap["name"] as String
+        fun fromHash(hashMap: QueryDocumentSnapshot) : Event {
+            val event = Event(
+                hashMap["name"] as String,
+                hashMap["desc"] as String,
+                hashMap["month"] as String,
+                hashMap["day"] as String,
+                hashMap["hour"] as String
             )
-            return chat
+            return event
         }
     }
 }
