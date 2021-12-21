@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.singularity.ipcaplus" >
+    package="com.singularity.ipcaplus">
 
     <application
         android:allowBackup="true"
@@ -8,20 +8,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IPCA" >
+        android:theme="@style/Theme.IPCA">
+        <activity
+            android:name=".calendar.AddEventActivity"
+            android:exported="false" />
         <activity
             android:name=".DrawerActivty"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.IPCA.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
             android:name=".TabActivity"
             android:exported="true"
             android:label="@string/title_activity_tab"
-            android:theme="@style/Theme.IPCA.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
             android:name=".ChatActivity"
             android:exported="true" />
@@ -31,8 +31,7 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.IPCA.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
             android:name=".WelcomeActivity"
             android:exported="true"
@@ -54,4 +53,3 @@
     </application>
 
 </manifest>
-

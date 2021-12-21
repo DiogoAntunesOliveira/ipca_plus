@@ -2,24 +2,50 @@ package com.singularity.ipcaplus
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 import java.util.regex.Pattern
 
 object  Utilis {
 
     /*
         This function return the current month id
-        @month = month id
      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentMonthId(): Int {
 
-        // Variables
         val c = LocalDate.now()
-
         val strArray = Pattern.compile("-").split(c.toString())
 
         return strArray[1].toInt()
+    }
+
+    /*
+        This function return the current year id
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentYear(): String {
+
+        val c = LocalDate.now()
+        val strArray = Pattern.compile("-").split(c.toString())
+
+        return strArray[0]
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getYearByCalendarId(id: Int): Int {
+
+        var count = id
+        var result = 2021 - 121
+
+        while (count > 0) {
+            count -= 1
+            result ++
+        }
+
+        return result
     }
 
     /*
@@ -43,4 +69,84 @@ object  Utilis {
             else -> "None"
         }
     }
+
+
+    fun getDate(milliSeconds: Long, dateFormat: String?): String {
+        // Create a DateFormatter object for displaying date in specified format.
+        val formatter = SimpleDateFormat(dateFormat)
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSeconds
+        return formatter.format(calendar.time)
+    }
+
+
+    /*
+        This function split the date and return only the day
+        @date = default date
+     */
+    fun getDay(dateTime: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("-").split(dateTime)
+        val strArray2 = Pattern.compile("T").split(strArray[2])
+
+        return strArray2[0]
+    }
+
+
+    /*
+        This function split the date and return only the month in text
+        @date = default date
+     */
+    fun getMonth(dateTime: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("-").split(dateTime)
+
+        return strArray[1].toString()
+    }
+
+
+    /*
+        This function split the date and return only the year in text
+        @date = default date
+     */
+    fun getYear(dateTime: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("-").split(dateTime)
+
+        return strArray[0].toString()
+    }
+
+
+    /*
+        This function split the date and return only the Hours in text
+        @date = default date
+     */
+    fun getHours(dateTime: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("T").split(dateTime)
+        val strArray2 = Pattern.compile(":").split(strArray[1])
+
+        return strArray2[0].toString()
+    }
+
+
+    /*
+        This function split the date and return only the Minutes in text
+        @date = default date
+     */
+    fun getMinutes(dateTime: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("T").split(dateTime)
+        val strArray2 = Pattern.compile(":").split(strArray[1])
+
+        return strArray2[1].toString()
+    }
+
 }
