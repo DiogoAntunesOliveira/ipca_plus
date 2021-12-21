@@ -12,17 +12,16 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
-import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
+import java.util.concurrent.TimeUnit
 
 
 class DrawerActivty : AppCompatActivity() {
@@ -51,6 +50,9 @@ class DrawerActivty : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val stampCurrent = System.currentTimeMillis()
+        val stampSec = TimeUnit.MILLISECONDS.toSeconds(stampCurrent)
+        val stampNano = TimeUnit.MILLISECONDS.toNanos(stampCurrent).toInt()
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -69,7 +71,7 @@ class DrawerActivty : AppCompatActivity() {
                 Firebase.auth.currentUser!!.uid,
                 "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
                 "2021-11-15",
-                "11:37",
+                Timestamp.now(),
                 ""
 
             )

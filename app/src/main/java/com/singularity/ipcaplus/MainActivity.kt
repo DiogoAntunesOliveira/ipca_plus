@@ -13,15 +13,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
-import kotlin.io.path.Path
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 Firebase.auth.currentUser!!.uid,
                 "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
                 "2021-11-15",
-                "11:37",
+                Timestamp.now(),
                 ""
 
             )

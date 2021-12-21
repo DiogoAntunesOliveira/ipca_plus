@@ -1,6 +1,7 @@
 package com.singularity.ipcaplus
 
 import android.content.ContentValues.TAG
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +9,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Message
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ChatActivity : AppCompatActivity() {
 
@@ -27,6 +33,7 @@ class ChatActivity : AppCompatActivity() {
     private var mLayoutManager: LinearLayoutManager? = null
 
     val db = Firebase.firestore
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -35,6 +42,16 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val chat_id = intent.getStringExtra("chat_id")
+        val current = LocalDateTime.now()
+
+        val formatter = DateTimeFormatter.BASIC_ISO_DATE
+        val formatted = current.format(formatter)
+
+        println("Current Date is: $formatted")
+        //val hour = LocalDateTime.now()
+        val stampCurrent = System.currentTimeMillis()
+        val stampSec = TimeUnit.MILLISECONDS.toSeconds(stampCurrent)
+        val stampNano = TimeUnit.MILLISECONDS.toNanos(stampCurrent).toInt()
 
             binding.fabSend.setOnClickListener {
                 if(!binding.editTextMessage.text.isNullOrBlank()) {
@@ -42,7 +59,7 @@ class ChatActivity : AppCompatActivity() {
                         Firebase.auth.currentUser!!.uid,
                         binding.editTextMessage.text.toString(),
                         "",
-                        "",
+                        Timestamp.now(),
                         ""
 
                     )
@@ -58,7 +75,7 @@ class ChatActivity : AppCompatActivity() {
                     binding.editTextMessage.text.clear()
                 }
         }
-        db.collection("chat").document("$chat_id").collection("message")
+        db.collection("chat").document("$chat_id").collection("message").orderBy("time")
             .addSnapshotListener { documents, e ->
 
                 documents?.let {
