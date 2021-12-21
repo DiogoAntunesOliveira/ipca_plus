@@ -23,10 +23,16 @@
         android:label="@string/oficiais"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
+    <activity
         android:id="@+id/nav_calendar"
-        android:name="com.singularity.ipcaplus.calendar.CalendarFragment"
+        android:name="com.singularity.ipcaplus.calendar.CalendarActivity"
         android:label="@string/calendario"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/activity_calendar"/>
+
+    <activity
+        android:id="@+id/nav_profile"
+        android:name="com.singularity.ipcaplus.profile.ProfileActivity"
+        android:label="@string/perfil"
+        tools:layout="@layout/activity_profile"/>
 
 </navigation>

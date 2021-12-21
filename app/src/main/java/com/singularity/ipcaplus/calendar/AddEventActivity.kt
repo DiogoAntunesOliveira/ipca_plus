@@ -65,7 +65,7 @@ class AddEventActivity : AppCompatActivity() {
 
     }
 
-    //when the support action bar back button is pressed, the app will go back to the previous activity
+    // When the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
