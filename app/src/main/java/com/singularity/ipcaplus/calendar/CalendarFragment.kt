@@ -32,7 +32,6 @@ import java.time.format.DateTimeFormatter
 
 class CalendarFragment : Fragment() {
 
-    val db = Firebase.firestore
     var events = arrayListOf<EventCalendar>()
     private var eventAdapter: RecyclerView.Adapter<*>? = null
     private var eventLayoutManager: LinearLayoutManager? = null
