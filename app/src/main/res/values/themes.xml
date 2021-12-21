@@ -14,6 +14,15 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:background" tools:ignore="NewApi">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:searchHintIcon">@drawable/ic_search_24</item>
+        <item name="android:searchIcon">@drawable/ic_search_24</item>
+
+    </style>
+
     <style name="Theme.IPCA.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -22,4 +31,9 @@
     <style name="Theme.IPCA.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.IPCA.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="NewFontStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
 </resources>

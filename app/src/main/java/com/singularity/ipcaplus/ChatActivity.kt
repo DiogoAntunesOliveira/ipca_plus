@@ -1,25 +1,28 @@
 package com.singularity.ipcaplus
 
 import android.content.ContentValues.TAG
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
-import com.singularity.ipcaplus.databinding.ActivityRegisterBinding
 import com.singularity.ipcaplus.models.Message
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ChatActivity : AppCompatActivity() {
 
@@ -30,6 +33,7 @@ class ChatActivity : AppCompatActivity() {
     private var mLayoutManager: LinearLayoutManager? = null
 
     val db = Firebase.firestore
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -38,6 +42,16 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val chat_id = intent.getStringExtra("chat_id")
+        val current = LocalDateTime.now()
+
+        val formatter = DateTimeFormatter.BASIC_ISO_DATE
+        val formatted = current.format(formatter)
+
+        println("Current Date is: $formatted")
+        //val hour = LocalDateTime.now()
+        val stampCurrent = System.currentTimeMillis()
+        val stampSec = TimeUnit.MILLISECONDS.toSeconds(stampCurrent)
+        val stampNano = TimeUnit.MILLISECONDS.toNanos(stampCurrent).toInt()
 
             binding.fabSend.setOnClickListener {
                 if(!binding.editTextMessage.text.isNullOrBlank()) {
@@ -45,7 +59,7 @@ class ChatActivity : AppCompatActivity() {
                         Firebase.auth.currentUser!!.uid,
                         binding.editTextMessage.text.toString(),
                         "",
-                        "",
+                        Timestamp.now(),
                         ""
 
                     )
@@ -61,7 +75,7 @@ class ChatActivity : AppCompatActivity() {
                     binding.editTextMessage.text.clear()
                 }
         }
-        db.collection("chat").document("$chat_id").collection("message")
+        db.collection("chat").document("$chat_id").collection("message").orderBy("time")
             .addSnapshotListener { documents, e ->
 
                 documents?.let {
@@ -85,14 +99,22 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+
     inner class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.row_message, parent, false)
-            )
+            if(viewType == 1) {
+                return ViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_self, parent, false)
+                )
+            } else {
+                return ViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_others, parent, false)
+                )
+            }
+
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -106,8 +128,18 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        override fun getItemViewType(position: Int) : Int {
+            if (messages[position].user == Firebase.auth.currentUser!!.uid) {
+                return 1
+            } else {
+                return 0
+            }
+        }
+
         override fun getItemCount(): Int {
             return messages.size
         }
+
+
     }
 }

@@ -10,16 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
+            android:name=".calendar.AddEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DrawerActivty"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
             android:name=".TabActivity"
             android:exported="true"
             android:label="@string/title_activity_tab"
-            android:theme="@style/Theme.IPCA.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
             android:name=".ChatActivity"
             android:exported="true" />
@@ -28,11 +30,26 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.IPCA.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

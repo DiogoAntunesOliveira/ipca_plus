@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:iconifiedByDefault="false"
+
+        android:queryHint="Pesquisar..."
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:closeIcon="@drawable/ic_arrow_back_24"
+        android:searchHintIcon="@drawable/ic_search_24"
+        android:searchIcon="@drawable/ic_search_24"
+
+        android:background="@color/green_200"
+
+        android:theme="@style/MyActionBar"
+
+        >
+
+
+    </SearchView>
+
+
+    <Button
+        android:id="@+id/btn_foto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_foto_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Fotografias"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="93dp" />
+
+    <Button
+        android:id="@+id/btn_vid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_gif_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Vídeos"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="181dp"
+        tools:layout_editor_absoluteY="93dp" />
+
+    <Button
+        android:id="@+id/btn_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_audio"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Áudio"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="292dp"
+        tools:layout_editor_absoluteY="93dp" />
+
+    <Button
+        android:id="@+id/btn_gifs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_gif_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="GIFs"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="15dp"
+        tools:layout_editor_absoluteY="153dp" />
+
+    <Button
+        android:id="@+id/btn_documentos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_paper_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Documentos"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="153dp" />
+
+    <Button
+        android:id="@+id/btn_ligacoes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_swap_24"
+
+        android:fontFamily="@font/roboto_regular"
+
+        android:text="Ligações"
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+
+        tools:layout_editor_absoluteX="280dp"
+        tools:layout_editor_absoluteY="153dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

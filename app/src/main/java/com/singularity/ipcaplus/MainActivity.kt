@@ -13,15 +13,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
-import kotlin.io.path.Path
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,14 +42,14 @@ class MainActivity : AppCompatActivity() {
         // Criação de Chat
         binding.fabAddChat.setOnClickListener {
             val chat = Chat(
-                "Chat ${Random.nextInt(0, 100)}"
+                "Encripted"
 
             )
             val message = Message(
                 Firebase.auth.currentUser!!.uid,
-                "Teste",
-                "",
-                "",
+                "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
+                "2021-11-15",
+                Timestamp.now(),
                 ""
 
             )
@@ -100,8 +98,8 @@ class MainActivity : AppCompatActivity() {
         mAdapter = ChatAdapter()
         binding.recyclerViewGroups.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewGroups.adapter = mAdapter
-    }
 
+    }
 
     inner class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -135,4 +133,5 @@ class MainActivity : AppCompatActivity() {
             return chats.size
         }
     }
+
 }

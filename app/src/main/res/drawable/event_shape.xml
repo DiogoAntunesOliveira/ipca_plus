@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:height="75dp">
+        <shape android:shape="rectangle">
+            <!-- fill/color -->
+            <solid
+                android:color="@color/green_200"/>
+
+
+            <!-- Control the radius of each corners -->
+            <corners
+                android:radius="20dp"/>
+
+        </shape>
+    </item>
+    <item android:left="75dp" android:height="75dp">
+        <shape android:shape="rectangle">
+            <!-- fill/color -->
+            <solid
+                android:color="@color/white"/>
+
+            <!-- Control the radius of each corners -->
+            <corners
+                android:topRightRadius="20dp"
+                android:bottomRightRadius="20dp"/>
+
+        </shape>
+    </item>
+
+</layer-list>
