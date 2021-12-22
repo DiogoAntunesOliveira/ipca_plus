@@ -30,6 +30,12 @@
         tools:layout="@layout/activity_calendar"/>
 
     <activity
+        android:id="@+id/nav_contacts"
+        android:name="com.singularity.ipcaplus.profile.ContactsActivity"
+        android:label="@string/contactos"
+        tools:layout="@layout/activity_contacts"/>
+
+    <activity
         android:id="@+id/nav_profile"
         android:name="com.singularity.ipcaplus.profile.ProfileActivity"
         android:label="@string/perfil"
