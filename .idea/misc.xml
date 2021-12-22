@@ -3,12 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/breaktime.xml" value="0.3828125" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/breaktime_form.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_filtro.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_green.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_register.xml" value="0.3828125" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_week_day.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/circle.xml" value="0.23802083333333332" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/custom_black_border.xml" value="0.23802083333333332" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/datetime_selected_item.xml" value="0.3828125" />
@@ -16,7 +13,6 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_arrow_back_24.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_baseline_arrow_forward_ios_24.xml" value="0.3828125" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_contact_icon.xml" value="0.2520833333333333" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_documentdrawer_icons.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_folderdrawer_icons.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_foto_24.xml" value="0.3828125" />
@@ -34,27 +30,19 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_calendar.xml" value="0.36277173913043476" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.2359375" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_contacts.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_profile.xml" value="0.36277173913043476" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.2359375" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_schedule.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_tab.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_welcome.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_calendar.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.358695652173913" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_breaktime.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_event.xml" value="0.7456647398843931" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.3546195652173913" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_subject.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/sample_date_time_picker.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_message_shape.xml" value="0.29074074074074074" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_photo.xml" value="0.2953703703703704" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/circle.xml" value="0.3101851851851852" />
@@ -89,7 +77,27 @@
         <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/chat_photo.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/gradient_shadow.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_video.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/shadow.xml" value="0.3769230769230769" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_calendar.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_contacts.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_profile.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_schedule.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.5" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_tab.xml" value="0.26766304347826086" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_pesquisa.xml" value="0.33" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
         <entry key="app/src/main/res/drawable/button_register.xml" value="0.3425925925925926" />
         <entry key="app/src/main/res/drawable/event_shape.xml" value="0.31203703703703706" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.3671875" />
