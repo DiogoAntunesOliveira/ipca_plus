@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +43,7 @@ class ChatActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Variables
         val chat_id = intent.getStringExtra("chat_id")
         val current = LocalDateTime.now()
 
@@ -48,13 +51,11 @@ class ChatActivity : AppCompatActivity() {
         val formatted = current.format(formatter)
 
         println("Current Date is: $formatted")
-        //val hour = LocalDateTime.now()
-        val stampCurrent = System.currentTimeMillis()
-        val stampSec = TimeUnit.MILLISECONDS.toSeconds(stampCurrent)
-        val stampNano = TimeUnit.MILLISECONDS.toNanos(stampCurrent).toInt()
 
+        // Send Message
             binding.fabSend.setOnClickListener {
                 if(!binding.editTextMessage.text.isNullOrBlank()) {
+
                     val message = Message(
                         Firebase.auth.currentUser!!.uid,
                         binding.editTextMessage.text.toString(),
@@ -91,11 +92,22 @@ class ChatActivity : AppCompatActivity() {
 
             }
 
+        // Recycler View Messages
         mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recycleViewChat.layoutManager = mLayoutManager
         mAdapter = MessageAdapter()
         binding.recycleViewChat.itemAnimator = DefaultItemAnimator()
         binding.recycleViewChat.adapter = mAdapter
+
+        /*
+            if(binding.editTextMessage.text == null) {
+                binding.buttonTakePhoto.visibility = View.VISIBLE
+                println("VISIBLE")
+            } else {
+                binding.buttonTakePhoto.visibility = View.GONE
+                println("GONE")
+            }
+        */
 
     }
 
@@ -107,12 +119,13 @@ class ChatActivity : AppCompatActivity() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             if(viewType == 1) {
                 return ViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_self, parent, false)
-                )
+                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_self, parent, false))
+            } else if (viewType == 2){
+                return ViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_system, parent, false))
             } else {
                 return ViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_others, parent, false)
-                )
+                    LayoutInflater.from(parent.context).inflate(R.layout.row_message_others, parent, false))
             }
 
         }
@@ -131,6 +144,8 @@ class ChatActivity : AppCompatActivity() {
         override fun getItemViewType(position: Int) : Int {
             if (messages[position].user == Firebase.auth.currentUser!!.uid) {
                 return 1
+            } else if (messages[position].user == "system"){
+                return 2
             } else {
                 return 0
             }

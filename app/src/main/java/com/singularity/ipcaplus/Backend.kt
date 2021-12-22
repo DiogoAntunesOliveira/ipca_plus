@@ -2,9 +2,13 @@ package com.singularity.ipcaplus
 
 import android.graphics.Color
 import com.github.sundeepk.compactcalendarview.domain.Event
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.EventCalendar
+import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.models.Subject
 
 object Backend {
@@ -180,4 +184,57 @@ object Backend {
                 }
             }
     }
+    /*
+       ------------------------------------------------ Chats ------------------------------------------------
+    */
+    /*
+       This function returns chats based on given type
+       @callBack = return the list
+    */
+    fun getChatByType(type: String ,callBack: (List<Chat>, List<String>)->Unit) {
+
+        val chats = arrayListOf<Chat>()
+        val chatIds = arrayListOf<String>()
+
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        val chat = Chat.fromHash(document)
+                        if (type == chat.type) {
+                            chats.add(chat)
+                            chatIds.add(document.id)
+                        }
+                    }
+
+                    callBack(chats, chatIds)
+                }
+
+            }
+
+    }
+
+    /*
+       This function returns last chat message by chat id
+       @callBack = return the list
+    */
+    fun getLastMessageByChatID(chatID: String ,callBack: (Message?)->Unit) {
+
+        var message : Message? = null
+
+        db.collection("chat").document("${chatID}").collection("message")
+            .orderBy("time", Query.Direction.DESCENDING).limit(1)
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        message = Message.fromHash(document)
+                        }
+                    }
+
+                    callBack(message)
+                }
+
+    }
+
+
 }

@@ -75,13 +75,14 @@ class DrawerActivty : AppCompatActivity() {
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
             val chat = Chat(
-                "Encripted"
+                "Cadeira",
+                "oficial"
 
             )
             val message = Message(
-                Firebase.auth.currentUser!!.uid,
-                "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
-                "2021-11-15",
+                "system",
+                "This is an Alpha Chat bugs are expected, please report them if you found some. Welcome to Singularity!",
+                "2021-12-22",
                 Timestamp.now(),
                 ""
 

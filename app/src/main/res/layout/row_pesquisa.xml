@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewChatName" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/lastMessageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -75,7 +75,7 @@
         android:layout_marginBottom="37dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/lastMessageTime"
         app:srcCompat="@drawable/ic_unread_22"
         app:tint="#A3A3A3" />
 
