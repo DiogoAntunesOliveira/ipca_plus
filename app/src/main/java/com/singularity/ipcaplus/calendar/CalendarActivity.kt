@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -21,6 +22,7 @@ import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.EventCalendar
+import java.time.Year
 import java.util.*
 
 class CalendarActivity : AppCompatActivity() {
@@ -86,7 +88,6 @@ class CalendarActivity : AppCompatActivity() {
         eventAdapter = EventAdapter()
         binding.recycleViewEvents.itemAnimator = DefaultItemAnimator()
         binding.recycleViewEvents.adapter = eventAdapter
-
     }
 
     // When the support action bar back button is pressed, the app will go back to the previous activity
@@ -154,5 +155,4 @@ class CalendarActivity : AppCompatActivity() {
             return events.size
         }
     }
-
 }
