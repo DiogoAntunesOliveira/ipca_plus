@@ -63,6 +63,7 @@ class LoginActivity : AppCompatActivity() {
                         updateUI(user, email)
                         prefs.password = binding.editTextTextPassword.text.toString()
                         prefs.email = binding.editTextEmail.text.toString()
+                        prefs.userId = auth.currentUser?.uid
 
                         // Sign in success, update UI with the signed-in user's information
                         startActivity(Intent(this@LoginActivity, DrawerActivty::class.java ))
@@ -111,10 +112,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         var SharedPreferences.userId
-            get() = getInt(USER_ID, 0)
+            get() = getString(USER_ID, "")
             set(value) {
                 editMe {
-                    it.putInt(USER_ID, value)
+                    it.putString(USER_ID, value)
                 }
             }
 

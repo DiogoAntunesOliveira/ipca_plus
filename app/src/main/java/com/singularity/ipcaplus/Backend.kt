@@ -110,12 +110,12 @@ object Backend {
        This function returns all events in the firebase to an list
        @callBack = return the list
     */
-    fun getDaySchedule(day: String ,callBack: (List<Subject>)->Unit) {
+    fun getDayCourseSubjects(day: String, courseId: String, callBack: (List<Subject>)->Unit) {
 
         val subjects = arrayListOf<Subject>()
         val subjectsWithBreaks = arrayListOf<Subject>()
 
-        db.collection("course").document("lLhV0mtn5kNZ5Ivr3FKH").collection("subject")
+        db.collection("course").document(courseId).collection("subject")
             .addSnapshotListener { documents, _ ->
                 documents?.let {
 
@@ -158,4 +158,26 @@ object Backend {
 
     }
 
+
+    /*
+       This function returns the user course by callback
+       @id = user uid
+    */
+    fun getUserCourse(uid: String, callBack:(String)->Unit) {
+
+        db.collection("profile")
+            .document(uid)
+            .collection("course").limit(1)
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    var courseId = ""
+                    for (document in documents)
+                        courseId = document.id
+
+                    callBack(courseId)
+                }
+            }
+    }
 }

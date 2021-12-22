@@ -40,25 +40,27 @@ class AddEventActivity : AppCompatActivity() {
             if(!binding.editTextTitle.text.isNullOrBlank()) {
                 val stampCurrent = System.currentTimeMillis()  // Transformar datetime em millis e mandar praqui
                 val stampSec = TimeUnit.MILLISECONDS.toSeconds(stampCurrent)
-                val stampNano = TimeUnit.MILLISECONDS.toNanos(stampCurrent).toInt()
 
                 val event = EventCalendar(
-                    Timestamp(stampSec,stampNano),
+                    Timestamp(stampSec, 0),
                     binding.editTextDescription.text.toString(),
                     binding.editTextTitle.text.toString()
                 )
                 db.collection("event")
                     .add(event.toHash())
                     .addOnSuccessListener { documentReference ->
-                        Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+
+                        db.collection("profile")
+                            .document("${Firebase.auth.currentUser!!.uid}")
+                            .collection("event")
+                            .document("${documentReference.id}")
+                            .set(event)
 
                     }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error adding document", e)
-                    }
+
 
                 // Change Activity
-                val returnIntent = Intent(this, MainActivity::class.java)
+                val returnIntent = Intent(this, CalendarActivity::class.java)
                 startActivity(returnIntent)
             }
         }
