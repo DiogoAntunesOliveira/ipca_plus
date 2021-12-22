@@ -110,23 +110,48 @@ object Backend {
        This function returns all events in the firebase to an list
        @callBack = return the list
     */
-    fun getAllDaySubjects(day: String ,callBack: (List<Subject>)->Unit) {
+    fun getDaySchedule(day: String ,callBack: (List<Subject>)->Unit) {
 
         val subjects = arrayListOf<Subject>()
+        val subjectsWithBreaks = arrayListOf<Subject>()
 
         db.collection("course").document("lLhV0mtn5kNZ5Ivr3FKH").collection("subject")
             .addSnapshotListener { documents, _ ->
                 documents?.let {
+
+                    // Add every subject to the list
                     for (document in documents) {
                         val subject = Subject.fromHash(document)
-                        println(day + "==" + subject.day)
                         if (day == subject.day) {
                             subjects.add(subject)
-                            println("adadadadadad")
                         }
                     }
 
-                    callBack(subjects)
+                    // Order the subjects by time
+                    for (i in 0 until subjects.size) {
+                        for (j in 0 until subjects.size - 1) {
+
+                            if (Utilis.convertHoursStringToInt(subjects[j].start_time) > Utilis.convertHoursStringToInt(subjects[j+1].start_time)) {
+                                val temp = subjects[j]
+                                subjects[j] = subjects[j + 1]
+                                subjects[j + 1] = temp
+                            }
+                        }
+                    }
+
+                    // Add Break Times Between Classes
+                    for (i in 0 until subjects.size) {
+                        if (i % 2 == 0) {
+                            subjectsWithBreaks.add(subjects[i])
+                        }
+                        else {
+                            val diff = Utilis.convertHoursStringToInt(subjects[i].start_time) - Utilis.convertHoursStringToInt(subjects[i-1].end_time)
+                            subjectsWithBreaks.add(Subject("breaktime", diff.toString()))
+                            subjectsWithBreaks.add(subjects[i])
+                        }
+                    }
+
+                    callBack(subjectsWithBreaks)
                 }
 
             }

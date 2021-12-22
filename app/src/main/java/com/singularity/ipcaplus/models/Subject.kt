@@ -12,8 +12,9 @@ class Subject {
     var classroom : String = ""
     var teacher : String = ""
 
-    constructor() {
-
+    constructor(name : String, start_time: String) {
+        this.name = name
+        this.start_time = start_time
     }
 
     constructor(

@@ -70,6 +70,11 @@ object  Utilis {
         }
     }
 
+    fun convertHoursStringToInt(strVal: String): Int {
+        val strArray = Pattern.compile(":").split(strVal)
+        val result = strArray[0] + strArray[1]
+        return result.toInt()
+    }
 
     fun getDate(milliSeconds: Long, dateFormat: String?): String {
         // Create a DateFormatter object for displaying date in specified format.
