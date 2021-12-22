@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/breaktime.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/breaktime_form.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_filtro.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_green.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_register.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_week_day.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/circle.xml" value="0.23802083333333332" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/custom_black_border.xml" value="0.23802083333333332" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/datetime_selected_item.xml" value="0.3828125" />
@@ -37,6 +40,7 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_profile.xml" value="0.36277173913043476" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.2359375" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_schedule.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_tab.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_welcome.xml" value="0.2359375" />
@@ -44,7 +48,10 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_calendar.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.358695652173913" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_breaktime.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_event.xml" value="0.7456647398843931" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.3546195652173913" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_subject.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/sample_date_time_picker.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />

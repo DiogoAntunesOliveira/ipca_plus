@@ -5,6 +5,7 @@ import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.models.EventCalendar
+import com.singularity.ipcaplus.models.Subject
 
 object Backend {
 
@@ -102,7 +103,34 @@ object Backend {
 
 
     /*
-       ------------------------------------------------ Others ------------------------------------------------
+       ------------------------------------------------ Schedule ------------------------------------------------
     */
+
+    /*
+       This function returns all events in the firebase to an list
+       @callBack = return the list
+    */
+    fun getAllDaySubjects(day: String ,callBack: (List<Subject>)->Unit) {
+
+        val subjects = arrayListOf<Subject>()
+
+        db.collection("course").document("lLhV0mtn5kNZ5Ivr3FKH").collection("subject")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        val subject = Subject.fromHash(document)
+                        println(day + "==" + subject.day)
+                        if (day == subject.day) {
+                            subjects.add(subject)
+                            println("adadadadadad")
+                        }
+                    }
+
+                    callBack(subjects)
+                }
+
+            }
+
+    }
 
 }

@@ -4,6 +4,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class EventCalendar {
+
     var name : String = ""
     var desc : String = ""
     lateinit var datetime: Timestamp

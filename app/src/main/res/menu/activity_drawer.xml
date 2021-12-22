@@ -28,9 +28,6 @@
             android:id="@+id/nav_invite"
             android:icon="@drawable/ic_add_userdrawer_icons"
             android:title="@string/convidar_amigos" />
-        <item
-            android:id="@+id/blanck_space"
-            android:title="" />
     </group>
 
 </menu>

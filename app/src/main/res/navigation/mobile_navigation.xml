@@ -41,4 +41,10 @@
         android:label="@string/perfil"
         tools:layout="@layout/activity_profile"/>
 
+    <activity
+        android:id="@+id/nav_schedule"
+        android:name="com.singularity.ipcaplus.calendar.ScheduleActivity"
+        android:label="@string/horario"
+        tools:layout="@layout/activity_schedule"/>
+
 </navigation>
