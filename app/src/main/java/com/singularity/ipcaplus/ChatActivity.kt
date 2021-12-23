@@ -5,12 +5,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +19,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
+import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -31,6 +31,7 @@ class ChatActivity : AppCompatActivity() {
     var messages = arrayListOf<Message>()
 
     private lateinit var binding: ActivityChatBinding
+    private lateinit var chat_id : String
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
 
@@ -44,11 +45,19 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Variables
-        val chat_id = intent.getStringExtra("chat_id")
+        chat_id = intent.getStringExtra("chat_id").toString()
         val current = LocalDateTime.now()
 
         val formatter = DateTimeFormatter.BASIC_ISO_DATE
         val formatted = current.format(formatter)
+
+
+
+        // Action Bar
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
+
+
 
         println("Current Date is: $formatted")
 
@@ -76,6 +85,8 @@ class ChatActivity : AppCompatActivity() {
                     binding.editTextMessage.text.clear()
                 }
         }
+
+        // Show Messages
         db.collection("chat").document("$chat_id").collection("message").orderBy("time")
             .addSnapshotListener { documents, e ->
 
@@ -99,16 +110,39 @@ class ChatActivity : AppCompatActivity() {
         binding.recycleViewChat.itemAnimator = DefaultItemAnimator()
         binding.recycleViewChat.adapter = mAdapter
 
-        /*
-            if(binding.editTextMessage.text == null) {
-                binding.buttonTakePhoto.visibility = View.VISIBLE
-                println("VISIBLE")
-            } else {
-                binding.buttonTakePhoto.visibility = View.GONE
-                println("GONE")
-            }
-        */
 
+    }
+
+    /*
+       This function create the action bar above the activity
+    */
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_chat, menu)
+
+        db.collection("chat")
+            .addSnapshotListener { documents, e ->
+                documents?.let {
+                    for (document in it) {
+                        if(document.id == chat_id) {
+                            val chat = Chat.fromHash(document)
+                            supportActionBar?.title = chat.name
+                        }
+                    }
+                }
+            }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
+
+
+        return true
+    }
+
+
+    // When the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 
@@ -136,7 +170,18 @@ class ChatActivity : AppCompatActivity() {
             holder.v.apply {
 
                 val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
+                val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
+
                 textViewMessage.text = messages[position].message
+                timeLastMessage?.isVisible = false
+                println("escondido")
+                if(position == messages.size - 1) {
+                    val data = Utilis.getDate(messages[position].time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    timeLastMessage.isVisible = true
+                    println("Visivel")
+                    timeLastMessage.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+                    println("Com tempo")
+                }
 
             }
         }

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageViewChatGroup"
@@ -12,6 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:background="@drawable/chat_photo"
+        android:maxWidth="36dp"
+        android:maxHeight="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,10 +26,10 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="3dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Chat Name"
-        android:textSize="20sp"
-        android:maxLength="25"
         android:maxHeight="22sp"
+        android:maxLength="30"
+        android:text="Chat Name"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textViewLastMessage"
         app:layout_constraintStart_toEndOf="@+id/imageViewChatGroup"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,11 +43,11 @@
         android:layout_marginTop="3dp"
         android:layout_marginBottom="30dp"
         android:fontFamily="@font/poppins"
+        android:maxHeight="22sp"
+        android:maxLength="32"
         android:text="Last Message"
         android:textColor="#A3A3A3"
-        android:textSize="16sp"
-        android:maxLength="25"
-        android:maxHeight="22sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewChatGroup"
         app:layout_constraintTop_toBottomOf="@+id/textViewChatName" />
@@ -62,7 +63,7 @@
 
         android:text="22:00"
         android:textColor="#848484"
-        android:textSize="17sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

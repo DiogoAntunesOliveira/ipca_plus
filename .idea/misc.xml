@@ -68,7 +68,9 @@
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.67" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message.xml" value="0.28940217391304346" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2694746376811594" />
-        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.17831813576494426" />
+        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.25" />
+        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_system.xml" value="0.22" />
+        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/menu/menu_chat.xml" value="0.75" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_system.xml" value="0.26268115942028986" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_pesquisa.xml" value="0.26268115942028986" />
         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.25" />
