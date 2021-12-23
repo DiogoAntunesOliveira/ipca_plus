@@ -26,6 +26,7 @@ import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.profile.ProfileActivity
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 
 class DrawerActivty : AppCompatActivity() {
@@ -75,13 +76,13 @@ class DrawerActivty : AppCompatActivity() {
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
             val chat = Chat(
-                "Cadeira",
-                "oficial"
+                "Chat Teste " + Random.nextInt(256),
+                "chat"
 
             )
             val message = Message(
                 "system",
-                "This is an Alpha Chat bugs are expected, please report them if you found some. Welcome to Singularity!",
+                "This is an Alpha Chat, bugs are expected, please report them if you found some. Welcome to Singularity!",
                 "2021-12-22",
                 Timestamp.now(),
                 ""

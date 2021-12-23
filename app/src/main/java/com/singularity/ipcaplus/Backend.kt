@@ -188,6 +188,7 @@ object Backend {
        ------------------------------------------------ Chats ------------------------------------------------
     */
     /*
+    /*
        This function returns chats based on given type
        @callBack = return the list
     */
@@ -213,6 +214,7 @@ object Backend {
             }
 
     }
+    */
 
     /*
        This function returns last chat message by chat id

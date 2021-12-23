@@ -29,7 +29,6 @@ class ChatsFragment : Fragment() {
     // Variables
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
-    var user_groups = arrayListOf<String>()
 
     private var _binding: FragmentChatsBinding? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -49,10 +48,20 @@ class ChatsFragment : Fragment() {
         val root: View = binding.root
 
         // Get Group Chats
-        Backend.getChatByType("chat"){ a,b->
-            chats.addAll(a)
-            chatIds.addAll(b)
-        }
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
+            .addSnapshotListener { documents, e ->
+                documents?.let {
+                    chats.clear()
+                    for (document in it) {
+                        val chat = Chat.fromHash(document)
+                        if (chat.type == "chat") {
+                            chats.add(chat)
+                            chatIds.add(document.id)
+                        }
+                    }
+                    mAdapter?.notifyDataSetChanged()
+                }
+            }
 
         // RecyclerView Chat
         mLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -61,11 +70,7 @@ class ChatsFragment : Fragment() {
         binding.recyclerViewGroups.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewGroups.adapter = mAdapter
 
-
         return root
-
-
-
     }
 
     override fun onDestroyView() {

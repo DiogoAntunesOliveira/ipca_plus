@@ -52,10 +52,20 @@ class OfficialChatsFragment : Fragment() {
         val root: View = binding.root
 
         // Get Oficial Chats
-        Backend.getChatByType("oficial"){ a, b->
-            chats.addAll(a)
-            chatIds.addAll(b)
-        }
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
+            .addSnapshotListener { documents, e ->
+                documents?.let {
+                    chats.clear()
+                    for (document in it) {
+                        val chat = Chat.fromHash(document)
+                        if (chat.type == "oficial") {
+                            chats.add(chat)
+                            chatIds.add(document.id)
+                        }
+                    }
+                    mAdapter?.notifyDataSetChanged()
+                }
+            }
 
         // RecyclerView Chats
         mLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
