@@ -47,4 +47,10 @@
         android:label="@string/horario"
         tools:layout="@layout/activity_schedule"/>
 
+    <activity
+        android:id="@+id/nav_news"
+        android:name="com.singularity.ipcaplus.NewsWebActivity"
+        android:label="News"
+        tools:layout="@layout/activity_news_web"/>
+
 </navigation>
