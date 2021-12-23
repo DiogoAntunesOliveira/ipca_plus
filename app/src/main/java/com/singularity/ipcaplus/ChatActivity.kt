@@ -1,6 +1,7 @@
 package com.singularity.ipcaplus
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,8 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.calendar.AddEventActivity
+import com.singularity.ipcaplus.calendar.CalendarActivity
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
@@ -50,14 +53,6 @@ class ChatActivity : AppCompatActivity() {
 
         val formatter = DateTimeFormatter.BASIC_ISO_DATE
         val formatted = current.format(formatter)
-
-
-
-        // Action Bar
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
-
-
 
         println("Current Date is: $formatted")
 
@@ -136,6 +131,25 @@ class ChatActivity : AppCompatActivity() {
 
 
         return true
+    }
+
+
+    /*
+        This function define the events of the action bar buttons
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item.itemId){
+            R.id.calendario -> {
+                val intent = Intent(this, CalendarActivity::class.java)
+                intent.putExtra("chat_id", chat_id)
+                startActivity(intent)
+                return true
+            }
+        }
+
+        return false
     }
 
 

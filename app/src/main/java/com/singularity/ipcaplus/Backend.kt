@@ -16,33 +16,6 @@ object Backend {
        ------------------------------------------------ Events ------------------------------------------------
     */
 
-
-    /*
-       This function returns all events in the firebase to an list
-       @callBack = return the list
-    */
-    fun getAllEvents(callBack: (List<EventCalendar>)->Unit) {
-
-        val events = arrayListOf<EventCalendar>()
-
-        db.collection("event")
-            .addSnapshotListener { documents, _ ->
-
-                documents?.let {
-
-                    for (document in documents) {
-                        val event = EventCalendar.fromHash(document)
-                        events.add(event)
-                    }
-
-                    callBack(events)
-                }
-
-            }
-
-    }
-
-
     /*
        This function returns all events during the month in the firebase to an list
        @month = selected month
@@ -52,7 +25,70 @@ object Backend {
 
         val events = arrayListOf<EventCalendar>()
 
-        db.collection("event")
+        // Get all user chat ids
+        val chatIds = arrayListOf<String>()
+        getAllUserChatIds {
+            chatIds.addAll(it)
+
+            // Search in all chats
+            for (id in chatIds) {
+                db.collection("chat")
+                    .document(id)
+                    .collection("event")
+                    .addSnapshotListener { documents, _ ->
+
+                        documents?.let {
+
+                            for (document in documents) {
+                                val event = EventCalendar.fromHash(document)
+
+                                val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                                    events.add(event)
+                                }
+                            }
+                            callBack(events)
+                        }
+                    }
+            }
+        }
+
+
+
+
+    }
+
+
+    private fun getAllUserChatIds(callBack: (List<String>)->Unit) {
+
+        val chatIds = arrayListOf<String>()
+
+        // Get Group Chats Ids
+        db.collection("profile").document(Firebase.auth.currentUser!!.uid).collection("chat")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in it) {
+                        chatIds.add(document.id)
+                    }
+
+                    callBack(chatIds)
+                }
+            }
+    }
+
+
+    /*
+       This function returns all events during the month in the firebase to an list
+       @month = selected month
+       @callBack = return the list
+    */
+    fun getAllChatMonthEvents(month: String, chat_id: String, callBack: (List<EventCalendar>)->Unit) {
+
+        val events = arrayListOf<EventCalendar>()
+
+        db.collection("chat")
+            .document(chat_id)
+            .collection("event")
             .addSnapshotListener { documents, _ ->
 
                 documents?.let {
@@ -78,11 +114,13 @@ object Backend {
        @day = selected day
        @callBack = return the list
     */
-    fun getAllMonthDayEvents(month: String, day: Int, callBack: (List<EventCalendar>)->Unit) {
+    fun getAllChatMonthDayEvents(month: String, day: Int, chat_id: String, callBack: (List<EventCalendar>)->Unit) {
 
         val events = arrayListOf<EventCalendar>()
 
-        db.collection("event")
+        db.collection("chat")
+            .document(chat_id)
+            .collection("event")
             .addSnapshotListener { documents, _ ->
 
                 documents?.let {
@@ -100,6 +138,47 @@ object Backend {
                 }
 
             }
+    }
+
+
+    /*
+       This function returns all events during the day in the firebase to an list
+       @day = selected day
+       @callBack = return the list
+    */
+    fun getAllMonthDayEvents(month: String, day: Int, callBack: (List<EventCalendar>)->Unit) {
+
+        val events = arrayListOf<EventCalendar>()
+
+        // Get all user chat ids
+        val chatIds = arrayListOf<String>()
+        getAllUserChatIds {
+            chatIds.addAll(it)
+
+            // Search in all chats
+            for (id in chatIds) {
+                db.collection("chat")
+                    .document(id)
+                    .collection("event")
+                    .addSnapshotListener { documents, _ ->
+
+                        documents?.let {
+
+                            for (document in documents) {
+                                val event = EventCalendar.fromHash(document)
+
+                                val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                                    events.add(event)
+                                }
+                            }
+
+                            callBack(events)
+                        }
+
+                    }
+            }
+        }
     }
 
 
@@ -168,7 +247,7 @@ object Backend {
 
         db.collection("profile")
             .document(uid)
-            .collection("course").limit(1)
+            .collection("course")
             .addSnapshotListener { documents, _ ->
 
                 documents?.let {

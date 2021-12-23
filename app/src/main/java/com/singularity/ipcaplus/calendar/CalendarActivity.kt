@@ -54,8 +54,14 @@ class CalendarActivity : AppCompatActivity() {
         binding.yearTitle.text = Utilis.getCurrentYear()
         binding.compactcalendarView.setCurrentDate(Date())
 
-        // Get This Month Events
-        addAllMonthEvents(binding.monthTitle.text.toString())
+        // Get chat id
+        val chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
+
+        // Get All Events This Month
+        if (chat_id == "none")
+            addAllMonthEvents(binding.monthTitle.text.toString())
+        else
+            addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
 
         // Add Event Button
         binding.fabAddEvent.setOnClickListener {
@@ -69,7 +75,10 @@ class CalendarActivity : AppCompatActivity() {
             override fun onDayClick(dateClicked: Date) {
 
                 // Show All Selected day Events
-                addAllDayEvents(binding.monthTitle.text.toString(), dateClicked.date)
+                if (chat_id == "none")
+                    addAllDayEvents(binding.monthTitle.text.toString(), dateClicked.date)
+                else
+                    addAllChatDayEvents(binding.monthTitle.text.toString(), dateClicked.date, chat_id)
 
             }
 
@@ -78,7 +87,10 @@ class CalendarActivity : AppCompatActivity() {
                 binding.yearTitle.text = Utilis.getYearByCalendarId(firstDayOfNewMonth.year).toString()
 
                 // Refresh with new Month Events
-                addAllMonthEvents(binding.monthTitle.text.toString())
+                if (chat_id == "none")
+                    addAllMonthEvents(binding.monthTitle.text.toString())
+                else
+                    addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
             }
         })
 
@@ -96,24 +108,36 @@ class CalendarActivity : AppCompatActivity() {
         return true
     }
 
+
     fun addAllMonthEvents(month: String) {
         Backend.getAllMonthEvents (month) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+        }
+    }
 
-            // Add Icons into the calendar
-            // Bugado <----------- vvvvvvvvvvv
-            for (event in events) {
-                val ev = Event(0,event.datetime.seconds * 1000, event.desc)
-                binding.compactcalendarView.addEvent(ev)
-            }
+
+    fun addAllChatMonthEvents(month: String, chat_id: String) {
+        Backend.getAllChatMonthEvents (month, chat_id) { allEvents ->
+            events.clear()
+            events.addAll(allEvents)
+            eventAdapter?.notifyDataSetChanged()
         }
     }
 
 
     fun addAllDayEvents(month: String, day: Int) {
         Backend.getAllMonthDayEvents (month, day) { allEvents ->
+            events.clear()
+            events.addAll(allEvents)
+            eventAdapter?.notifyDataSetChanged()
+        }
+    }
+
+
+    fun addAllChatDayEvents(month: String, day: Int, chat_id: String) {
+        Backend.getAllChatMonthDayEvents (month, day, chat_id) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
