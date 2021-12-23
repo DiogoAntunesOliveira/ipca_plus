@@ -16,18 +16,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.ChatActivity
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.Utilis
 import com.singularity.ipcaplus.databinding.FragmentChatsBinding
 import com.singularity.ipcaplus.models.Chat
 
 
 class ChatsFragment : Fragment() {
 
-
+    // Variables
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
-    var user_groups = arrayListOf<String>()
 
     private var _binding: FragmentChatsBinding? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -46,35 +47,30 @@ class ChatsFragment : Fragment() {
         _binding = FragmentChatsBinding.inflate(layoutInflater)
         val root: View = binding.root
 
-        db.collection("profile")
-            .document("${Firebase.auth.currentUser!!.uid}")
-            .collection("chat")
+        // Get Group Chats
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
             .addSnapshotListener { documents, e ->
-
                 documents?.let {
                     chats.clear()
-                    chatIds.clear()
                     for (document in it) {
-                        Log.d(ContentValues.TAG, "${document.id} => ${document.data}")
                         val chat = Chat.fromHash(document)
-                        chatIds.add(document.id)
-                        chats.add(chat)
-
+                        if (chat.type == "chat") {
+                            chats.add(chat)
+                            chatIds.add(document.id)
+                        }
                     }
                     mAdapter?.notifyDataSetChanged()
                 }
-
             }
 
+        // RecyclerView Chat
         mLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewGroups.layoutManager = mLayoutManager
         mAdapter = ChatAdapter()
         binding.recyclerViewGroups.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewGroups.adapter = mAdapter
 
-
         return root
-
     }
 
     override fun onDestroyView() {
@@ -98,26 +94,47 @@ class ChatsFragment : Fragment() {
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.row_chat, parent, false)
-            )
+                return ViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.row_chat, parent, false)
+                )
+
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-            holder.v.apply {
-                val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
-                val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
+                holder.v.apply {
+
+                    // Variables
+                    val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
+                    val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
+                    val lastMessageTime = findViewById<TextView>(R.id.lastMessageTime)
+                    val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
 
-                textViewMessage.text = chats[position].name
-                imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
-            }
-            holder.v.setOnClickListener {
-                val intent = Intent(activity, ChatActivity::class.java)
-                intent.putExtra("chat_id", chatIds[position])
-                activity?.startActivity(intent)
+                    textViewMessage.text = chats[position].name
+                    // Set Last Chat Message
+                    Backend.getLastMessageByChatID(chatIds[position]) {
+                        val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                        lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+                        lastMessageText.text = it.message
+                    }
+                    imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
+
+                }
+                holder.v.setOnClickListener {
+                    val intent = Intent(activity, ChatActivity::class.java)
+                    intent.putExtra("chat_id", chatIds[position])
+                    activity?.startActivity(intent)
+                }
+
+        }
+
+        override fun getItemViewType(position: Int) : Int {
+            if (chats[position].type == "chat") {
+                return 1
+            } else {
+                return 0
             }
         }
 

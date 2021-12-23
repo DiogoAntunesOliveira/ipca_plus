@@ -37,108 +37,142 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="18dp"
+
         android:background="@drawable/button_filtro"
         android:drawableLeft="@drawable/ic_foto_24"
-
         android:fontFamily="@font/roboto_regular"
-
         android:text="Fotografias"
+
         android:textAllCaps="false"
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
-
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="93dp" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_vid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <Button
         android:id="@+id/btn_vid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop="18dp"
+
         android:background="@drawable/button_filtro"
-        android:drawableLeft="@drawable/ic_gif_24"
-
+        android:drawableLeft="@drawable/ic_video"
         android:fontFamily="@font/roboto_regular"
-
         android:text="Vídeos"
+
         android:textAllCaps="false"
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
-
-        tools:layout_editor_absoluteX="181dp"
-        tools:layout_editor_absoluteY="93dp" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_audio"
+        app:layout_constraintStart_toEndOf="@+id/btn_foto"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <Button
         android:id="@+id/btn_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop="18dp"
+
+        android:layout_marginEnd="5dp"
+
         android:background="@drawable/button_filtro"
         android:drawableLeft="@drawable/ic_audio"
-
         android:fontFamily="@font/roboto_regular"
+        android:text="Áudios"
 
-        android:text="Áudio"
         android:textAllCaps="false"
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
-
-        tools:layout_editor_absoluteX="292dp"
-        tools:layout_editor_absoluteY="93dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_vid"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <Button
         android:id="@+id/btn_gifs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginStart="5dp"
+
+        android:layout_marginTop="12dp"
+
         android:background="@drawable/button_filtro"
         android:drawableLeft="@drawable/ic_gif_24"
-
         android:fontFamily="@font/roboto_regular"
-
         android:text="GIFs"
+
         android:textAllCaps="false"
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
-
-        tools:layout_editor_absoluteX="15dp"
-        tools:layout_editor_absoluteY="153dp" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_documentos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_foto" />
 
     <Button
         android:id="@+id/btn_documentos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop="12dp"
+
         android:background="@drawable/button_filtro"
         android:drawableLeft="@drawable/ic_paper_24"
-
         android:fontFamily="@font/roboto_regular"
-
         android:text="Documentos"
+
         android:textAllCaps="false"
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
-
-        tools:layout_editor_absoluteX="113dp"
-        tools:layout_editor_absoluteY="153dp" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_ligacoes"
+        app:layout_constraintStart_toEndOf="@+id/btn_gifs"
+        app:layout_constraintTop_toBottomOf="@+id/btn_foto" />
 
     <Button
         android:id="@+id/btn_ligacoes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop="12dp"
+
+        android:layout_marginEnd="5dp"
+
         android:background="@drawable/button_filtro"
         android:drawableLeft="@drawable/ic_swap_24"
-
         android:fontFamily="@font/roboto_regular"
-
         android:text="Ligações"
+
         android:textAllCaps="false"
         android:textColor="#7C7C7C"
         app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_documentos"
+        app:layout_constraintTop_toBottomOf="@+id/btn_vid" />
 
-        tools:layout_editor_absoluteX="280dp"
-        tools:layout_editor_absoluteY="153dp" />
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/gradient_shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_gifs" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="409dp"
+        android:layout_height="625dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

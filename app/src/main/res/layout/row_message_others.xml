@@ -28,7 +28,7 @@
         android:background="@drawable/rounded_shape"
         android:backgroundTint="#E9E9E9"
         android:maxWidth="280dp"
-        android:padding="5dp"
+        android:padding="10dp"
         android:textAlignment="textStart"
         android:textColor="#242424"
         android:textSize="14sp"

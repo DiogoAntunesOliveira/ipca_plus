@@ -1,60 +1,53 @@
 package com.singularity.ipcaplus.calendar
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.github.sundeepk.compactcalendarview.domain.Event
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.Utilis
-import com.singularity.ipcaplus.databinding.FragmentCalendarBinding
+import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
+import com.singularity.ipcaplus.databinding.ActivityChatBinding
+import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.EventCalendar
+import java.time.Year
 import java.util.*
-import com.github.sundeepk.compactcalendarview.CompactCalendarView
-import com.github.sundeepk.compactcalendarview.CompactCalendarView.CompactCalendarViewListener
-import com.singularity.ipcaplus.Backend
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
-
-class CalendarFragment : Fragment() {
+class CalendarActivity : AppCompatActivity() {
 
     var events = arrayListOf<EventCalendar>()
     private var eventAdapter: RecyclerView.Adapter<*>? = null
     private var eventLayoutManager: LinearLayoutManager? = null
-    private var _binding: FragmentCalendarBinding? = null
+    private lateinit var binding: ActivityCalendarBinding
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _binding!!
 
-
-    /*
-        This function create the view
-     */
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_calendar)
 
         // Create the layout for this fragment
-        _binding = FragmentCalendarBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = ActivityCalendarBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Action Bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
+        supportActionBar?.title = "Calendario"
 
         // Set Current Date
         binding.monthTitle.text = Utilis.getMonthById(Utilis.getCurrentMonthId())
@@ -66,12 +59,13 @@ class CalendarFragment : Fragment() {
 
         // Add Event Button
         binding.fabAddEvent.setOnClickListener {
-            val intent = Intent(activity, AddEventActivity::class.java)
+            val intent = Intent(this, AddEventActivity::class.java)
             startActivity(intent)
         }
 
         // Calendar Interactions Events
-        binding.compactcalendarView.setListener(object : CompactCalendarViewListener {
+        binding.compactcalendarView.setListener(object :
+            CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
 
                 // Show All Selected day Events
@@ -89,28 +83,18 @@ class CalendarFragment : Fragment() {
         })
 
         // Event List
-        eventLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+        eventLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recycleViewEvents.layoutManager = eventLayoutManager
         eventAdapter = EventAdapter()
         binding.recycleViewEvents.itemAnimator = DefaultItemAnimator()
         binding.recycleViewEvents.adapter = eventAdapter
-
-        return root
     }
 
-
-    /*
-       This function configures the fragment after its creation
-    */
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    // When the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 
     fun addAllMonthEvents(month: String) {
         Backend.getAllMonthEvents (month) { allEvents ->

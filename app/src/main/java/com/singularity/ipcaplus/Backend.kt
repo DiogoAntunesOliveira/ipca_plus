@@ -2,9 +2,11 @@ package com.singularity.ipcaplus
 
 import android.graphics.Color
 import com.github.sundeepk.compactcalendarview.domain.Event
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.models.EventCalendar
+import com.singularity.ipcaplus.models.*
 
 object Backend {
 
@@ -102,7 +104,167 @@ object Backend {
 
 
     /*
-       ------------------------------------------------ Others ------------------------------------------------
+       ------------------------------------------------ Schedule ------------------------------------------------
     */
+
+    /*
+       This function returns all events in the firebase to an list
+       @callBack = return the list
+    */
+    fun getDayCourseSubjects(day: String, courseId: String, callBack: (List<Subject>)->Unit) {
+
+        val subjects = arrayListOf<Subject>()
+        val subjectsWithBreaks = arrayListOf<Subject>()
+
+        db.collection("course").document(courseId).collection("subject")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+
+                    // Add every subject to the list
+                    for (document in documents) {
+                        val subject = Subject.fromHash(document)
+                        if (day == subject.day) {
+                            subjects.add(subject)
+                        }
+                    }
+
+                    // Order the subjects by time
+                    for (i in 0 until subjects.size) {
+                        for (j in 0 until subjects.size - 1) {
+
+                            if (Utilis.convertHoursStringToInt(subjects[j].start_time) > Utilis.convertHoursStringToInt(subjects[j+1].start_time)) {
+                                val temp = subjects[j]
+                                subjects[j] = subjects[j + 1]
+                                subjects[j + 1] = temp
+                            }
+                        }
+                    }
+
+                    // Add Break Times Between Classes
+                    for (i in 0 until subjects.size) {
+                        if (i % 2 == 0) {
+                            subjectsWithBreaks.add(subjects[i])
+                        }
+                        else {
+                            val diff = Utilis.convertHoursStringToInt(subjects[i].start_time) - Utilis.convertHoursStringToInt(subjects[i-1].end_time)
+                            subjectsWithBreaks.add(Subject("breaktime", diff.toString()))
+                            subjectsWithBreaks.add(subjects[i])
+                        }
+                    }
+
+                    callBack(subjectsWithBreaks)
+                }
+
+            }
+
+    }
+
+
+    /*
+       This function returns the user course by callback
+       @id = user uid
+    */
+    fun getUserCourse(uid: String, callBack:(String)->Unit) {
+
+        db.collection("profile")
+            .document(uid)
+            .collection("course").limit(1)
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    var courseId = ""
+                    for (document in documents)
+                        courseId = document.id
+
+                    callBack(courseId)
+                }
+            }
+    }
+
+
+    /*
+       ------------------------------------------------ Contacts ------------------------------------------------
+    */
+    /*
+       This function returns all contacts in the firebase to an list
+       @callBack = return the list
+    */
+    fun getAllContacts(callBack: (List<Contact>)->Unit) {
+
+        val contacts = arrayListOf<Contact>()
+
+        db.collection("contacts")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+                        val contact = Contact.fromHash(document)
+                        contacts.add(contact)
+                    }
+
+                    callBack(contacts)
+                }
+
+            }
+
+    }
+
+
+    /*
+       ------------------------------------------------ Chats ------------------------------------------------
+    */
+    /*
+    /*
+       This function returns chats based on given type
+       @callBack = return the list
+    */
+    fun getChatByType(type: String ,callBack: (List<Chat>, List<String>)->Unit) {
+
+        val chats = arrayListOf<Chat>()
+        val chatIds = arrayListOf<String>()
+
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        val chat = Chat.fromHash(document)
+                        if (type == chat.type) {
+                            chats.add(chat)
+                            chatIds.add(document.id)
+                        }
+                    }
+
+                    callBack(chats, chatIds)
+                }
+
+            }
+
+    }
+    */
+
+    /*
+       This function returns last chat message by chat id
+       @callBack = return the list
+    */
+    fun getLastMessageByChatID(chatID: String ,callBack: (Message?)->Unit) {
+
+        var message : Message? = null
+
+        db.collection("chat").document("${chatID}").collection("message")
+            .orderBy("time", Query.Direction.DESCENDING).limit(1)
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        message = Message.fromHash(document)
+                        }
+                    }
+
+                    callBack(message)
+                }
+
+    }
+
 
 }

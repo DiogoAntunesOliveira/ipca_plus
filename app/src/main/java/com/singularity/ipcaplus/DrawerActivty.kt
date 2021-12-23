@@ -1,11 +1,13 @@
 package com.singularity.ipcaplus
 
 import android.content.ContentValues
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,10 +20,13 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.calendar.AddEventActivity
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
+import com.singularity.ipcaplus.profile.ProfileActivity
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 
 class DrawerActivty : AppCompatActivity() {
@@ -36,6 +41,13 @@ class DrawerActivty : AppCompatActivity() {
 
         binding = ActivityDrawerActivtyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
+
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar)
         window.setFlags(
@@ -64,13 +76,14 @@ class DrawerActivty : AppCompatActivity() {
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
             val chat = Chat(
-                "Encripted"
+                "Chat Teste " + Random.nextInt(256),
+                "chat"
 
             )
             val message = Message(
-                Firebase.auth.currentUser!!.uid,
-                "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
-                "2021-11-15",
+                "system",
+                "This is an Alpha Chat, bugs are expected, please report them if you found some. Welcome to Singularity!",
+                "2021-12-22",
                 Timestamp.now(),
                 ""
 

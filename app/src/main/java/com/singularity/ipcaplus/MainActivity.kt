@@ -23,6 +23,7 @@ import com.singularity.ipcaplus.models.Message
 
 class MainActivity : AppCompatActivity() {
 
+    // Variables
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
     var user_groups = arrayListOf<String>()
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var mLayoutManager: LinearLayoutManager? = null
 
     val db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,16 +41,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*
         // Criação de Chat
         binding.fabAddChat.setOnClickListener {
             val chat = Chat(
-                "Encripted"
+                "Chat Teste",
+                "chat"
 
             )
             val message = Message(
-                Firebase.auth.currentUser!!.uid,
-                "This is a Encrypted Chat on BETA please DYOR, and Welcome to Singularity",
-                "2021-11-15",
+                "system",
+                "This is an Alpha Chat bugs are expected, please report them if you found some. Welcome to Singularity!",
+                "2021-12-22",
                 Timestamp.now(),
                 ""
 
@@ -72,7 +76,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
         }
+        */
 
+
+        // Show Profile Chats
         db.collection("profile")
             .document("${Firebase.auth.currentUser!!.uid}")
             .collection("chat")
@@ -93,6 +100,7 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+        // RecyclerView Chats
         mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewGroups.layoutManager = mLayoutManager
         mAdapter = ChatAdapter()
@@ -115,19 +123,24 @@ class MainActivity : AppCompatActivity() {
 
 
             holder.v.apply {
-                val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
-                val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
+                if (chats[position].type == "chats"){
+                    val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
+                    val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
 
 
-                textViewMessage.text = chats[position].name
-                imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
+                    textViewMessage.text = chats[position].name
+                    imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
+                }
+
             }
             holder.v.setOnClickListener {
                 val intent = Intent(this@MainActivity, ChatActivity::class.java)
                 intent.putExtra("chat_id", chatIds[position])
                 startActivity(intent)
             }
+
         }
+
 
         override fun getItemCount(): Int {
             return chats.size

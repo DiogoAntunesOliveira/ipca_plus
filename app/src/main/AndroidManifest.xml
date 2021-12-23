@@ -10,6 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
+            android:name=".calendar.ScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewsWebActivity"
+            android:exported="false" />
+        <activity
+            android:name=".profile.ContactsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".calendar.CalendarActivity"
+            android:exported="false" />
+        <activity
             android:name=".calendar.AddEventActivity"
             android:exported="false" />
         <activity
@@ -51,5 +66,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
 
 </manifest>
