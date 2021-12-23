@@ -6,10 +6,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.models.Chat
-import com.singularity.ipcaplus.models.EventCalendar
-import com.singularity.ipcaplus.models.Message
-import com.singularity.ipcaplus.models.Subject
+import com.singularity.ipcaplus.models.*
 
 object Backend {
 
@@ -184,6 +181,37 @@ object Backend {
                 }
             }
     }
+
+
+    /*
+       ------------------------------------------------ Contacts ------------------------------------------------
+    */
+    /*
+       This function returns all contacts in the firebase to an list
+       @callBack = return the list
+    */
+    fun getAllContacts(callBack: (List<Contact>)->Unit) {
+
+        val contacts = arrayListOf<Contact>()
+
+        db.collection("contacts")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+                        val contact = Contact.fromHash(document)
+                        contacts.add(contact)
+                    }
+
+                    callBack(contacts)
+                }
+
+            }
+
+    }
+
+
     /*
        ------------------------------------------------ Chats ------------------------------------------------
     */
