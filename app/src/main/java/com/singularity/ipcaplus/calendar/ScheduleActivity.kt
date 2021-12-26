@@ -11,12 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.singularity.ipcaplus.Backend
-import com.singularity.ipcaplus.LoginActivity
-import com.singularity.ipcaplus.LoginActivity.PreferenceHelper.email
-import com.singularity.ipcaplus.LoginActivity.PreferenceHelper.userId
-import com.singularity.ipcaplus.R
-import com.singularity.ipcaplus.Utilis
+import com.singularity.ipcaplus.*
+import com.singularity.ipcaplus.PreferenceHelper.email
+import com.singularity.ipcaplus.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
 import com.singularity.ipcaplus.databinding.ActivityScheduleBinding
 import com.singularity.ipcaplus.models.EventCalendar
@@ -46,7 +43,7 @@ class ScheduleActivity : AppCompatActivity() {
         supportActionBar?.title = "Horário"
 
         // Add all Subjects To List based on the selected day and the User Course
-        val prefs = LoginActivity.PreferenceHelper.customPreference(this, "User_data")
+        val prefs = PreferenceHelper.customPreference(this, "User_data")
         Backend.getUserCourse(prefs.userId!!) {
             addSubjectsToList(it)
         }
@@ -86,7 +83,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         // Reset Schedule and get the new Subjects
         day = button.text.toString().lowercase()
-        val prefs = LoginActivity.PreferenceHelper.customPreference(this, "User_data")
+        val prefs = PreferenceHelper.customPreference(this, "User_data")
         Backend.getUserCourse(prefs.userId!!) {
             addSubjectsToList(it)
         }

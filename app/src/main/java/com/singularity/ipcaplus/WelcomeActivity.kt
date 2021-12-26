@@ -10,10 +10,18 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        var registerButton = findViewById<Button>(R.id.LoginButton)
-        registerButton.setOnClickListener{
+        var loginButton = findViewById<Button>(R.id.LoginButton)
+        var registerButton = findViewById<Button>(R.id.RegisterButton)
+
+        loginButton.setOnClickListener{
 
             var intent = Intent(this, LoginActivity::class.java )
+            startActivity(intent)
+        }
+
+        registerButton.setOnClickListener{
+
+            var intent = Intent(this, RegisterActivity::class.java )
             startActivity(intent)
         }
 

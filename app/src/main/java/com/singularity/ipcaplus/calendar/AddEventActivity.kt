@@ -35,6 +35,9 @@ class AddEventActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Marcar tarefa"
 
+        // Get chat id
+        val chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
+
         // Save Event
         binding.buttonSave.setOnClickListener {
             if(!binding.editTextTitle.text.isNullOrBlank()) {
@@ -46,7 +49,9 @@ class AddEventActivity : AppCompatActivity() {
                     binding.editTextDescription.text.toString(),
                     binding.editTextTitle.text.toString()
                 )
-                db.collection("event")
+                db.collection("chat")
+                    .document(chat_id)
+                    .collection("event")
                     .add(event.toHash())
                     .addOnSuccessListener { documentReference ->
 
@@ -60,8 +65,7 @@ class AddEventActivity : AppCompatActivity() {
 
 
                 // Change Activity
-                val returnIntent = Intent(this, CalendarActivity::class.java)
-                startActivity(returnIntent)
+                onBackPressed()
             }
         }
 

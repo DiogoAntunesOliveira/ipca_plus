@@ -1,7 +1,9 @@
 package com.singularity.ipcaplus
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +22,9 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.PreferenceHelper.email
+import com.singularity.ipcaplus.PreferenceHelper.password
+import com.singularity.ipcaplus.PreferenceHelper.userId
 import com.singularity.ipcaplus.calendar.AddEventActivity
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
@@ -107,6 +112,20 @@ class DrawerActivty : AppCompatActivity() {
                 }
 
         }
+
+        // Log Out Button
+        binding.logoutLayout.setOnClickListener {
+
+            val prefs = PreferenceHelper.customPreference(this, "User_data")
+            prefs.password = null
+            prefs.email = null
+            prefs.userId = null
+
+            val intent = Intent(this, WelcomeActivity::class.java)
+            startActivity(intent)
+        }
+
+
         // Passing each fragment ID as a set of Ids
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

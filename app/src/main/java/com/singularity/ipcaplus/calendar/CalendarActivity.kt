@@ -64,9 +64,15 @@ class CalendarActivity : AppCompatActivity() {
             addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
 
         // Add Event Button
-        binding.fabAddEvent.setOnClickListener {
-            val intent = Intent(this, AddEventActivity::class.java)
-            startActivity(intent)
+        if (chat_id == "none") {
+            binding.fabAddEvent.visibility = View.GONE
+        }
+        else {
+            binding.fabAddEvent.setOnClickListener {
+                val intent = Intent(this, AddEventActivity::class.java)
+                intent.putExtra("chat_id", chat_id)
+                startActivity(intent)
+            }
         }
 
         // Calendar Interactions Events
