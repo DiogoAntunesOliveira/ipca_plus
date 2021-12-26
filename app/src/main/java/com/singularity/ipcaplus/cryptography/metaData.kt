@@ -5,15 +5,19 @@ import android.preference.PreferenceManager
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Base64
 import java.io.*
+import java.lang.StringBuilder
 import java.security.InvalidKeyException
+import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.Security
+import java.util.Objects.hash
 import javax.crypto.*
 import javax.crypto.spec.SecretKeySpec
 
 
 fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
     Security.addProvider(BouncyCastleProvider())
+    hash(strToEncrypt)
     var keyBytes: ByteArray
 
     try {
@@ -54,7 +58,6 @@ fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
     return null
 }
 
-
 fun decryptWithAESmeta(key: String, strToDecrypt: String?): String? {
     Security.addProvider(BouncyCastleProvider())
     var keyBytes: ByteArray
@@ -92,4 +95,40 @@ fun decryptWithAESmeta(key: String, strToDecrypt: String?): String? {
     }
 
     return null
+}
+
+fun metaGenrateKey(): String {
+    //val secretKey: String = "662ede816988e58fb6d057d9d85605e0"
+    val keygen = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            + "0123456789"
+            + "abcdefghijklmnopqrstuvxyz")
+
+    val n = 32
+
+    // create StringBuffer size of keygen
+    val secretKey = StringBuilder(n)
+    for (i in 0 until n) {
+
+        // generate a random number between
+        // 0 to keygen variable length
+        val index = (keygen.length
+                * Math.random()).toInt()
+
+        // add Character one by one in end of secretKey
+        secretKey.append(keygen[index])
+
+    }
+    println(secretKey)
+    return secretKey.toString()
+}
+
+fun metaBlock(message: String){
+    //val secretKey: String = "662ede816988e58fb6d057d9d85605e0"
+    val keygen = metaGenrateKey()
+
+    var meta = encryptMeta(message, keygen)
+    println(meta)
+
+    val message_decripted = decryptWithAESmeta(keygen, meta)
+    println(message_decripted)
 }

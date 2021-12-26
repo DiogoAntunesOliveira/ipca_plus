@@ -2,12 +2,15 @@ package com.singularity.ipcaplus
 
 import android.content.ContentValues
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import java.util.Base64
 import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,11 +24,18 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.calendar.AddEventActivity
+import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
+import com.singularity.ipcaplus.cryptography.encryptMeta
+import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.profile.ProfileActivity
+import java.lang.StringBuilder
+import java.util.Base64.getEncoder
 import java.util.concurrent.TimeUnit
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 import kotlin.random.Random
 
 
@@ -36,6 +46,7 @@ class DrawerActivty : AppCompatActivity() {
 
     val db = Firebase.firestore
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,6 +59,15 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
 
         }
+
+        //val secretKey: String = "662ede816988e58fb6d057d9d85605e0"
+
+        /*val message = "Hello Welcome to Solanium Dr.Diogo"
+        var meta = encryptMeta(message, keygen)
+        println(meta)
+
+        val message_decripted = decryptWithAESmeta(keygen, meta)
+        println(message_decripted)*/
 
         setSupportActionBar(binding.appBarMain.toolbar)
         window.setFlags(
@@ -75,14 +95,22 @@ class DrawerActivty : AppCompatActivity() {
 
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
+
+            /*val keygen = metaGenrateKey()
+
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("keygen", keygen)
+            startActivity(intent)*/
+
             val chat = Chat(
                 "Chat Teste " + Random.nextInt(256),
                 "chat"
-
             )
+
+            var meta = encryptMeta("This is an Alpha Chat, bugs are expected, please report them if you found some. Welcome to Singularity!", "662ede816988e58fb6d057d9d85605e0")
             val message = Message(
                 "system",
-                "This is an Alpha Chat, bugs are expected, please report them if you found some. Welcome to Singularity!",
+                meta.toString(),
                 "2021-12-22",
                 Timestamp.now(),
                 ""
