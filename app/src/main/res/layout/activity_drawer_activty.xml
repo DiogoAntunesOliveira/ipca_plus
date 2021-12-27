@@ -27,7 +27,8 @@
         app:menu="@menu/activity_drawer">
 
       <LinearLayout
-          android:layout_width="match_parent"
+          android:id="@+id/logout_layout"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom"
           android:orientation="horizontal"
