@@ -18,7 +18,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.calendar.CalendarActivity
+import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
 import com.singularity.ipcaplus.cryptography.encryptMeta
+import com.singularity.ipcaplus.cryptography.getMetaOx
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
@@ -55,11 +57,12 @@ class ChatActivity : AppCompatActivity() {
         // Send Message
             binding.fabSend.setOnClickListener {
                 if(!binding.editTextMessage.text.isNullOrBlank()) {
-                    var meta = encryptMeta( binding.editTextMessage.text.toString(), "662ede816988e58fb6d057d9d85605e0")
+                    val keygen = getMetaOx(this, chat_id)
+                    var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
 
                     val message = Message(
                         Firebase.auth.currentUser!!.uid,
-                        binding.editTextMessage.text.toString(),
+                        meta.toString(),
                         "",
                         Timestamp.now(),
                         ""
@@ -182,6 +185,7 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
@@ -191,13 +195,16 @@ class ChatActivity : AppCompatActivity() {
                 val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
 
 
-                textViewMessage.text = messages[position].message
                 timeLastMessage?.isVisible = false
-                println("escondido")
+                val keygen = getMetaOx(context, chat_id)
+                print( getMetaOx(context, chat_id)).toString()
+                val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message)
+                textViewMessage.text = message_decripted
+                println(message_decripted)
                 if(position == messages.size - 1) {
                     val data = Utilis.getDate(messages[position].time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                     timeLastMessage.isVisible = true
-                    println("Visivel")
+                    println("\nVisivel")
                     timeLastMessage.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
                     println("Com tempo")
                 }

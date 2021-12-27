@@ -1,18 +1,25 @@
 package com.singularity.ipcaplus.cryptography
 
 import android.content.Context
-import android.preference.PreferenceManager
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.util.encoders.Base64
-import java.io.*
-import java.lang.StringBuilder
+import java.io.UnsupportedEncodingException
 import java.security.InvalidKeyException
-import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.Security
 import java.util.Objects.hash
 import javax.crypto.*
 import javax.crypto.spec.SecretKeySpec
+
+
+
 
 
 fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
@@ -131,4 +138,42 @@ fun metaBlock(message: String){
 
     val message_decripted = decryptWithAESmeta(keygen, meta)
     println(message_decripted)
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun saveKeygenOx(context : Context, chatUid : String, keygen: String){
+
+    val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
+    val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    val sharedPreferences = EncryptedSharedPreferences.create(
+        "meta_shared_preferences",
+        masterKeyAlias,
+        context,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+    // storing a value
+    sharedPreferences
+        .edit()
+        .putString(chatUid, keygen)
+        .apply()
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun getMetaOx(context: Context, chatUid: String): String? {
+
+    val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
+    val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+    val sharedPreferences = EncryptedSharedPreferences.create(
+        "meta_shared_preferences",
+        masterKeyAlias,
+        context,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+    // reading a value
+    println(sharedPreferences.getString(chatUid, ""))
+    return sharedPreferences.getString(chatUid, "") // -> "some_data"
 }
