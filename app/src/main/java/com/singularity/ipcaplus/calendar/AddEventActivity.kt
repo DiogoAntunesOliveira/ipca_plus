@@ -9,12 +9,10 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.MainActivity
+import com.singularity.ipcaplus.DrawerActivty
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityAddEventBinding
-import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.EventCalendar
-import com.singularity.ipcaplus.models.Message
 import java.util.concurrent.TimeUnit
 
 class AddEventActivity : AppCompatActivity() {

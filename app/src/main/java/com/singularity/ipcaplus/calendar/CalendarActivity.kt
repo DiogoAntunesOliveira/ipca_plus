@@ -22,8 +22,6 @@ import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.Utilis
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
-import com.singularity.ipcaplus.databinding.ActivityChatBinding
-import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.EventCalendar
 import java.time.Year
 import java.util.*

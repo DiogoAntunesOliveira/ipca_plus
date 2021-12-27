@@ -33,9 +33,9 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
-            android:name=".TabActivity"
+            android:name=".SearchActivity"
             android:exported="true"
-            android:label="@string/title_activity_tab"
+            android:label="SearchActivity"
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
             android:name=".ChatActivity"
@@ -58,9 +58,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"

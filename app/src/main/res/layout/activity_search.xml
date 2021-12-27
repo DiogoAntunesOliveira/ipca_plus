@@ -8,29 +8,77 @@
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:iconifiedByDefault="false"
-
-        android:queryHint="Pesquisar..."
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:closeIcon="@drawable/ic_arrow_back_24"
-        android:searchHintIcon="@drawable/ic_search_24"
-        android:searchIcon="@drawable/ic_search_24"
-
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/green_200"
 
+        android:closeIcon="@drawable/ic_close_white_24"
+
+
+        android:iconifiedByDefault="false"
+        android:queryHint="Pesquisar..."
+        android:searchIcon="@null"
+
         android:theme="@style/MyActionBar"
-
-        >
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </SearchView>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="92dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toStartOf="@+id/searchView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/green_100"
+        >
+
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btn_documentos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="12dp"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_paper_24"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Documentos"
+
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toStartOf="@+id/btn_ligacoes"
+        app:layout_constraintStart_toEndOf="@+id/btn_gifs"
+        app:layout_constraintTop_toBottomOf="@+id/btn_foto" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/gradient_shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_gifs" />
 
     <Button
         android:id="@+id/btn_foto"
@@ -50,25 +98,6 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toStartOf="@+id/btn_vid"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
-    <Button
-        android:id="@+id/btn_vid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="18dp"
-
-        android:background="@drawable/button_filtro"
-        android:drawableLeft="@drawable/ic_video"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Vídeos"
-
-        android:textAllCaps="false"
-        android:textColor="#7C7C7C"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toStartOf="@+id/btn_audio"
-        app:layout_constraintStart_toEndOf="@+id/btn_foto"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
     <Button
@@ -114,25 +143,6 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_foto" />
 
     <Button
-        android:id="@+id/btn_documentos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="12dp"
-
-        android:background="@drawable/button_filtro"
-        android:drawableLeft="@drawable/ic_paper_24"
-        android:fontFamily="@font/roboto_regular"
-        android:text="Documentos"
-
-        android:textAllCaps="false"
-        android:textColor="#7C7C7C"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toStartOf="@+id/btn_ligacoes"
-        app:layout_constraintStart_toEndOf="@+id/btn_gifs"
-        app:layout_constraintTop_toBottomOf="@+id/btn_foto" />
-
-    <Button
         android:id="@+id/btn_ligacoes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -153,26 +163,37 @@
         app:layout_constraintStart_toEndOf="@+id/btn_documentos"
         app:layout_constraintTop_toBottomOf="@+id/btn_vid" />
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/gradient_shadow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_gifs" />
+    <Button
+        android:id="@+id/btn_vid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="18dp"
+
+        android:background="@drawable/button_filtro"
+        android:drawableLeft="@drawable/ic_video"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Vídeos"
+
+        android:textAllCaps="false"
+        android:textColor="#7C7C7C"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toStartOf="@+id/btn_audio"
+        app:layout_constraintStart_toEndOf="@+id/btn_foto"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewProfile"
         android:layout_width="409dp"
         android:layout_height="625dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

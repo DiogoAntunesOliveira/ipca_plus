@@ -90,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
 
             // Below  if statement is added to check if email is verified
             if(currentUser.isEmailVerified){
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, DrawerActivty::class.java)
                 intent.putExtra("emailAddress", emailAdd);
                 startActivity(intent)
 
