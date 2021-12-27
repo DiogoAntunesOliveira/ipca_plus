@@ -144,6 +144,13 @@ class ChatActivity : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+            R.id.chatMore -> {
+                val intent = Intent(this, ChatMoreActivity::class.java)
+                intent.putExtra("chat_id", chat_id)
+                intent.putExtra("chat_name", supportActionBar?.title)
+                startActivity(intent)
+                return true
+            }
         }
 
         return false
