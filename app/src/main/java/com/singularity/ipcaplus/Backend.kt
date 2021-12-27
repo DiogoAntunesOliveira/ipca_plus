@@ -1,10 +1,9 @@
 package com.singularity.ipcaplus
 
-import android.graphics.Color
-import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.models.*
 
@@ -401,6 +400,30 @@ object Backend {
             }
 
     }
+
+    /*
+       ------------------------------------------------ Register Manipulation ------------------------------------------------
+    */
+
+    fun getIpcaData(email: String, callBack: (Profile?)->Unit) {
+
+        var profile : Profile? = null
+
+        db.collection("ipca_data")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        println(document.getField("email"))
+                        if (email == document.getField("email")){
+                            profile = Profile.fromHash(document)
+                        }
+                    }
+                }
+                callBack(profile)
+            }
+
+    }
+
 
 
 }

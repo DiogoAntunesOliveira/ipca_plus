@@ -155,6 +155,9 @@ object  Utilis {
         return strArray2[1].toString()
     }
 
+    /*
+        This function get the buffer with the name of filename on assets folder
+     */
 
     fun getJsonDataFromAsset(context: Context, fileName: String): String? {
         val jsonString: String
@@ -172,6 +175,18 @@ object  Utilis {
         val nameArray = Pattern.compile(" ").split(fullName)
 
         return nameArray[0] + " " + nameArray[nameArray.size-1]
+    }
+
+    /*
+        This function gets the domain of email
+        split remove the @ and make the array like this -> [a20115][alunos.ipca.pt]
+     */
+    fun getEmailDomain(email: String) : String{
+        val strArray = Pattern.compile("@").split(email)
+        val result= strArray[1]
+
+        return result.toString()
+
     }
 
 }
