@@ -7,7 +7,7 @@
     tools:context=".profile.ProfileActivity">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imageView_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -29,7 +29,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profile" />
 
     <TextView
         android:id="@+id/textViewEmail"

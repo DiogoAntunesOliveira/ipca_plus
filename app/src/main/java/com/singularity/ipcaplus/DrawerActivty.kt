@@ -52,7 +52,10 @@ class DrawerActivty : AppCompatActivity() {
 
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+        }
 
+        Utilis.getUserImage(Firebase.auth.uid!!) { bitmap ->
+            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
 
         val name = Utilis.getFirstAndLastName(UserLoggedIn.name!!)
