@@ -1,10 +1,11 @@
 package com.singularity.ipcaplus
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 import java.util.regex.Pattern
 
@@ -152,6 +153,18 @@ object  Utilis {
         val strArray2 = Pattern.compile(":").split(strArray[1])
 
         return strArray2[1].toString()
+    }
+
+
+    fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return null
+        }
+        return jsonString
     }
 
 }
