@@ -203,9 +203,8 @@ class CalendarActivity : AppCompatActivity() {
                     deleteButton.visibility = View.GONE
 
                 deleteButton.setOnClickListener {
-                    events.clear()
-                    eventAdapter = EventAdapter()
                     Backend.deleteEvent(chat_id, events[position].id)
+                    addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
                 }
 
             }
