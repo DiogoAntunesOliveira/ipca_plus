@@ -41,6 +41,7 @@ object Backend {
 
                             for (document in documents) {
                                 val event = EventCalendar.fromHash(document)
+                                event.id = document.id
 
                                 val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                 if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
@@ -52,10 +53,6 @@ object Backend {
                     }
             }
         }
-
-
-
-
     }
 
 
@@ -95,6 +92,7 @@ object Backend {
 
                     for (document in documents) {
                         val event = EventCalendar.fromHash(document)
+                        event.id = document.id
 
                         val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                         if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
@@ -127,6 +125,7 @@ object Backend {
 
                     for (document in documents) {
                         val event = EventCalendar.fromHash(document)
+                        event.id = document.id
 
                         val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                         if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
@@ -166,6 +165,7 @@ object Backend {
 
                             for (document in documents) {
                                 val event = EventCalendar.fromHash(document)
+                                event.id = document.id
 
                                 val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                 if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
@@ -179,6 +179,17 @@ object Backend {
                     }
             }
         }
+    }
+
+
+    fun deleteEvent(chatID: String, eventID: String) {
+
+        db.collection("chat")
+            .document(chatID)
+            .collection("event")
+            .document(eventID)
+            .delete()
+
     }
 
 
@@ -327,7 +338,7 @@ object Backend {
        This function returns last chat message by chat id
        @callBack = return the list
     */
-    fun getLastMessageByChatID(chatID: String ,callBack: (Message?)->Unit) {
+    fun getLastMessageByChatID(chatID: String, callBack: (Message?)->Unit) {
 
         var message : Message? = null
 
@@ -342,6 +353,25 @@ object Backend {
 
                     callBack(message)
                 }
+
+    }
+
+
+    fun getChatAdminIds(chatID: String, callBack: (List<String>)->Unit) {
+
+        val adminIds = arrayListOf<String>()
+
+        // Get Group Chats Ids
+        db.collection("chat").document(chatID).collection("admin")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in it) {
+                        adminIds.add(document.id)
+                    }
+
+                    callBack(adminIds)
+                }
+            }
 
     }
 

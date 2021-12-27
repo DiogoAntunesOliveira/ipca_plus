@@ -40,9 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="75dp"
                 android:text="10"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/imageView1"
                 app:layout_constraintEnd_toStartOf="@+id/separador"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +54,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="90dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:text="TextView"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deleteButton"
                 app:layout_constraintStart_toEndOf="@+id/separador"
                 app:layout_constraintTop_toTopOf="@+id/imageView1" />
 
@@ -67,10 +68,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="90dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
                 android:text="TextView"
                 android:textColor="@color/black"
                 android:textSize="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deleteButton"
                 app:layout_constraintStart_toEndOf="@+id/separador"
                 app:layout_constraintTop_toBottomOf="@+id/name_textview" />
 
@@ -81,10 +83,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="90dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
                 android:text="TextView"
                 android:textColor="@color/black"
                 android:textSize="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deleteButton"
                 app:layout_constraintStart_toEndOf="@+id/separador"
                 app:layout_constraintTop_toBottomOf="@+id/desc_textview" />
 
@@ -97,9 +100,19 @@
                 app:layout_constraintStart_toStartOf="@+id/imageView1"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/imageView1"
+                app:layout_constraintTop_toTopOf="@+id/imageView1"
+                app:srcCompat="@drawable/ic_delete" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-        <!-- android:backgroundTint="@color/black" -->
+    <!-- android:backgroundTint="@color/black" -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

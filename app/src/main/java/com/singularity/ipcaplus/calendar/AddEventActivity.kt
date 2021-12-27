@@ -53,19 +53,12 @@ class AddEventActivity : AppCompatActivity() {
                     .document(chat_id)
                     .collection("event")
                     .add(event.toHash())
-                    .addOnSuccessListener { documentReference ->
+                    .addOnSuccessListener {
 
-                        db.collection("profile")
-                            .document("${Firebase.auth.currentUser!!.uid}")
-                            .collection("event")
-                            .document("${documentReference.id}")
-                            .set(event)
-
+                        // Change Activity
+                        onBackPressed()
                     }
 
-
-                // Change Activity
-                onBackPressed()
             }
         }
 
