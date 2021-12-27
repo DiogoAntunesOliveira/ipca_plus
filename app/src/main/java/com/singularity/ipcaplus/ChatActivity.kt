@@ -3,15 +3,13 @@ package com.singularity.ipcaplus
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.graphics.drawable.toDrawable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,18 +17,13 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.calendar.AddEventActivity
 import com.singularity.ipcaplus.calendar.CalendarActivity
-import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
 import com.singularity.ipcaplus.cryptography.encryptMeta
-import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class ChatActivity : AppCompatActivity() {
 
@@ -66,7 +59,7 @@ class ChatActivity : AppCompatActivity() {
 
                     val message = Message(
                         Firebase.auth.currentUser!!.uid,
-                        meta.toString(),
+                        binding.editTextMessage.text.toString(),
                         "",
                         Timestamp.now(),
                         ""
