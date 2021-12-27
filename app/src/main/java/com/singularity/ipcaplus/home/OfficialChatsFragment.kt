@@ -56,6 +56,7 @@ class OfficialChatsFragment : Fragment() {
             .addSnapshotListener { documents, e ->
                 documents?.let {
                     chats.clear()
+                    chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
                         if (chat.type == "oficial") {

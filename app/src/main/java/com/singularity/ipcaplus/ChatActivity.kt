@@ -21,6 +21,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.calendar.AddEventActivity
 import com.singularity.ipcaplus.calendar.CalendarActivity
+import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
+import com.singularity.ipcaplus.cryptography.encryptMeta
+import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
@@ -59,10 +62,11 @@ class ChatActivity : AppCompatActivity() {
         // Send Message
             binding.fabSend.setOnClickListener {
                 if(!binding.editTextMessage.text.isNullOrBlank()) {
+                    var meta = encryptMeta( binding.editTextMessage.text.toString(), "662ede816988e58fb6d057d9d85605e0")
 
                     val message = Message(
                         Firebase.auth.currentUser!!.uid,
-                        binding.editTextMessage.text.toString(),
+                        meta.toString(),
                         "",
                         Timestamp.now(),
                         ""
@@ -186,7 +190,9 @@ class ChatActivity : AppCompatActivity() {
                 val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
                 val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
 
-                textViewMessage.text = messages[position].message
+                val message_decripted = decryptWithAESmeta("662ede816988e58fb6d057d9d85605e0", messages[position].message)
+
+                textViewMessage.text = message_decripted
                 timeLastMessage?.isVisible = false
                 println("escondido")
                 if(position == messages.size - 1) {
