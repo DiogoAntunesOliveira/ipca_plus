@@ -1,13 +1,20 @@
 package com.singularity.ipcaplus
 
+import android.content.ClipData
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,7 +27,12 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.PreferenceHelper.email
+import com.singularity.ipcaplus.PreferenceHelper.password
+import com.singularity.ipcaplus.PreferenceHelper.userId
 import com.singularity.ipcaplus.calendar.AddEventActivity
+import com.singularity.ipcaplus.cryptography.encryptMeta
+import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
@@ -46,8 +58,15 @@ class DrawerActivty : AppCompatActivity() {
 
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
-
         }
+
+        Utilis.getUserImage(Firebase.auth.uid!!) { bitmap ->
+            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
+        }
+
+        val name = Utilis.getFirstAndLastName(UserLoggedIn.name!!)
+        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textView3).text = name
+        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text = UserLoggedIn.email
 
         setSupportActionBar(binding.appBarMain.toolbar)
         window.setFlags(
@@ -73,16 +92,21 @@ class DrawerActivty : AppCompatActivity() {
             ), drawerLayout
         )
 
+        val keygen = metaGenrateKey()
+
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
             val chat = Chat(
                 "Chat Teste " + Random.nextInt(256),
-                "chat"
-
+                "chat",
+                keygen
             )
+            var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
+                    " please report them if you found some. Welcome to Singularity!", keygen)
+            val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"
             val message = Message(
                 "system",
-                "This is an Alpha Chat, bugs are expected, please report them if you found some. Welcome to Singularity!",
+                meta.toString(),
                 "2021-12-22",
                 Timestamp.now(),
                 ""
@@ -100,6 +124,11 @@ class DrawerActivty : AppCompatActivity() {
                         .collection("chat")
                         .document("${documentReference.id}")
                         .set(chat)
+                    db.collection("profile")
+                        .document(id_amigo)
+                        .collection("chat")
+                        .document("${documentReference.id}")
+                        .set(chat)
 
                 }
                 .addOnFailureListener { e ->
@@ -107,6 +136,20 @@ class DrawerActivty : AppCompatActivity() {
                 }
 
         }
+
+        // Log Out Button
+        binding.logoutLayout.setOnClickListener {
+
+            val prefs = PreferenceHelper.customPreference(this, "User_data")
+            prefs.password = null
+            prefs.email = null
+            prefs.userId = null
+
+            val intent = Intent(this, WelcomeActivity::class.java)
+            startActivity(intent)
+        }
+
+
         // Passing each fragment ID as a set of Ids
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -122,5 +165,18 @@ class DrawerActivty : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.search_btn -> {
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

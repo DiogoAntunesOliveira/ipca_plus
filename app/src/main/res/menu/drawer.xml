@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search_bar"
+        android:id="@+id/search_btn"
         android:icon="@drawable/ic_baseline_search_24"
         android:orderInCategory="100"
         android:title="@string/search_bar_icon"

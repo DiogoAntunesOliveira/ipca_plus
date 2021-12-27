@@ -9,12 +9,10 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.MainActivity
+import com.singularity.ipcaplus.DrawerActivty
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityAddEventBinding
-import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.EventCalendar
-import com.singularity.ipcaplus.models.Message
 import java.util.concurrent.TimeUnit
 
 class AddEventActivity : AppCompatActivity() {
@@ -35,6 +33,9 @@ class AddEventActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Marcar tarefa"
 
+        // Get chat id
+        val chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
+
         // Save Event
         binding.buttonSave.setOnClickListener {
             if(!binding.editTextTitle.text.isNullOrBlank()) {
@@ -46,22 +47,16 @@ class AddEventActivity : AppCompatActivity() {
                     binding.editTextDescription.text.toString(),
                     binding.editTextTitle.text.toString()
                 )
-                db.collection("event")
+                db.collection("chat")
+                    .document(chat_id)
+                    .collection("event")
                     .add(event.toHash())
-                    .addOnSuccessListener { documentReference ->
+                    .addOnSuccessListener {
 
-                        db.collection("profile")
-                            .document("${Firebase.auth.currentUser!!.uid}")
-                            .collection("event")
-                            .document("${documentReference.id}")
-                            .set(event)
-
+                        // Change Activity
+                        onBackPressed()
                     }
 
-
-                // Change Activity
-                val returnIntent = Intent(this, CalendarActivity::class.java)
-                startActivity(returnIntent)
             }
         }
 

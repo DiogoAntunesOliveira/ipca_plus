@@ -1,10 +1,9 @@
 package com.singularity.ipcaplus
 
-import android.graphics.Color
-import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.models.*
 
@@ -16,33 +15,6 @@ object Backend {
        ------------------------------------------------ Events ------------------------------------------------
     */
 
-
-    /*
-       This function returns all events in the firebase to an list
-       @callBack = return the list
-    */
-    fun getAllEvents(callBack: (List<EventCalendar>)->Unit) {
-
-        val events = arrayListOf<EventCalendar>()
-
-        db.collection("event")
-            .addSnapshotListener { documents, _ ->
-
-                documents?.let {
-
-                    for (document in documents) {
-                        val event = EventCalendar.fromHash(document)
-                        events.add(event)
-                    }
-
-                    callBack(events)
-                }
-
-            }
-
-    }
-
-
     /*
        This function returns all events during the month in the firebase to an list
        @month = selected month
@@ -52,16 +24,110 @@ object Backend {
 
         val events = arrayListOf<EventCalendar>()
 
-        db.collection("event")
+        // Get all user chat ids
+        val chatIds = arrayListOf<String>()
+        getAllUserChatIds {
+            chatIds.addAll(it)
+
+            // Search in all chats
+            for (id in chatIds) {
+                db.collection("chat")
+                    .document(id)
+                    .collection("event")
+                    .addSnapshotListener { documents, _ ->
+
+                        documents?.let {
+
+                            for (document in documents) {
+                                val event = EventCalendar.fromHash(document)
+                                event.id = document.id
+
+                                val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                                    events.add(event)
+                                }
+                            }
+                            callBack(events)
+                        }
+                    }
+            }
+        }
+    }
+
+
+    private fun getAllUserChatIds(callBack: (List<String>)->Unit) {
+
+        val chatIds = arrayListOf<String>()
+
+        // Get Group Chats Ids
+        db.collection("profile").document(Firebase.auth.currentUser!!.uid).collection("chat")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in it) {
+                        chatIds.add(document.id)
+                    }
+
+                    callBack(chatIds)
+                }
+            }
+    }
+
+
+    /*
+       This function returns all events during the month in the firebase to an list
+       @month = selected month
+       @callBack = return the list
+    */
+    fun getAllChatMonthEvents(month: String, chat_id: String, callBack: (List<EventCalendar>)->Unit) {
+
+        val events = arrayListOf<EventCalendar>()
+
+        db.collection("chat")
+            .document(chat_id)
+            .collection("event")
             .addSnapshotListener { documents, _ ->
 
                 documents?.let {
 
                     for (document in documents) {
                         val event = EventCalendar.fromHash(document)
+                        event.id = document.id
 
                         val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                         if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                            events.add(event)
+                        }
+                    }
+
+                    callBack(events)
+                }
+
+            }
+    }
+
+
+    /*
+       This function returns all events during the day in the firebase to an list
+       @day = selected day
+       @callBack = return the list
+    */
+    fun getAllChatMonthDayEvents(month: String, day: Int, chat_id: String, callBack: (List<EventCalendar>)->Unit) {
+
+        val events = arrayListOf<EventCalendar>()
+
+        db.collection("chat")
+            .document(chat_id)
+            .collection("event")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+                        val event = EventCalendar.fromHash(document)
+                        event.id = document.id
+
+                        val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                        if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
                             events.add(event)
                         }
                     }
@@ -82,24 +148,47 @@ object Backend {
 
         val events = arrayListOf<EventCalendar>()
 
-        db.collection("event")
-            .addSnapshotListener { documents, _ ->
+        // Get all user chat ids
+        val chatIds = arrayListOf<String>()
+        getAllUserChatIds {
+            chatIds.addAll(it)
 
-                documents?.let {
+            // Search in all chats
+            for (id in chatIds) {
+                db.collection("chat")
+                    .document(id)
+                    .collection("event")
+                    .addSnapshotListener { documents, _ ->
 
-                    for (document in documents) {
-                        val event = EventCalendar.fromHash(document)
+                        documents?.let {
 
-                        val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                        if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
-                            events.add(event)
+                            for (document in documents) {
+                                val event = EventCalendar.fromHash(document)
+                                event.id = document.id
+
+                                val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                                    events.add(event)
+                                }
+                            }
+
+                            callBack(events)
                         }
+
                     }
-
-                    callBack(events)
-                }
-
             }
+        }
+    }
+
+
+    fun deleteEvent(chatID: String, eventID: String) {
+
+        db.collection("chat")
+            .document(chatID)
+            .collection("event")
+            .document(eventID)
+            .delete()
+
     }
 
 
@@ -168,7 +257,7 @@ object Backend {
 
         db.collection("profile")
             .document(uid)
-            .collection("course").limit(1)
+            .collection("course")
             .addSnapshotListener { documents, _ ->
 
                 documents?.let {
@@ -186,6 +275,7 @@ object Backend {
     /*
        ------------------------------------------------ Contacts ------------------------------------------------
     */
+
     /*
        This function returns all contacts in the firebase to an list
        @callBack = return the list
@@ -209,6 +299,32 @@ object Backend {
 
             }
 
+    }
+
+
+    /*
+       ------------------------------------------------ Profile ------------------------------------------------
+    */
+
+    fun getUserProfile(userId: String, callBack:(Profile)->Unit) {
+
+        var profile = Profile()
+
+        db.collection("profile")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+
+                        if (document.id == userId) {
+                            profile = Profile.fromHash(document)
+                        }
+                    }
+
+                    callBack(profile)
+                }
+            }
     }
 
 
@@ -248,7 +364,7 @@ object Backend {
        This function returns last chat message by chat id
        @callBack = return the list
     */
-    fun getLastMessageByChatID(chatID: String ,callBack: (Message?)->Unit) {
+    fun getLastMessageByChatID(chatID: String, callBack: (Message?)->Unit) {
 
         var message : Message? = null
 
@@ -265,6 +381,49 @@ object Backend {
                 }
 
     }
+
+
+    fun getChatAdminIds(chatID: String, callBack: (List<String>)->Unit) {
+
+        val adminIds = arrayListOf<String>()
+
+        // Get Group Chats Ids
+        db.collection("chat").document(chatID).collection("admin")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in it) {
+                        adminIds.add(document.id)
+                    }
+
+                    callBack(adminIds)
+                }
+            }
+
+    }
+
+    /*
+       ------------------------------------------------ Register Manipulation ------------------------------------------------
+    */
+
+    fun getIpcaData(email: String, callBack: (Profile?)->Unit) {
+
+        var profile : Profile? = null
+
+        db.collection("ipca_data")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        println(document.getField("email"))
+                        if (email == document.getField("email")){
+                            profile = Profile.fromHash(document)
+                        }
+                    }
+                }
+                callBack(profile)
+            }
+
+    }
+
 
 
 }

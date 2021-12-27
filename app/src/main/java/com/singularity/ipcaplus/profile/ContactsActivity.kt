@@ -58,6 +58,7 @@ class ContactsActivity : AppCompatActivity() {
 
             }
 
+            contactsAdapter.notifyDataSetChanged()
         }
 
     }

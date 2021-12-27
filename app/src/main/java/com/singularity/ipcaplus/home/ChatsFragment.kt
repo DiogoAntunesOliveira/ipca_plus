@@ -2,6 +2,7 @@ package com.singularity.ipcaplus.home
 
 import android.content.ContentValues
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +22,8 @@ import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.ChatActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.Utilis
+import com.singularity.ipcaplus.cryptography.getMetaOx
+import com.singularity.ipcaplus.cryptography.saveKeygenOx
 import com.singularity.ipcaplus.databinding.FragmentChatsBinding
 import com.singularity.ipcaplus.models.Chat
 
@@ -52,6 +56,7 @@ class ChatsFragment : Fragment() {
             .addSnapshotListener { documents, e ->
                 documents?.let {
                     chats.clear()
+                    chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
                         if (chat.type == "chat") {
@@ -100,6 +105,7 @@ class ChatsFragment : Fragment() {
 
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
@@ -113,6 +119,9 @@ class ChatsFragment : Fragment() {
 
 
                     textViewMessage.text = chats[position].name
+
+                    // sync with encrypted shared preferences
+                    saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
                     // Set Last Chat Message
                     Backend.getLastMessageByChatID(chatIds[position]) {
                         val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")

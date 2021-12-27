@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -15,18 +16,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.github.sundeepk.compactcalendarview.domain.Event
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.Utilis
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
-import com.singularity.ipcaplus.databinding.ActivityChatBinding
-import com.singularity.ipcaplus.databinding.ActivityMainBinding
 import com.singularity.ipcaplus.models.EventCalendar
 import java.time.Year
 import java.util.*
 
 class CalendarActivity : AppCompatActivity() {
 
+    var isAdmin = false
+    lateinit var chat_id: String
     var events = arrayListOf<EventCalendar>()
     private var eventAdapter: RecyclerView.Adapter<*>? = null
     private var eventLayoutManager: LinearLayoutManager? = null
@@ -54,13 +57,40 @@ class CalendarActivity : AppCompatActivity() {
         binding.yearTitle.text = Utilis.getCurrentYear()
         binding.compactcalendarView.setCurrentDate(Date())
 
-        // Get This Month Events
-        addAllMonthEvents(binding.monthTitle.text.toString())
+        // Get chat id
+        chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
+
+        // Get All Events This Month
+        if (chat_id == "none")
+            addAllMonthEvents(binding.monthTitle.text.toString())
+        else
+            addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
+
+        // Check if Player is Chat Admin
+        if (chat_id != "none") {
+            Backend.getChatAdminIds(chat_id) {
+                val currentUser = Firebase.auth.currentUser!!.uid
+                for (admin in it) {
+                    if (admin == currentUser)
+                        isAdmin = true
+                }
+
+                // Hide Add Button for normal users
+                if (!isAdmin)
+                    binding.fabAddEvent.visibility = View.GONE
+            }
+        }
 
         // Add Event Button
-        binding.fabAddEvent.setOnClickListener {
-            val intent = Intent(this, AddEventActivity::class.java)
-            startActivity(intent)
+        if (chat_id == "none") {
+            binding.fabAddEvent.visibility = View.GONE
+        }
+        else {
+            binding.fabAddEvent.setOnClickListener {
+                val intent = Intent(this, AddEventActivity::class.java)
+                intent.putExtra("chat_id", chat_id)
+                startActivity(intent)
+            }
         }
 
         // Calendar Interactions Events
@@ -69,7 +99,10 @@ class CalendarActivity : AppCompatActivity() {
             override fun onDayClick(dateClicked: Date) {
 
                 // Show All Selected day Events
-                addAllDayEvents(binding.monthTitle.text.toString(), dateClicked.date)
+                if (chat_id == "none")
+                    addAllDayEvents(binding.monthTitle.text.toString(), dateClicked.date)
+                else
+                    addAllChatDayEvents(binding.monthTitle.text.toString(), dateClicked.date, chat_id)
 
             }
 
@@ -78,7 +111,10 @@ class CalendarActivity : AppCompatActivity() {
                 binding.yearTitle.text = Utilis.getYearByCalendarId(firstDayOfNewMonth.year).toString()
 
                 // Refresh with new Month Events
-                addAllMonthEvents(binding.monthTitle.text.toString())
+                if (chat_id == "none")
+                    addAllMonthEvents(binding.monthTitle.text.toString())
+                else
+                    addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
             }
         })
 
@@ -96,24 +132,36 @@ class CalendarActivity : AppCompatActivity() {
         return true
     }
 
+
     fun addAllMonthEvents(month: String) {
         Backend.getAllMonthEvents (month) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+        }
+    }
 
-            // Add Icons into the calendar
-            // Bugado <----------- vvvvvvvvvvv
-            for (event in events) {
-                val ev = Event(0,event.datetime.seconds * 1000, event.desc)
-                binding.compactcalendarView.addEvent(ev)
-            }
+
+    fun addAllChatMonthEvents(month: String, chat_id: String) {
+        Backend.getAllChatMonthEvents (month, chat_id) { allEvents ->
+            events.clear()
+            events.addAll(allEvents)
+            eventAdapter?.notifyDataSetChanged()
         }
     }
 
 
     fun addAllDayEvents(month: String, day: Int) {
         Backend.getAllMonthDayEvents (month, day) { allEvents ->
+            events.clear()
+            events.addAll(allEvents)
+            eventAdapter?.notifyDataSetChanged()
+        }
+    }
+
+
+    fun addAllChatDayEvents(month: String, day: Int, chat_id: String) {
+        Backend.getAllChatMonthDayEvents (month, day, chat_id) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
@@ -140,6 +188,7 @@ class CalendarActivity : AppCompatActivity() {
                 val textViewName = findViewById<TextView>(R.id.name_textview)
                 val textViewDesc = findViewById<TextView>(R.id.desc_textview)
                 val textViewHour = findViewById<TextView>(R.id.hour_textview)
+                val deleteButton = findViewById<ImageView>(R.id.deleteButton)
 
                 // Set data
                 val date = Utilis.getDate(events[position].datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
@@ -147,6 +196,14 @@ class CalendarActivity : AppCompatActivity() {
                 textViewName.text = events[position].name
                 textViewDesc.text = events[position].desc
                 textViewHour.text = Utilis.getHours(date) + ":" + Utilis.getMinutes(date)
+
+                if (!isAdmin)
+                    deleteButton.visibility = View.GONE
+
+                deleteButton.setOnClickListener {
+                    Backend.deleteEvent(chat_id, events[position].id)
+                    addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
+                }
 
             }
         }
