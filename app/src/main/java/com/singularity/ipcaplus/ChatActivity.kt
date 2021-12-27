@@ -190,9 +190,8 @@ class ChatActivity : AppCompatActivity() {
                 val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
                 val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
 
-                val message_decripted = decryptWithAESmeta("662ede816988e58fb6d057d9d85605e0", messages[position].message)
 
-                textViewMessage.text = message_decripted
+                textViewMessage.text = messages[position].message
                 timeLastMessage?.isVisible = false
                 println("escondido")
                 if(position == messages.size - 1) {
