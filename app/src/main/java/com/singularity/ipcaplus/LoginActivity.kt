@@ -14,6 +14,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.PreferenceHelper.customPreference
 import com.singularity.ipcaplus.PreferenceHelper.email
+import com.singularity.ipcaplus.PreferenceHelper.name
 import com.singularity.ipcaplus.PreferenceHelper.password
 import com.singularity.ipcaplus.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityLoginBinding
@@ -44,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
         val prefs = customPreference(this, VALID_DATA)
 
         UserLoggedIn.id = prefs.getString("USER_ID", null)
+        UserLoggedIn.name = prefs.getString("USER_NAME", null)
         UserLoggedIn.email = prefs.getString("USER_EMAIL", null)
         UserLoggedIn.password = prefs.getString("USER_PASSWORD", null)
 
@@ -66,8 +68,14 @@ class LoginActivity : AppCompatActivity() {
                         prefs.email = binding.editTextEmail.text.toString()
                         prefs.userId = auth.currentUser?.uid
 
-                        // Sign in success, update UI with the signed-in user's information
-                        startActivity(Intent(this@LoginActivity, DrawerActivty::class.java ))
+                        Backend.getUserProfile(Firebase.auth.uid!!) {
+                            prefs.name = it.name
+
+                            // Sign in success, update UI with the signed-in user's information
+                            startActivity(Intent(this@LoginActivity, DrawerActivty::class.java ))
+                        }
+
+
                     } else {
                         Toast.makeText(baseContext, "Authentication failed.",
                             Toast.LENGTH_SHORT).show()

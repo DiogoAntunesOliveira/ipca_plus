@@ -167,4 +167,11 @@ object  Utilis {
         return jsonString
     }
 
+    fun getFirstAndLastName(fullName: String): String {
+
+        val nameArray = Pattern.compile(" ").split(fullName)
+
+        return nameArray[0] + " " + nameArray[nameArray.size-1]
+    }
+
 }

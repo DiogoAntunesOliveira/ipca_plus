@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 object PreferenceHelper {
 
     val USER_ID = "USER_ID"
+    val USER_NAME = "USER_NAME"
     val USER_EMAIL = "USER_EMAIL"
     val USER_PASSWORD = "PASSWORD"
 
@@ -44,6 +45,15 @@ object PreferenceHelper {
             UserLoggedIn.password = value
             editMe {
                 it.putString(USER_PASSWORD, value)
+            }
+        }
+
+    var SharedPreferences.name
+        get() = getString(USER_NAME, "")
+        set(value) {
+            UserLoggedIn.name = value
+            editMe {
+                it.putString(USER_NAME, value)
             }
         }
 

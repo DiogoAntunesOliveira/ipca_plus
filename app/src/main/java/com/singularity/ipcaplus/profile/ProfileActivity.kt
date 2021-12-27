@@ -7,6 +7,7 @@ import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.UserLoggedIn
+import com.singularity.ipcaplus.Utilis
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
 import com.singularity.ipcaplus.models.Profile
 
@@ -33,7 +34,7 @@ class ProfileActivity : AppCompatActivity() {
             profileData = it
 
             // Set data
-            binding.textViewName1.text = profileData.name
+            binding.textViewName1.text = Utilis.getFirstAndLastName(profileData.name)
             binding.textViewEmail.text = UserLoggedIn.email
             binding.textViewFullName.text = profileData.name
             binding.textViewRole.text = profileData.role

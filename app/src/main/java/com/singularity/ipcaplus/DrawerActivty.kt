@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -53,6 +54,10 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
 
         }
+
+        val name = Utilis.getFirstAndLastName(UserLoggedIn.name!!)
+        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textView3).text = name
+        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text = UserLoggedIn.email
 
         setSupportActionBar(binding.appBarMain.toolbar)
         window.setFlags(
