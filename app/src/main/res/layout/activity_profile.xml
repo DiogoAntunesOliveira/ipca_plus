@@ -17,13 +17,13 @@
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
     <TextView
-        android:id="@+id/textViewDateTime"
+        android:id="@+id/textViewName1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:text="Afonso Afonseca"
+        android:text="null"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -32,20 +32,20 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <TextView
-        android:id="@+id/textViewDateTime2"
+        android:id="@+id/textViewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
-        android:text="a2000@alunos.ipca.pt"
+        android:text="null"
         android:textColor="@color/green_100"
         android:textSize="14sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDateTime" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewName1" />
 
     <TextView
         android:id="@+id/textViewDesc"
@@ -60,10 +60,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDateTime2" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail" />
 
     <EditText
-        android:id="@+id/editTextTitle"
+        android:id="@+id/editTextDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -94,7 +94,7 @@
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTitle">
+        app:layout_constraintTop_toBottomOf="@+id/editTextDesc">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -116,13 +116,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textViewName"
+                android:id="@+id/textViewFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="Afonso Antunês Afonseca"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -130,33 +130,33 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewNameTitle" />
 
             <TextView
-                android:id="@+id/textViewNumberTitle"
+                android:id="@+id/textViewRoleTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:text="Função"
+                android:text="Cargo"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewFullName" />
 
             <TextView
-                android:id="@+id/textViewNumber"
+                android:id="@+id/textViewRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="Aluno"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNumberTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewRoleTitle" />
 
 
             <TextView
@@ -172,7 +172,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNumber" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewRole" />
 
             <TextView
                 android:id="@+id/textViewAge"
@@ -181,7 +181,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="19"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -211,7 +211,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="Aplicações Móveis"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"

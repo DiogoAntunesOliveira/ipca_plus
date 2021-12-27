@@ -276,6 +276,7 @@ object Backend {
     /*
        ------------------------------------------------ Contacts ------------------------------------------------
     */
+
     /*
        This function returns all contacts in the firebase to an list
        @callBack = return the list
@@ -299,6 +300,32 @@ object Backend {
 
             }
 
+    }
+
+
+    /*
+       ------------------------------------------------ Profile ------------------------------------------------
+    */
+
+    fun getUserProfile(userId: String, callBack:(Profile)->Unit) {
+
+        var profile = Profile()
+
+        db.collection("profile")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+
+                        if (document.id == userId) {
+                            profile = Profile.fromHash(document)
+                        }
+                    }
+
+                    callBack(profile)
+                }
+            }
     }
 
 
