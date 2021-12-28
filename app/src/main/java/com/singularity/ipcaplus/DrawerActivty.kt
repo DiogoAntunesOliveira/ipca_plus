@@ -63,10 +63,11 @@ class DrawerActivty : AppCompatActivity() {
         Utilis.getUserImage(Firebase.auth.uid!!) { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
-
-        val name = Utilis.getFirstAndLastName(UserLoggedIn.name!!)
-        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textView3).text = name
-        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text = UserLoggedIn.email
+        if(!UserLoggedIn.name.isNullOrEmpty()){
+            val name = Utilis.getFirstAndLastName(UserLoggedIn.name!!)
+            binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textView3).text = name
+            binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text = UserLoggedIn.email
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar)
         window.setFlags(
@@ -81,9 +82,6 @@ class DrawerActivty : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        val stampCurrent = System.currentTimeMillis()
-        val stampSec = TimeUnit.MILLISECONDS.toSeconds(stampCurrent)
-        val stampNano = TimeUnit.MILLISECONDS.toNanos(stampCurrent).toInt()
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
