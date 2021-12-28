@@ -1,13 +1,10 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.utils
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.provider.OpenableColumns
-import android.provider.Telephony.Carriers.PORT
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

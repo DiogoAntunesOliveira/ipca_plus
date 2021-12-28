@@ -1,7 +1,8 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.chat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
 
 class ChatMoreActivity : AppCompatActivity() {

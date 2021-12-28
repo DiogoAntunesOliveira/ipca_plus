@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.utils
 
 import android.content.Intent
 import android.content.pm.PackageManager

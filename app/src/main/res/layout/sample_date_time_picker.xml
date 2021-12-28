@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.singularity.ipcaplus.calendar.DateTimePicker
+    <com.singularity.ipcaplus.drawer.DateTimePicker
         style="@style/Widget.Theme.IPCA.MyView"
         android:layout_width="300dp"
         android:layout_height="300dp"

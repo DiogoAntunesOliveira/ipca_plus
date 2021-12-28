@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.utils
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
@@ -93,7 +93,10 @@ object Backend {
                         val event = EventCalendar.fromHash(document)
                         event.id = document.id
 
-                        val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                        val date = Utilis.getDate(
+                            event.datetime.seconds * 1000,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                        )
                         if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
                             events.add(event)
                         }
@@ -126,8 +129,14 @@ object Backend {
                         val event = EventCalendar.fromHash(document)
                         event.id = document.id
 
-                        val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                        if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                        val date = Utilis.getDate(
+                            event.datetime.seconds * 1000,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                        )
+                        if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(
+                                Utilis.getMonth(date).toInt()
+                            )
+                        ) {
                             events.add(event)
                         }
                     }
@@ -167,7 +176,9 @@ object Backend {
                                 event.id = document.id
 
                                 val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
+                                if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(
+                                        Utilis.getMonth(date).toInt())
+                                ) {
                                     events.add(event)
                                 }
                             }
@@ -221,7 +232,10 @@ object Backend {
                     for (i in 0 until subjects.size) {
                         for (j in 0 until subjects.size - 1) {
 
-                            if (Utilis.convertHoursStringToInt(subjects[j].start_time) > Utilis.convertHoursStringToInt(subjects[j+1].start_time)) {
+                            if (Utilis.convertHoursStringToInt(subjects[j].start_time) > Utilis.convertHoursStringToInt(
+                                    subjects[j + 1].start_time
+                                )
+                            ) {
                                 val temp = subjects[j]
                                 subjects[j] = subjects[j + 1]
                                 subjects[j + 1] = temp
@@ -235,7 +249,9 @@ object Backend {
                             subjectsWithBreaks.add(subjects[i])
                         }
                         else {
-                            val diff = Utilis.convertHoursStringToInt(subjects[i].start_time) - Utilis.convertHoursStringToInt(subjects[i-1].end_time)
+                            val diff = Utilis.convertHoursStringToInt(subjects[i].start_time) - Utilis.convertHoursStringToInt(
+                                subjects[i - 1].end_time
+                            )
                             subjectsWithBreaks.add(Subject("breaktime", diff.toString()))
                             subjectsWithBreaks.add(subjects[i])
                         }

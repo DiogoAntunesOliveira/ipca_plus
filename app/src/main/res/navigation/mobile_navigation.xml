@@ -7,49 +7,49 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.singularity.ipcaplus.home.HomeFragment"
+        android:name="com.singularity.ipcaplus.chat.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_chats"
-        android:name="com.singularity.ipcaplus.home.ChatsFragment"
+        android:name="com.singularity.ipcaplus.chat.ChatsFragment"
         android:label="@string/chats"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_official_chats"
-        android:name="com.singularity.ipcaplus.home.OfficialChatsFragment"
+        android:name="com.singularity.ipcaplus.chat.OfficialChatsFragment"
         android:label="@string/oficiais"
         tools:layout="@layout/fragment_home" />
 
     <activity
         android:id="@+id/nav_calendar"
-        android:name="com.singularity.ipcaplus.calendar.CalendarActivity"
+        android:name="com.singularity.ipcaplus.drawer.CalendarActivity"
         android:label="@string/calendario"
         tools:layout="@layout/activity_calendar"/>
 
     <activity
         android:id="@+id/nav_contacts"
-        android:name="com.singularity.ipcaplus.profile.ContactsActivity"
+        android:name="com.singularity.ipcaplus.drawer.ContactsActivity"
         android:label="@string/contactos"
         tools:layout="@layout/activity_contacts"/>
 
     <activity
         android:id="@+id/nav_profile"
-        android:name="com.singularity.ipcaplus.profile.ProfileActivity"
+        android:name="com.singularity.ipcaplus.drawer.ProfileActivity"
         android:label="@string/perfil"
         tools:layout="@layout/activity_profile"/>
 
     <activity
         android:id="@+id/nav_schedule"
-        android:name="com.singularity.ipcaplus.calendar.ScheduleActivity"
+        android:name="com.singularity.ipcaplus.drawer.ScheduleActivity"
         android:label="@string/horario"
         tools:layout="@layout/activity_schedule"/>
 
     <activity
         android:id="@+id/nav_news"
-        android:name="com.singularity.ipcaplus.NewsWebActivity"
+        android:name="com.singularity.ipcaplus.drawer.NewsWebActivity"
         android:label="News"
         tools:layout="@layout/activity_news_web"/>
 

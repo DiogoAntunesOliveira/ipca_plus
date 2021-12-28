@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus.calendar
+package com.singularity.ipcaplus.drawer
 
 import android.content.Context
 import android.graphics.Canvas

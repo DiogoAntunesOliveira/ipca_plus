@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus.home
+package com.singularity.ipcaplus.chat
 
 import android.os.Bundle
 import android.view.LayoutInflater

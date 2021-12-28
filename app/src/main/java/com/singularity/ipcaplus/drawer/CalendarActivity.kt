@@ -1,11 +1,10 @@
-package com.singularity.ipcaplus.calendar
+package com.singularity.ipcaplus.drawer
 
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,15 +14,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
-import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.Backend
 import com.singularity.ipcaplus.R
-import com.singularity.ipcaplus.Utilis
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
 import com.singularity.ipcaplus.models.EventCalendar
-import java.time.Year
+import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.Utilis
 import java.util.*
 
 class CalendarActivity : AppCompatActivity() {

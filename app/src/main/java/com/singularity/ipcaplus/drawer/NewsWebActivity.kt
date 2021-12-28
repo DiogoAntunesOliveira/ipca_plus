@@ -1,11 +1,11 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.drawer
 
 import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.webkit.ClientCertRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.singularity.ipcaplus.R
 
 class NewsWebActivity : AppCompatActivity() {
     private lateinit var webView : WebView

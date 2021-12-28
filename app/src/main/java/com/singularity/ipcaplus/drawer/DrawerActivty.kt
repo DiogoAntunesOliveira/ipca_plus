@@ -1,18 +1,13 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.drawer
 
-import android.content.ClipData
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
@@ -27,17 +22,20 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.PreferenceHelper.email
-import com.singularity.ipcaplus.PreferenceHelper.password
-import com.singularity.ipcaplus.PreferenceHelper.userId
-import com.singularity.ipcaplus.calendar.AddEventActivity
+import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.WelcomeActivity
+import com.singularity.ipcaplus.utils.PreferenceHelper.email
+import com.singularity.ipcaplus.utils.PreferenceHelper.password
+import com.singularity.ipcaplus.utils.PreferenceHelper.userId
+import com.singularity.ipcaplus.chat.SearchActivity
 import com.singularity.ipcaplus.cryptography.encryptMeta
 import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
-import com.singularity.ipcaplus.profile.ProfileActivity
-import java.util.concurrent.TimeUnit
+import com.singularity.ipcaplus.utils.PreferenceHelper
+import com.singularity.ipcaplus.utils.UserLoggedIn
+import com.singularity.ipcaplus.utils.Utilis
 import kotlin.random.Random
 
 

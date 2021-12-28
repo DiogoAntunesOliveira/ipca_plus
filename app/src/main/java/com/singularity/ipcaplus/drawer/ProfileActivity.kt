@@ -1,19 +1,19 @@
-package com.singularity.ipcaplus.profile
+package com.singularity.ipcaplus.drawer
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.*
+import com.singularity.ipcaplus.utils.ActivityImageHelper
+import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.UserLoggedIn
+import com.singularity.ipcaplus.utils.Utilis
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import java.io.File
 
 
 class ProfileActivity : ActivityImageHelper() {

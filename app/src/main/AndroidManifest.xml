@@ -14,41 +14,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
-            android:name=".ChatMoreActivity"
+            android:name=".chat.ChatMoreActivity"
             android:exported="false" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
         <activity
-            android:name=".calendar.ScheduleActivity"
+            android:name=".drawer.ScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".NewsWebActivity"
+            android:name=".drawer.NewsWebActivity"
             android:exported="false" />
         <activity
-            android:name=".profile.ContactsActivity"
+            android:name=".drawer.ContactsActivity"
             android:exported="false" />
         <activity
-            android:name=".profile.ProfileActivity"
+            android:name=".drawer.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".calendar.CalendarActivity"
+            android:name=".drawer.CalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".calendar.AddEventActivity"
+            android:name=".drawer.AddEventActivity"
             android:exported="false" />
         <activity
-            android:name=".DrawerActivty"
+            android:name=".drawer.DrawerActivty"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".chat.SearchActivity"
             android:exported="true"
             android:label="SearchActivity"
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".chat.ChatActivity"
             android:exported="true" />
         <activity
             android:name=".RegisterActivity"

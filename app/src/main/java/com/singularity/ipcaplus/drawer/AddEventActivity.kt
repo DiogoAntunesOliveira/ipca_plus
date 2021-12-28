@@ -1,15 +1,10 @@
-package com.singularity.ipcaplus.calendar
+package com.singularity.ipcaplus.drawer
 
-import android.content.ContentValues
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.DrawerActivty
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityAddEventBinding
 import com.singularity.ipcaplus.models.EventCalendar

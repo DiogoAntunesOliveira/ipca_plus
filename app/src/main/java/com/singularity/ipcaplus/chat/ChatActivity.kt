@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.chat
 
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -17,7 +17,9 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.calendar.CalendarActivity
+import com.singularity.ipcaplus.drawer.CalendarActivity
+import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
 import com.singularity.ipcaplus.cryptography.encryptMeta
 import com.singularity.ipcaplus.cryptography.getMetaOx
@@ -204,11 +206,12 @@ class ChatActivity : AppCompatActivity() {
                 textViewMessage.text = message_decripted
                 println(message_decripted)
                 if(position == messages.size - 1) {
-                    val data = Utilis.getDate(messages[position].time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    val data = Utilis.getDate(
+                        messages[position].time.seconds * 1000,
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                    )
                     timeLastMessage.isVisible = true
-                    println("\nVisivel")
                     timeLastMessage.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
-                    println("Com tempo")
                 }
 
             }

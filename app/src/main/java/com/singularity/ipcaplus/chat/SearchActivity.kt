@@ -1,14 +1,11 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.chat
 
 import android.content.Intent
-import android.graphics.drawable.Icon
-import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -17,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.databinding.ActivitySearchBinding
 import com.singularity.ipcaplus.models.Chat
 
@@ -99,7 +99,7 @@ class SearchActivity: AppCompatActivity() {
                 textViewMessage.text = chats[position].name
                 // Set Last Chat Message
                 Backend.getLastMessageByChatID(chatIds[position]) {
-                    val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    val data = Utilis.getDate(it!!.time.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                     lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
                     lastMessageText.text = it.message
                 }

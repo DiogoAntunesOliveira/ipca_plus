@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus.calendar
+package com.singularity.ipcaplus.drawer
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -11,13 +11,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.singularity.ipcaplus.*
-import com.singularity.ipcaplus.PreferenceHelper.email
-import com.singularity.ipcaplus.PreferenceHelper.userId
-import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
+import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.utils.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityScheduleBinding
-import com.singularity.ipcaplus.models.EventCalendar
 import com.singularity.ipcaplus.models.Subject
+import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.PreferenceHelper
 
 class ScheduleActivity : AppCompatActivity() {
 

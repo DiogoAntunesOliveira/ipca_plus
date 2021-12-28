@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus
+package com.singularity.ipcaplus.utils
 
 import android.content.ContentUris
 import android.content.Context

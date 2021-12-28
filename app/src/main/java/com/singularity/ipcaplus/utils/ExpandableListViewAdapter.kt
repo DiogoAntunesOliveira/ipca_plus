@@ -1,4 +1,4 @@
-package com.singularity.ipcaplus.profile
+package com.singularity.ipcaplus.utils
 
 import android.content.Context
 import android.view.LayoutInflater

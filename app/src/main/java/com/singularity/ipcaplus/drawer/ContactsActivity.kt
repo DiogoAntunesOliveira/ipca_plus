@@ -1,13 +1,12 @@
-package com.singularity.ipcaplus.profile
+package com.singularity.ipcaplus.drawer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.BaseExpandableListAdapter
-import android.widget.ExpandableListAdapter
-import com.singularity.ipcaplus.Backend
+import com.singularity.ipcaplus.utils.ExpandableListViewAdapter
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityContactsBinding
 import com.singularity.ipcaplus.models.Contact
+import com.singularity.ipcaplus.utils.Backend
 
 class ContactsActivity : AppCompatActivity() {
 
