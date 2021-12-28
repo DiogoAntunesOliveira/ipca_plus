@@ -57,7 +57,9 @@ class ChatActivity : AppCompatActivity() {
         // Send Message
             binding.fabSend.setOnClickListener {
                 if(!binding.editTextMessage.text.isNullOrBlank()) {
+                    // get data of ecripted shared preferences ("chatuid" -> "key")
                     val keygen = getMetaOx(this, chat_id)
+                    // Build encryptation data of message send by the user
                     var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
 
                     val message = Message(

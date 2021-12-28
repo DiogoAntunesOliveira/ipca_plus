@@ -92,6 +92,7 @@ class DrawerActivty : AppCompatActivity() {
             ), drawerLayout
         )
 
+        // Generate key for chats
         val keygen = metaGenrateKey()
 
         // Criação de Chat
@@ -101,6 +102,7 @@ class DrawerActivty : AppCompatActivity() {
                 "chat",
                 keygen
             )
+            // Build encryptation data of first message send by the system
             var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
                     " please report them if you found some. Welcome to Singularity!", keygen)
             val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"

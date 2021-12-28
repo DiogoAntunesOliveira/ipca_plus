@@ -120,7 +120,7 @@ class ChatsFragment : Fragment() {
 
                     textViewMessage.text = chats[position].name
 
-                    // sync with encrypted shared preferences
+                    // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
                     saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
                     // Set Last Chat Message
                     Backend.getLastMessageByChatID(chatIds[position]) {
