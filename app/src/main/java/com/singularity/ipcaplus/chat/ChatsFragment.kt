@@ -113,7 +113,10 @@ class ChatsFragment : Fragment() {
                         lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
                         lastMessageText.text = it.message
                     }
-                    imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
+
+                    Utilis.getImage("chats/${chatIds[position]}.png") { bitmap ->
+                        imageViewChatGroup.setImageBitmap(bitmap)
+                    }
 
                 }
                 holder.v.setOnClickListener {

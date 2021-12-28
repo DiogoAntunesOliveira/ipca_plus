@@ -37,6 +37,7 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_calendar.xml" value="0.36277173913043476" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.2359375" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat_members.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat_more.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_contacts.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.2359375" />
@@ -50,11 +51,16 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_welcome.xml" value="0.2359375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/dialog_select_image.xml" value="0.2375" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/dialog_select_name.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_calendar.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.358695652173913" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_event.xml" value="0.7456647398843931" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.3546195652173913" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_search.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_subject.xml" value="0.3546195652173913" />
+        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_user_in_chat.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/sample_date_time_picker.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
@@ -70,7 +76,6 @@
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.2957427536231884" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.28940217391304346" />
-        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/fragment_tab.xml" value="0.20520833333333333" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.67" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message.xml" value="0.28940217391304346" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2694746376811594" />

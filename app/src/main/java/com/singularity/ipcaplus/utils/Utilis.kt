@@ -191,10 +191,10 @@ object  Utilis {
        ------------------------------------------------ Images ------------------------------------------------
     */
 
-    fun getUserImage(userId: String, callback:(Bitmap)->Unit) {
+    fun getImage(path: String, callback:(Bitmap)->Unit) {
 
         // Retrieve image from firebase
-        val storageRef = FirebaseStorage.getInstance().reference.child("profilePictures/" + Firebase.auth.uid!! + ".png")
+        val storageRef = FirebaseStorage.getInstance().reference.child(path)
         val localfile = File.createTempFile("tempImage", "jpg")
 
         // Set ImageView

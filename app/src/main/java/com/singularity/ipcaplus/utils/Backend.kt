@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.utils
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -347,34 +349,34 @@ object Backend {
     /*
        ------------------------------------------------ Chats ------------------------------------------------
     */
-    /*
-    /*
-       This function returns chats based on given type
-       @callBack = return the list
-    */
-    fun getChatByType(type: String ,callBack: (List<Chat>, List<String>)->Unit) {
 
-        val chats = arrayListOf<Chat>()
-        val chatIds = arrayListOf<String>()
 
-        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
-            .addSnapshotListener { documents, _ ->
-                documents?.let {
-                    for (document in documents) {
-                        val chat = Chat.fromHash(document)
-                        if (type == chat.type) {
-                            chats.add(chat)
-                            chatIds.add(document.id)
-                        }
-                    }
+    fun getChatUsers(chatID: String, callBack: (List<Profile>)->Unit) {
 
-                    callBack(chats, chatIds)
+        val users = arrayListOf<Profile>()
+
+        db.collection("profile")
+            .whereEqualTo("gender","M")
+            .get()
+            .addOnSuccessListener { documents ->
+
+                println("---------------------------- ${documents.size()}")
+
+                for (document in documents) {
+                    println("---------------------------- ${document.id} => ${document.data}")
                 }
-
             }
 
     }
-    */
+
+
+    fun changeChatName(chatID: String, newName: String) {
+
+        db.collection("chat")
+            .document(chatID)
+            .update("name", newName)
+    }
+
 
     /*
        This function returns last chat message by chat id
