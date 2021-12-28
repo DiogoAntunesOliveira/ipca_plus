@@ -45,7 +45,7 @@ class SearchActivity: AppCompatActivity() {
             finish()
         }
 
-        // Get Oficial Chats
+        // Get All Chats
         db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
             .addSnapshotListener { documents, e ->
                 documents?.let {
