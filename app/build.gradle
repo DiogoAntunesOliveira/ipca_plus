@@ -70,4 +70,8 @@ dependencies {
 
     //picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    //security
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
+
 }

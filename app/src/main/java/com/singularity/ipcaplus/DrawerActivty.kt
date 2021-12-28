@@ -31,6 +31,8 @@ import com.singularity.ipcaplus.PreferenceHelper.email
 import com.singularity.ipcaplus.PreferenceHelper.password
 import com.singularity.ipcaplus.PreferenceHelper.userId
 import com.singularity.ipcaplus.calendar.AddEventActivity
+import com.singularity.ipcaplus.cryptography.encryptMeta
+import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
@@ -90,16 +92,23 @@ class DrawerActivty : AppCompatActivity() {
             ), drawerLayout
         )
 
+        // Generate key for chats
+        val keygen = metaGenrateKey()
+
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
             val chat = Chat(
                 "Chat Teste " + Random.nextInt(256),
-                "chat"
-
+                "chat",
+                keygen
             )
+            // Build encryptation data of first message send by the system
+            var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
+                    " please report them if you found some. Welcome to Singularity!", keygen)
+            val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"
             val message = Message(
                 "system",
-                "This is an Alpha Chat, bugs are expected, please report them if you found some. Welcome to Singularity!",
+                meta.toString(),
                 "2021-12-22",
                 Timestamp.now(),
                 ""
@@ -114,6 +123,11 @@ class DrawerActivty : AppCompatActivity() {
                         .add(message.toHash())
                     db.collection("profile")
                         .document("${Firebase.auth.currentUser!!.uid}")
+                        .collection("chat")
+                        .document("${documentReference.id}")
+                        .set(chat)
+                    db.collection("profile")
+                        .document(id_amigo)
                         .collection("chat")
                         .document("${documentReference.id}")
                         .set(chat)
