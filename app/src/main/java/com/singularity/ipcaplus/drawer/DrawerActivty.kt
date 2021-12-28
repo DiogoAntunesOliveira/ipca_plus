@@ -147,7 +147,6 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         // Passing each fragment ID as a set of Ids
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
