@@ -7,7 +7,7 @@
     android:layout_marginTop="20dp">
 
     <ImageView
-        android:id="@+id/imageViewProfileGroup"
+        android:id="@+id/imageViewProfileAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -17,7 +17,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/textViewProfileNameMessage"
+        android:id="@+id/textViewProfileNameAdd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
@@ -29,7 +29,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileGroup"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfileAdd"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,9 +10,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.Backend.db
+import com.singularity.ipcaplus.utils.Backend.db
 import com.singularity.ipcaplus.databinding.ActivityRegisterBinding
 import com.singularity.ipcaplus.models.Profile
+import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.Utilis
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -82,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // below message changed and user is navigated to Sign In activity
-                    val user = auth.currentUser
                     Toast.makeText(
                         this, "Sign Up successful. Verification link sent to the Email address",
                         Toast.LENGTH_SHORT

@@ -1,23 +1,23 @@
 package com.singularity.ipcaplus
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.PreferenceHelper.customPreference
-import com.singularity.ipcaplus.PreferenceHelper.email
-import com.singularity.ipcaplus.PreferenceHelper.name
-import com.singularity.ipcaplus.PreferenceHelper.password
-import com.singularity.ipcaplus.PreferenceHelper.userId
+import com.singularity.ipcaplus.utils.PreferenceHelper.customPreference
+import com.singularity.ipcaplus.utils.PreferenceHelper.email
+import com.singularity.ipcaplus.utils.PreferenceHelper.name
+import com.singularity.ipcaplus.utils.PreferenceHelper.password
+import com.singularity.ipcaplus.utils.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityLoginBinding
+import com.singularity.ipcaplus.drawer.DrawerActivty
+import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.UserLoggedIn
 
 class LoginActivity : AppCompatActivity() {
 

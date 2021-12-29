@@ -53,20 +53,21 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewProfile"
+        android:id="@+id/recyclerViewUsers"
         android:layout_width="409dp"
         android:layout_height="625dp"
         android:layout_marginStart="1dp"
+        android:layout_marginTop="3dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="222dp" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewUsersSelected" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewUsersSelected"
         android:layout_width="413dp"
         android:layout_height="163dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewProfile"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
