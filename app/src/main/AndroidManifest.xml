@@ -57,6 +57,11 @@
             android:label="SearchActivity"
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
+            android:name=".AddButtonActivity"
+            android:exported="true"
+            android:label="AddButtonActivity"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
             android:name=".chat.ChatActivity"
             android:exported="true" />
         <activity
