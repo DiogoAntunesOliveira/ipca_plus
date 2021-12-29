@@ -2,6 +2,7 @@ package com.singularity.ipcaplus.utils
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -271,7 +272,7 @@ object Backend {
        This function returns the user course by callback
        @id = user uid
     */
-    fun getUserCourse(uid: String, callBack:(String)->Unit) {
+    fun getUserCourses(uid: String, callBack:(String)->Unit) {
 
         db.collection("profile")
             .document(uid)
@@ -287,6 +288,43 @@ object Backend {
                     callBack(courseId)
                 }
             }
+    }
+
+
+    /*
+       This function returns the user course by callback
+       @id = user uid
+    */
+    fun getUserCoursesIds(uid: String, courseTag: String, callBack:(List<String>)->Unit) {
+
+        val courseIds = arrayListOf<String>()
+
+        db.collection("course")
+            .whereEqualTo("tag", courseTag)
+            .get()
+            .addOnSuccessListener { documents ->
+
+                documents?.let {
+
+                    for (document in documents)
+                        courseIds.add(document.id)
+
+                    callBack(courseIds)
+                }
+
+            }
+
+    }
+
+
+    fun setUserCourses(userID: String, courseID: String) {
+
+        val profile = HashMap<String, Any>()
+        db.collection("profile")
+            .document(userID)
+            .collection("course")
+            .document(courseID)
+            .set(profile)
     }
 
 
@@ -428,16 +466,16 @@ object Backend {
         var profile : Profile? = null
 
         db.collection("ipca_data")
-            .addSnapshotListener { documents, _ ->
-                documents?.let {
-                    for (document in documents) {
-                        println(document.getField("email"))
-                        if (email == document.getField("email")){
-                            profile = Profile.fromHash(document)
-                        }
-                    }
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+
+                for (document in documents) {
+                    profile = Profile.fromHash(document)
                 }
+
                 callBack(profile)
+
             }
 
     }

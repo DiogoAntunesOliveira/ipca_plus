@@ -43,7 +43,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         // Add all Subjects To List based on the selected day and the User Course
         val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourse(prefs.userId!!) {
+        Backend.getUserCourses(prefs.userId!!) {
             addSubjectsToList(it)
         }
 
@@ -83,7 +83,7 @@ class ScheduleActivity : AppCompatActivity() {
         // Reset Schedule and get the new Subjects
         day = button.text.toString().lowercase()
         val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourse(prefs.userId!!) {
+        Backend.getUserCourses(prefs.userId!!) {
             addSubjectsToList(it)
         }
 

@@ -43,27 +43,25 @@ class RegisterActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(ContentValues.TAG, "createUserWithEmail:success")
-                            val user = auth.currentUser
+
                             emailVerification()
 
                             Backend.getIpcaData(email){
 
-                                val profile = it?.let {
-                                    Profile(
-                                        it.age,
-                                        it.contact,
-                                        it.course,
-                                        it.gender,
-                                        it.name,
-                                        it.role,
-                                        it.studentNumber
-                                    )
-                                }
+                                val profile = it
+
+                                val userID = auth.currentUser!!.uid
 
                                 db.collection("profile")
-                                    .add(profile!!.toHash())
+                                    .document(userID)
+                                    .set(profile!!.toHash())
+
+                                // Find Course Based on course_tag and create a collection with that document
+                                Backend.getUserCoursesIds(userID, profile.courseTag) { list ->
+                                    for (courseID in list)
+                                        Backend.setUserCourses(userID, courseID)
+                                }
+
                             }
 
                             startActivity(Intent(this, LoginActivity::class.java ))
