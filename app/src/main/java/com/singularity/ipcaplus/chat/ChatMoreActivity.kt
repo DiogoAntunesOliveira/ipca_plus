@@ -1,5 +1,6 @@
 package com.singularity.ipcaplus.chat
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.media.Image
 import android.net.Uri
@@ -15,6 +16,7 @@ import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.WelcomeActivity
 import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
+import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
@@ -32,6 +34,8 @@ class ChatMoreActivity : ActivityImageHelper() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_more)
+
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
 
         // Create the layout for this fragment
         binding = ActivityChatMoreBinding.inflate(layoutInflater)
@@ -72,6 +76,14 @@ class ChatMoreActivity : ActivityImageHelper() {
 
         binding.notifications.setOnClickListener {
             println("-------------> 5")
+        }
+
+        binding.securityNumberVerification.setOnClickListener {
+            println("-------------> 6")
+            val intent = Intent(this, VerifySecurityNumberActivity::class.java )
+            intent.putExtra("chat_id", chat_id)
+            startActivity(intent)
+
         }
     }
 

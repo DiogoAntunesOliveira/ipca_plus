@@ -37,22 +37,36 @@ import com.singularity.ipcaplus.utils.PreferenceHelper
 import com.singularity.ipcaplus.utils.UserLoggedIn
 import com.singularity.ipcaplus.utils.Utilis
 import kotlin.random.Random
+import androidx.core.view.ViewCompat
+
+import androidx.core.app.ActivityOptionsCompat
+import com.singularity.ipcaplus.databinding.ActivityProfileBinding
 
 
 class DrawerActivty : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDrawerActivtyBinding
-
+    private lateinit var binding2: ActivityProfileBinding
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDrawerActivtyBinding.inflate(layoutInflater)
+       // binding2 = ActivityProfileBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
+       /* var imageView = binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
+        var imageView2 = binding2.imageViewProfile.id*/
 
         binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
+
+            /*val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                imageView,
+                imageView2.toString()
+            )*/
 
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)

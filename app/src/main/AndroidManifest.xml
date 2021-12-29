@@ -17,6 +17,9 @@
             android:name=".chat.ChatMembersActivity"
             android:exported="false" />
         <activity
+            android:name=".chat.VerifySecurityNumberActivity"
+            android:exported="false" />
+        <activity
             android:name=".chat.ChatMoreActivity"
             android:exported="false" />
         <activity

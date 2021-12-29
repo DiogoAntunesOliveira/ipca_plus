@@ -1,0 +1,326 @@
+Index: app/src/main/java/com/singularity/ipcaplus/chat/ChatMoreActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.singularity.ipcaplus.chat\r\n\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.os.Bundle\r\nimport com.singularity.ipcaplus.R\r\nimport com.singularity.ipcaplus.databinding.ActivityChatMoreBinding\r\n\r\nclass ChatMoreActivity : AppCompatActivity() {\r\n\r\n    private lateinit var binding: ActivityChatMoreBinding\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_chat_more)\r\n\r\n        // Create the layout for this fragment\r\n        binding = ActivityChatMoreBinding.inflate(layoutInflater)\r\n        setContentView(binding.root)\r\n\r\n        // Create Action Bar\r\n        supportActionBar?.setDisplayHomeAsUpEnabled(true)\r\n        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)\r\n        supportActionBar?.title = \"Definições do grupo\"\r\n\r\n        // Get previous data\r\n        val chat_id = intent.getStringExtra(\"chat_id\").toString()\r\n        val chat_name = intent.getStringExtra(\"chat_name\").toString()\r\n        binding.textViewGroupName.text = chat_name\r\n\r\n        // Set Chat Image\r\n\r\n        binding.seeGroupMembers.setOnClickListener {\r\n            println(\"-------------> 1\")\r\n        }\r\n\r\n        binding.changeGroupName.setOnClickListener {\r\n            println(\"-------------> 2\")\r\n        }\r\n\r\n        binding.changeGroupImage.setOnClickListener {\r\n            println(\"-------------> 3\")\r\n        }\r\n\r\n        binding.groupFiles.setOnClickListener {\r\n            println(\"-------------> 4\")\r\n        }\r\n\r\n        binding.notifications.setOnClickListener {\r\n            println(\"-------------> 5\")\r\n        }\r\n    }\r\n\r\n    // When the support action bar back button is pressed, the app will go back to the previous activity\r\n    override fun onSupportNavigateUp(): Boolean {\r\n        onBackPressed()\r\n        return true\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/singularity/ipcaplus/chat/ChatMoreActivity.kt b/app/src/main/java/com/singularity/ipcaplus/chat/ChatMoreActivity.kt
+--- a/app/src/main/java/com/singularity/ipcaplus/chat/ChatMoreActivity.kt	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ b/app/src/main/java/com/singularity/ipcaplus/chat/ChatMoreActivity.kt	(date 1640717352512)
+@@ -1,9 +1,11 @@
+ package com.singularity.ipcaplus.chat
+ 
++import android.content.Intent
+ import androidx.appcompat.app.AppCompatActivity
+ import android.os.Bundle
+ import com.singularity.ipcaplus.R
+ import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
++import com.singularity.ipcaplus.drawer.DrawerActivty
+ 
+ class ChatMoreActivity : AppCompatActivity() {
+ 
+@@ -48,6 +50,14 @@
+         binding.notifications.setOnClickListener {
+             println("-------------> 5")
+         }
++
++        binding.securityNumberVerification.setOnClickListener {
++            println("-------------> 6")
++            val intent = Intent(this, VerifySecurityNumberActivity::class.java )
++            intent.putExtra("chat_id", chat_id)
++            startActivity(intent)
++
++        }
+     }
+ 
+     // When the support action bar back button is pressed, the app will go back to the previous activity
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n    id 'kotlin-android'\r\n    id 'com.google.gms.google-services'\r\n}\r\n\r\nandroid {\r\n    compileSdk 31\r\n\r\n    defaultConfig {\r\n        applicationId \"com.singularity.ipcaplus\"\r\n        minSdk 22\r\n        targetSdk 31\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = '1.8'\r\n    }\r\n    buildFeatures {\r\n        viewBinding true\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation 'androidx.core:core-ktx:1.6.0'\r\n    implementation 'androidx.appcompat:appcompat:1.3.1'\r\n    implementation 'com.google.android.material:material:1.4.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'\r\n    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'\r\n    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'\r\n    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'\r\n    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    implementation 'androidx.gridlayout:gridlayout:1.0.0'\r\n    testImplementation 'junit:junit:4.+'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.3'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'\r\n\r\n    //Firebase\r\n    implementation platform('com.google.firebase:firebase-bom:28.4.1')\r\n    implementation 'com.google.firebase:firebase-analytics-ktx'\r\n    implementation 'com.google.firebase:firebase-auth-ktx'\r\n    implementation 'com.google.firebase:firebase-firestore-ktx'\r\n    implementation 'com.google.firebase:firebase-storage-ktx'\r\n    implementation 'com.google.firebase:firebase-messaging-ktx'\r\n    implementation 'org.bouncycastle:bcpkix-jdk15on:1.56'\r\n\r\n    implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'\r\n\r\n    implementation 'com.github.bumptech.glide:glide:4.12.0'\r\n    implementation 'com.google.code.gson:gson:2.8.6'\r\n\r\n    //image crop\r\n    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'\r\n\r\n    //picasso\r\n    implementation 'com.squareup.picasso:picasso:2.5.2'\r\n\r\n    //security\r\n    implementation \"androidx.security:security-crypto:1.1.0-alpha03\"\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ b/app/build.gradle	(date 1640718567363)
+@@ -73,5 +73,8 @@
+ 
+     //security
+     implementation "androidx.security:security-crypto:1.1.0-alpha03"
++    implementation 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
++    implementation 'com.google.zxing:core:3.2.0'
++
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/singularity/ipcaplus/cryptography/AESdata.kt
+===================================================================
+diff --git a/app/src/main/java/com/singularity/ipcaplus/cryptography/AESdata.kt b/app/src/main/java/com/singularity/ipcaplus/cryptography/AESdata.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/singularity/ipcaplus/cryptography/AESdata.kt	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ /dev/null	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
+@@ -1,57 +0,0 @@
+-package com.singularity.ipcaplus.cryptography
+-
+-import android.content.Context
+-import android.preference.PreferenceManager
+-import android.widget.Toast
+-import java.io.ByteArrayInputStream
+-import java.io.ByteArrayOutputStream
+-import java.io.ObjectInputStream
+-import java.io.ObjectOutputStream
+-import javax.crypto.Cipher
+-import javax.crypto.KeyGenerator
+-import javax.crypto.SecretKey
+-import javax.crypto.spec.IvParameterSpec
+-
+-fun saveSecretKey(context:Context, secretKey: SecretKey) {
+-    val baos = ByteArrayOutputStream()
+-    val oos = ObjectOutputStream(baos)
+-    oos.writeObject(secretKey)
+-
+-    val strToSave = String(android.util.Base64.encode(baos.toByteArray(), android.util.Base64.DEFAULT))
+-    val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+-    val editor = sharedPref.edit()
+-    editor.putString("secret_key", strToSave)
+-    editor.apply()
+-}
+-
+-fun getSavedSecretKey(context: Context): SecretKey {
+-
+-    val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+-    val strSecretKey = sharedPref.getString("secret_key", "")
+-
+-    val bytes = android.util.Base64.decode(strSecretKey, android.util.Base64.DEFAULT)
+-    val ois = ObjectInputStream(ByteArrayInputStream(bytes))
+-
+-    val secretKey = ois.readObject() as SecretKey
+-    return secretKey
+-}
+-
+-fun saveInitializationVector(context: Context, initializationVector: ByteArray) {
+-    val baos = ByteArrayOutputStream()
+-    val oos = ObjectOutputStream(baos)
+-    oos.writeObject(initializationVector)
+-    val strToSave = String(android.util.Base64.encode(baos.toByteArray(), android.util.Base64.DEFAULT))
+-    val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+-    val editor = sharedPref.edit()
+-    editor.putString("initialization_vector", strToSave)
+-    editor.apply()
+-}
+-
+-fun getSavedInitializationVector(context: Context) : ByteArray {
+-    val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+-    val strInitializationVector = sharedPref.getString("initialization_vector", "")
+-    val bytes = android.util.Base64.decode(strInitializationVector, android.util.Base64.DEFAULT)
+-    val ois = ObjectInputStream(ByteArrayInputStream(bytes))
+-    val initializationVector = ois.readObject() as ByteArray
+-    return initializationVector
+-}
+Index: app/src/main/java/com/singularity/ipcaplus/cryptography/AdvancedAES.kt
+===================================================================
+diff --git a/app/src/main/java/com/singularity/ipcaplus/cryptography/AdvancedAES.kt b/app/src/main/java/com/singularity/ipcaplus/cryptography/AdvancedAES.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/singularity/ipcaplus/cryptography/AdvancedAES.kt	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ /dev/null	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
+@@ -1,92 +0,0 @@
+-package com.singularity.ipcaplus.cryptography
+-
+-import org.bouncycastle.jce.provider.BouncyCastleProvider
+-import org.bouncycastle.util.encoders.Base64
+-import java.io.UnsupportedEncodingException
+-import java.security.InvalidKeyException
+-import java.security.NoSuchAlgorithmException
+-import java.security.Security
+-import javax.crypto.*
+-import javax.crypto.spec.SecretKeySpec
+-
+-fun encrypt(strToEncrypt: String, secret_key: String): String? {
+-    Security.addProvider(BouncyCastleProvider())
+-    var keyBytes: ByteArray
+-
+-    try {
+-        keyBytes = secret_key.toByteArray(charset("UTF8"))
+-        val skey = SecretKeySpec(keyBytes, "AES")
+-        val input = strToEncrypt.toByteArray(charset("UTF8"))
+-
+-        synchronized(Cipher::class.java) {
+-            val cipher = Cipher.getInstance("AES/ECB/PKCS7Padding")
+-            cipher.init(Cipher.ENCRYPT_MODE, skey)
+-
+-            val cipherText = ByteArray(cipher.getOutputSize(input.size))
+-            var ctLength = cipher.update(
+-                input, 0, input.size,
+-                cipherText, 0
+-            )
+-            ctLength += cipher.doFinal(cipherText, ctLength)
+-            return String(
+-                Base64.encode(cipherText)
+-            )
+-        }
+-    } catch (uee: UnsupportedEncodingException) {
+-        uee.printStackTrace()
+-    } catch (ibse: IllegalBlockSizeException) {
+-        ibse.printStackTrace()
+-    } catch (bpe: BadPaddingException) {
+-        bpe.printStackTrace()
+-    } catch (ike: InvalidKeyException) {
+-        ike.printStackTrace()
+-    } catch (nspe: NoSuchPaddingException) {
+-        nspe.printStackTrace()
+-    } catch (nsae: NoSuchAlgorithmException) {
+-        nsae.printStackTrace()
+-    } catch (e: ShortBufferException) {
+-        e.printStackTrace()
+-    }
+-
+-    return null
+-}
+-
+-
+-fun decryptWithAES(key: String, strToDecrypt: String?): String? {
+-    Security.addProvider(BouncyCastleProvider())
+-    var keyBytes: ByteArray
+-
+-    try {
+-        keyBytes = key.toByteArray(charset("UTF8"))
+-        val skey = SecretKeySpec(keyBytes, "AES")
+-        val input = org.bouncycastle.util.encoders.Base64
+-            .decode(strToDecrypt?.trim { it <= ' ' }?.toByteArray(charset("UTF8")))
+-
+-        synchronized(Cipher::class.java) {
+-            val cipher = Cipher.getInstance("AES/ECB/PKCS7Padding")
+-            cipher.init(Cipher.DECRYPT_MODE, skey)
+-
+-            val plainText = ByteArray(cipher.getOutputSize(input.size))
+-            var ptLength = cipher.update(input, 0, input.size, plainText, 0)
+-            ptLength += cipher.doFinal(plainText, ptLength)
+-            val decryptedString = String(plainText)
+-            return decryptedString.trim { it <= ' ' }
+-        }
+-    } catch (uee: UnsupportedEncodingException) {
+-        uee.printStackTrace()
+-    } catch (ibse: IllegalBlockSizeException) {
+-        ibse.printStackTrace()
+-    } catch (bpe: BadPaddingException) {
+-        bpe.printStackTrace()
+-    } catch (ike: InvalidKeyException) {
+-        ike.printStackTrace()
+-    } catch (nspe: NoSuchPaddingException) {
+-        nspe.printStackTrace()
+-    } catch (nsae: NoSuchAlgorithmException) {
+-        nsae.printStackTrace()
+-    } catch (e: ShortBufferException) {
+-        e.printStackTrace()
+-    }
+-
+-    return null
+-}
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"DesignSurface\">\r\n    <option name=\"filePathToZoomLevelMap\">\r\n      <map>\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/breaktime.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/breaktime_form.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_filtro.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_green.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_register.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_week_day.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/chat_photo.xml\" value=\"0.25364583333333335\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/circle.xml\" value=\"0.23802083333333332\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/custom_black_border.xml\" value=\"0.23802083333333332\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/datetime_selected_item.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/event_shape.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_add_userdrawer_icons.xml\" value=\"0.25364583333333335\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_arrow_back_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_baseline_arrow_forward_ios_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_contact_icon.xml\" value=\"0.2520833333333333\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_delete.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_documentdrawer_icons.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_folderdrawer_icons.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_foto_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_homedrawer_icons.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_lg_ipca.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_logo_branco_ipca.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_logout.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_menu_camera.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_menu_gallery.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_menu_slideshow.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_paper_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_search_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_swap_24.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/side_nav_bar.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_add_event.xml\" value=\"0.33\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_calendar.xml\" value=\"0.36277173913043476\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat_more.xml\" value=\"0.2375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_contacts.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_login.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_main.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_profile.xml\" value=\"0.36277173913043476\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_register.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_schedule.xml\" value=\"0.3546195652173913\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_search.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_tab.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_welcome.xml\" value=\"0.2359375\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/app_bar_main.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/content_main.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_calendar.xml\" value=\"0.33\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml\" value=\"0.358695652173913\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_event.xml\" value=\"0.7456647398843931\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_self.xml\" value=\"0.3546195652173913\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_subject.xml\" value=\"0.3546195652173913\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/sample_date_time_picker.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/menu_chat.xml\" value=\"0.20520833333333333\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_message_shape.xml\" value=\"0.29074074074074074\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_photo.xml\" value=\"0.2953703703703704\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/circle.xml\" value=\"0.3101851851851852\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/ic_camera.xml\" value=\"0.22135416666666666\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/ic_upload.xml\" value=\"0.22135416666666666\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/rounded_shape.xml\" value=\"0.3101851851851852\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/user_message_photo.xml\" value=\"0.2953703703703704\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_chat.xml\" value=\"0.25\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_login.xml\" value=\"0.2957427536231884\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_main.xml\" value=\"0.2957427536231884\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_register.xml\" value=\"0.28940217391304346\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/fragment_tab.xml\" value=\"0.20520833333333333\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_chat.xml\" value=\"0.67\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message.xml\" value=\"0.28940217391304346\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_others.xml\" value=\"0.2694746376811594\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_self.xml\" value=\"0.17831813576494426\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_system.xml\" value=\"0.26268115942028986\" />\r\n        <entry key=\"..\\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_pesquisa.xml\" value=\"0.26268115942028986\" />\r\n        <entry key=\"..\\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml\" value=\"0.25\" />\r\n        <entry key=\"..\\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml\" value=\"0.128125\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_menu_slideshow.xml\" value=\"0.22135416666666666\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/round_corner_drawer.xml\" value=\"0.33\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/rounded_shape.xml\" value=\"0.3828125\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml\" value=\"0.28306159420289856\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml\" value=\"0.28306159420289856\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml\" value=\"0.28306159420289856\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml\" value=\"0.14010416666666667\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml\" value=\"0.13020833333333334\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_tab.xml\" value=\"0.14010416666666667\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/app_bar_main.xml\" value=\"0.13020833333333334\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/content_main.xml\" value=\"0.13020833333333334\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_calendar.xml\" value=\"0.264\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_chats.xml\" value=\"0.14010416666666667\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/fragment_slideshow.xml\" value=\"0.14010416666666667\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/nav_header_main.xml\" value=\"0.13020833333333334\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml\" value=\"0.25416666666666665\" />\r\n        <entry key=\"..\\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml\" value=\"0.25416666666666665\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/chat_photo.xml\" value=\"0.3769230769230769\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/gradient_shadow.xml\" value=\"0.3769230769230769\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_video.xml\" value=\"0.3769230769230769\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/shadow.xml\" value=\"0.3769230769230769\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_event.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_calendar.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_contacts.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_profile.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_schedule.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml\" value=\"0.5\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_tab.xml\" value=\"0.26766304347826086\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/content_main.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_pesquisa.xml\" value=\"0.33\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"..\\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml\" value=\"0.36666666666666664\" />\r\n        <entry key=\"app/src/main/res/drawable/button_register.xml\" value=\"0.3425925925925926\" />\r\n        <entry key=\"app/src/main/res/drawable/event_shape.xml\" value=\"0.31203703703703706\" />\r\n        <entry key=\"app/src/main/res/drawable/ic_baseline_add_24.xml\" value=\"0.3671875\" />\r\n        <entry key=\"app/src/main/res/drawable/ic_baseline_dehaze_24.xml\" value=\"0.3671875\" />\r\n        <entry key=\"app/src/main/res/drawable/ic_frame_4.xml\" value=\"0.3671875\" />\r\n        <entry key=\"app/src/main/res/drawable/ic_lg_ipca.xml\" value=\"0.36153846153846153\" />\r\n        <entry key=\"app/src/main/res/drawable/pop_up_round_corners.xml\" value=\"0.36153846153846153\" />\r\n        <entry key=\"app/src/main/res/drawable/round_corner_drawer.xml\" value=\"0.21354166666666666\" />\r\n        <entry key=\"app/src/main/res/drawable/rounded_shape.xml\" value=\"0.20208333333333334\" />\r\n        <entry key=\"app/src/main/res/layout/activity_drawer.xml\" value=\"0.35104166666666664\" />\r\n        <entry key=\"app/src/main/res/layout/activity_drawer_activty.xml\" value=\"0.14402173913043478\" />\r\n        <entry key=\"app/src/main/res/layout/activity_login.xml\" value=\"0.19427083333333334\" />\r\n        <entry key=\"app/src/main/res/layout/activity_search.xml\" value=\"0.32563405797101447\" />\r\n        <entry key=\"app/src/main/res/layout/activity_tab.xml\" value=\"0.33\" />\r\n        <entry key=\"app/src/main/res/layout/activity_welcome.xml\" value=\"0.33\" />\r\n        <entry key=\"app/src/main/res/layout/app_bar_drawer.xml\" value=\"0.35104166666666664\" />\r\n        <entry key=\"app/src/main/res/layout/app_bar_main.xml\" value=\"0.1707193515704154\" />\r\n        <entry key=\"app/src/main/res/layout/content_drawer.xml\" value=\"0.35104166666666664\" />\r\n        <entry key=\"app/src/main/res/layout/content_main.xml\" value=\"0.32563405797101447\" />\r\n        <entry key=\"app/src/main/res/layout/fragment_gallery.xml\" value=\"0.35104166666666664\" />\r\n        <entry key=\"app/src/main/res/layout/fragment_home.xml\" value=\"0.35104166666666664\" />\r\n        <entry key=\"app/src/main/res/layout/fragment_official_chats.xml\" value=\"0.32563405797101447\" />\r\n        <entry key=\"app/src/main/res/layout/fragment_tab.xml\" value=\"0.3489583333333333\" />\r\n        <entry key=\"app/src/main/res/layout/nav_header_main.xml\" value=\"0.32563405797101447\" />\r\n        <entry key=\"app/src/main/res/layout/row_chat.xml\" value=\"0.32563405797101447\" />\r\n        <entry key=\"app/src/main/res/menu/activity_drawer.xml\" value=\"0.35104166666666664\" />\r\n        <entry key=\"app/src/main/res/menu/drawer.xml\" value=\"0.325\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ b/.idea/misc.xml	(date 1640711897022)
+@@ -9,17 +9,14 @@
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_green.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_register.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/button_week_day.xml" value="0.3828125" />
+-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/chat_photo.xml" value="0.25364583333333335" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/circle.xml" value="0.23802083333333332" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/custom_black_border.xml" value="0.23802083333333332" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/datetime_selected_item.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/event_shape.xml" value="0.3828125" />
+-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_add_userdrawer_icons.xml" value="0.25364583333333335" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_arrow_back_24.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_baseline_arrow_forward_ios_24.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_contact_icon.xml" value="0.2520833333333333" />
+-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_delete.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_documentdrawer_icons.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_folderdrawer_icons.xml" value="0.3828125" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/drawable/ic_foto_24.xml" value="0.3828125" />
+@@ -37,7 +34,6 @@
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.33" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_calendar.xml" value="0.36277173913043476" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.2359375" />
+-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat_more.xml" value="0.2375" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_contacts.xml" value="0.2359375" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.2359375" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.2359375" />
+@@ -58,7 +54,6 @@
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/sample_date_time_picker.xml" value="0.36666666666666664" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
+         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
+-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/menu/menu_chat.xml" value="0.20520833333333333" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_message_shape.xml" value="0.29074074074074074" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/chat_photo.xml" value="0.2953703703703704" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/drawable/circle.xml" value="0.3101851851851852" />
+@@ -70,7 +65,6 @@
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.2957427536231884" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.28940217391304346" />
+-        <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/fragment_tab.xml" value="0.20520833333333333" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.67" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message.xml" value="0.28940217391304346" />
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2694746376811594" />
+@@ -79,10 +73,12 @@
+         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_pesquisa.xml" value="0.26268115942028986" />
+         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.25" />
+         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.128125" />
++        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.22135416666666666" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/round_corner_drawer.xml" value="0.33" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/rounded_shape.xml" value="0.3828125" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.28306159420289856" />
++        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_verify_security_number.xml" value="0.28306159420289856" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.28306159420289856" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.28306159420289856" />
+         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.singularity.ipcaplus\">\r\n\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.IPCA\">\r\n        <activity\r\n            android:name=\".chat.ChatMoreActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\"com.theartofdev.edmodo.cropper.CropImageActivity\"\r\n            android:theme=\"@style/Base.Theme.AppCompat\" /> <!-- optional (needed if default theme has no action bar) -->\r\n        <activity\r\n            android:name=\".drawer.ScheduleActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".drawer.NewsWebActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".drawer.ContactsActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".drawer.ProfileActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".drawer.CalendarActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".drawer.AddEventActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".drawer.DrawerActivty\"\r\n            android:exported=\"true\"\r\n            android:label=\"@string/app_name\"\r\n            android:theme=\"@style/Theme.IPCA.NoActionBar\" />\r\n        <activity\r\n            android:name=\".chat.SearchActivity\"\r\n            android:exported=\"true\"\r\n            android:label=\"SearchActivity\"\r\n            android:theme=\"@style/Theme.IPCA.NoActionBar\" />\r\n        <activity\r\n            android:name=\".chat.ChatActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".RegisterActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".LoginActivity\"\r\n            android:exported=\"true\"\r\n            android:theme=\"@style/Theme.IPCA.NoActionBar\" />\r\n        <activity\r\n            android:name=\".WelcomeActivity\"\r\n            android:exported=\"true\"\r\n            android:label=\"@string/app_name\"\r\n            android:theme=\"@style/Theme.IPCA.NoActionBar\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ b/app/src/main/AndroidManifest.xml	(date 1640711693824)
+@@ -14,6 +14,9 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.IPCA">
+         <activity
++            android:name=".chat.VerifySecurityNumberActivity"
++            android:exported="false" />
++        <activity
+             android:name=".chat.ChatMoreActivity"
+             android:exported="false" />
+         <activity
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">IPCA+</string>\r\n    <string name=\"title_activity_tab\">TabActivity</string>\r\n    <string name=\"tab_text_1\">Tab 1</string>\r\n    <string name=\"tab_text_2\">Tab 2</string>\r\n    <string name=\"title_activity_drawer\">DrawerActivity</string>\r\n    <string name=\"navigation_drawer_open\">Open navigation drawer</string>\r\n    <string name=\"navigation_drawer_close\">Close navigation drawer</string>\r\n    <string name=\"nav_header_title\">Android Studio</string>\r\n    <string name=\"nav_header_subtitle\">android.studio@android.com</string>\r\n    <string name=\"nav_header_desc\">Navigation header</string>\r\n    <string name=\"action_settings\">Settings</string>\r\n\r\n    <string name=\"menu_home\">Home</string>\r\n    <string name=\"oficiais\">Oficiais</string>\r\n    <string name=\"chats\">Chats</string>\r\n    <string name=\"search_bar_icon\">search_bar_icon</string>\r\n    <string name=\"horario\">Horário</string>\r\n    <string name=\"calendario\">Calendário</string>\r\n    <string name=\"convidar_amigos\">Convidar amigos</string>\r\n    <string name=\"noticias\">Notícias</string>\r\n    <string name=\"title_activity_add_event\">AddEventActivity</string>\r\n    <!-- Strings used for fragments for navigation -->\r\n    <string name=\"first_fragment_label\">First Fragment</string>\r\n    <string name=\"second_fragment_label\">Second Fragment</string>\r\n    <string name=\"next\">Next</string>\r\n    <string name=\"previous\">Previous</string>\r\n\r\n    <string name=\"hello_first_fragment\">Hello first fragment</string>\r\n    <string name=\"hello_second_fragment\">Hello second fragment. Arg: %1$s</string>\r\n    <string name=\"perfil\">Perfil</string>\r\n    <string name=\"contactos\">Contactos</string>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	(revision 14b1ccaa390192755eb9428a26cea4851a10516c)
++++ b/app/src/main/res/values/strings.xml	(date 1640713968045)
+@@ -30,4 +30,8 @@
+     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+     <string name="perfil">Perfil</string>
+     <string name="contactos">Contactos</string>
++    <string name="info_key">Para verificar a seguranca da sua encriptacao com este\n utilizador, compare os numeros acima com o dispositivo do outro utilizador\n Tambem pode digitalizar o codigo atraves do codigo QR no telemovel de outra pessoa</string>
++    <string name="marcar_como_verificado">Marcar como verificado!</string>
++    <string name="Oxr_ex">00000 00000 00000\n 00000 00000 00000\n 00000 00000 00000</string>
++    <string name="toque_para_ler">Toque para ler</string>
+ </resources>
+\ No newline at end of file

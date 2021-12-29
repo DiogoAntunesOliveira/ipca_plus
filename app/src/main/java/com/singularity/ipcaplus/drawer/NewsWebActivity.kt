@@ -14,6 +14,8 @@ class NewsWebActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_web)
 
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
+
         webView = findViewById(R.id.webview)
         var progDailog = ProgressDialog.show(this, "Loading","Please wait...", true);
         progDailog.setCancelable(false);

@@ -20,6 +20,8 @@ class ContactsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts)
 
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
+
         // Create the layout for this fragment
         binding = ActivityContactsBinding.inflate(layoutInflater)
         setContentView(binding.root)
