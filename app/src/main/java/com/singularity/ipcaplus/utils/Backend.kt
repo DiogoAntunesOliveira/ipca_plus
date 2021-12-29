@@ -377,6 +377,11 @@ object Backend {
             .update("name", newName)
     }
 
+    fun getAllChats() {
+
+
+    }
+
 
     /*
        This function returns last chat message by chat id

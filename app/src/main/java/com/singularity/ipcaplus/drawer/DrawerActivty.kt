@@ -40,6 +40,7 @@ import kotlin.random.Random
 import androidx.core.view.ViewCompat
 
 import androidx.core.app.ActivityOptionsCompat
+import com.singularity.ipcaplus.AddButtonActivity
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
 
 
@@ -107,7 +108,11 @@ class DrawerActivty : AppCompatActivity() {
 
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
-            val chat = Chat(
+
+            val intent = Intent(this, AddButtonActivity::class.java)
+            startActivity(intent)
+
+           /* val chat = Chat(
                 "Chat Teste " + Random.nextInt(256),
                 "chat",
                 keygen
@@ -146,7 +151,7 @@ class DrawerActivty : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.w(ContentValues.TAG, "Error adding document", e)
                 }
-
+                */
         }
 
         // Log Out Button
