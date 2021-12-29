@@ -34,4 +34,9 @@
     <string name="marcar_como_verificado">Marcar como verificado!</string>
     <string name="Oxr_ex">00000 00000 00000\n 00000 00000 00000\n 00000 00000 00000</string>
     <string name="toque_para_ler">Toque para ler</string>
+
+    <string name="forgot_password"><u>Esqueceste-te da password?</u></string>
+
+    <string name="terms_and_conditions">Ao clicares em registar, concordas com os <u>termos e condições</u> de uso do IPCA Plus.</string>
+
 </resources>

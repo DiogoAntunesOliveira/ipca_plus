@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
+            android:name=".TermsAndCondictionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".chat.ChatMembersActivity"
             android:exported="false" />
         <activity
@@ -61,8 +64,7 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.IPCA.NoActionBar" />
+            android:exported="true" />
         <activity
             android:name=".WelcomeActivity"
             android:exported="true"
