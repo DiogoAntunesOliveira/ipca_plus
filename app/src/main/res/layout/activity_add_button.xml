@@ -78,9 +78,12 @@
             android:id="@+id/constraintLayout"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/chat_photo"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="10dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -98,13 +101,17 @@
             android:id="@+id/textViewAddPeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="57dp"
+            android:layout_marginTop="33dp"
+            android:layout_marginBottom="24dp"
             android:fontFamily="@font/poppins"
+
             android:text="Novo Grupo"
             android:textColor="@color/black"
             android:textSize="18sp"
-
-            tools:layout_editor_absoluteX="148dp"
-            tools:layout_editor_absoluteY="33dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
