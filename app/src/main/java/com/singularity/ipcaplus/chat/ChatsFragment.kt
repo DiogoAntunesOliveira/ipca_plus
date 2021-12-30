@@ -114,7 +114,7 @@ class ChatsFragment : Fragment() {
                         lastMessageText.text = it.message
                     }
 
-                    Utilis.getImage("chats/${chatIds[position]}.png") { bitmap ->
+                    Utilis.getFile("chats/${chatIds[position]}/icon.png", "png") { bitmap ->
                         imageViewChatGroup.setImageBitmap(bitmap)
                     }
 

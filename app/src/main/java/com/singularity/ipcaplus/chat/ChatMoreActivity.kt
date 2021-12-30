@@ -53,7 +53,7 @@ class ChatMoreActivity : ActivityImageHelper() {
 
         // Get Group Image
         imageViewGroup = binding.imageViewGroup
-        Utilis.getImage("chats/$chat_id.png") { bitmap ->
+        Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
             imageViewGroup.setImageBitmap(bitmap)
         }
 
@@ -71,7 +71,9 @@ class ChatMoreActivity : ActivityImageHelper() {
         }
 
         binding.groupFiles.setOnClickListener {
-            println("-------------> 4")
+            val intent = Intent(this, ChatFilesActivity::class.java)
+            intent.putExtra("chat_id", chat_id)
+            startActivity(intent)
         }
 
         binding.notifications.setOnClickListener {
@@ -104,7 +106,7 @@ class ChatMoreActivity : ActivityImageHelper() {
         val row = layoutInflater.inflate(R.layout.dialog_select_image, null)
         imageViewDialog = row.findViewById(R.id.imageViewGroup)
 
-        Utilis.getImage("chats/$chat_id.png") { bitmap ->
+        Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
             row.findViewById<ImageView>(R.id.imageViewGroup).setImageBitmap(bitmap)
         }
 
@@ -118,7 +120,7 @@ class ChatMoreActivity : ActivityImageHelper() {
 
         row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
             try {
-                Utilis.uploadImage(imageUri!!, "chats/$chat_id.png", this)
+                Utilis.uploadFile(imageUri!!, "chats/$chat_id/icon.png")
             }
             catch (error: Throwable){
             }

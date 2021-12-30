@@ -1,13 +1,11 @@
 package com.singularity.ipcaplus.utils
 
-import android.content.ContentValues.TAG
-import android.util.Log
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.*
 
 object Backend {
@@ -486,5 +484,30 @@ object Backend {
     }
 
 
+    /*
+       ------------------------------------------------ Files ------------------------------------------------
+    */
+
+    fun getAllChatFolderFiles(path: String, callBack: (List<FirebaseFile>) -> Unit) {
+
+        val files = arrayListOf<FirebaseFile>()
+        val listRef = Firebase.storage.reference.child(path)
+
+        // Find all the prefixes and items.
+        listRef.listAll().addOnSuccessListener {
+
+            for (i in it.prefixes) {
+                files.add(FirebaseFile(i.name, R.drawable.ic_folder))
+            }
+
+            for (i in it.items) {
+                val file = FirebaseFile(i.name, Utilis.getFileIcon(i.name))
+                files.add(file)
+            }
+
+            callBack(files)
+        }
+
+    }
 
 }

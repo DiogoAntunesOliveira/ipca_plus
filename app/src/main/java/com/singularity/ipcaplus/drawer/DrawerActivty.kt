@@ -75,7 +75,7 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Utilis.getImage("profilePictures/" + Firebase.auth.uid!! + ".png") { bitmap ->
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
         if(!UserLoggedIn.name.isNullOrEmpty()){

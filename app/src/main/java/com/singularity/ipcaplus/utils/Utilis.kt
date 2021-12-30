@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.singularity.ipcaplus.R
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -191,11 +192,11 @@ object  Utilis {
        ------------------------------------------------ Images ------------------------------------------------
     */
 
-    fun getImage(path: String, callback:(Bitmap)->Unit) {
+    fun getFile(path: String, suffix: String, callback:(Bitmap)->Unit) {
 
         // Retrieve image from firebase
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
-        val localfile = File.createTempFile("tempImage", "jpg")
+        val localfile = File.createTempFile("tempImage", suffix)
 
         // Set ImageView
         storageRef.getFile(localfile).addOnSuccessListener {
@@ -205,7 +206,7 @@ object  Utilis {
     }
 
 
-    fun uploadImage(filePath: Uri, targetPath: String, context: Context) {
+    fun uploadFile(filePath: Uri, targetPath: String) {
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -214,6 +215,19 @@ object  Utilis {
             val ref: StorageReference = storageRef.child(targetPath)
             ref.putFile(filePath)
         }
+    }
+
+
+    fun getFileIcon(fileName:String): Int {
+        val extension = Pattern.compile("[.]").split(fileName)[1]
+
+        return when (extension) {
+            "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
+            else -> R.drawable.ic_file
+
+        }
+
+
     }
 
     fun uniqueImageNameGen(): String {
