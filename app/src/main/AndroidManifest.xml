@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
+            android:name=".rdpdActivityIn"
+            android:exported="false" />
+        <activity
+            android:name=".rgpdActivityEnd"
+            android:exported="false" />
+        <activity
             android:name=".TermsAndCondictionsActivity"
             android:exported="false" />
         <activity
