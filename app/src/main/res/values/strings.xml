@@ -38,5 +38,6 @@
     <string name="forgot_password"><u>Esqueceste-te da password?</u></string>
 
     <string name="terms_and_conditions">Ao clicares em registar, concordas com os <u>termos e condições</u> de uso do IPCA Plus.</string>
+    <string name="inicio">Início</string>
 
 </resources>
