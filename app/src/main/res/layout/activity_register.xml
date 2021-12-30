@@ -39,7 +39,7 @@
             android:layout_marginTop="70dp"
             android:text="Bem Vindo!"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="24dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -119,13 +119,13 @@
 
         <Button
             android:id="@+id/buttonRegister"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="161dp"
+            android:layout_marginStart="110dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="162dp"
+            android:layout_marginEnd="110dp"
             android:layout_marginBottom="50dp"
-            android:background="@drawable/button_green"
+            android:background="@drawable/button_register"
             android:backgroundTint="@color/green_200"
             android:paddingHorizontal="40dp"
             android:text="Confirmar"
