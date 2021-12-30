@@ -63,12 +63,7 @@ class AddPeopleActivity: AppCompatActivity() {
         }
 
 
-        // Recycler View Selected Users
-        userSelectedLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerViewUsersSelected.layoutManager = userSelectedLayoutManager
-        userSelectedAdapter = SelectedUsersAdapter()
-        binding.recyclerViewUsersSelected.itemAnimator = DefaultItemAnimator()
-        binding.recyclerViewUsersSelected.adapter = userSelectedAdapter
+
 
         // Recycler View All Users
         userLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -76,6 +71,13 @@ class AddPeopleActivity: AppCompatActivity() {
         userAdapter = AllUsersAdapter()
         binding.recyclerViewUsers.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewUsers.adapter = userAdapter
+
+        // Recycler View Selected Users
+        userSelectedLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewUsersSelected.layoutManager = userSelectedLayoutManager
+        userSelectedAdapter = SelectedUsersAdapter()
+        binding.recyclerViewUsersSelected.itemAnimator = DefaultItemAnimator()
+        binding.recyclerViewUsersSelected.adapter = userSelectedAdapter
 
         println("--------------------" + selectedUsers.size)
     }
@@ -139,7 +141,9 @@ class AddPeopleActivity: AppCompatActivity() {
 
 
                     println("------------------------------------------    " + selectedUsers.size)
+                    println("------------------------------------------    " + position)
                     // Set data
+                /*
                     Utilis.getFile(
                         "profilePictures/${selectedUsers[position].id}.png",
                         "png"
@@ -148,7 +152,7 @@ class AddPeopleActivity: AppCompatActivity() {
                     }
 
                     username.text = selectedUsers[position].name
-
+*/
             }
             holder.v.setOnClickListener {
 

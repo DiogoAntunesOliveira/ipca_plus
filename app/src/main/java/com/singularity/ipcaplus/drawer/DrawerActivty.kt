@@ -112,7 +112,7 @@ class DrawerActivty : AppCompatActivity() {
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
 
-            val intent = Intent(this, CreateChatActivity::class.java)
+            val intent = Intent(this, AddButtonActivity::class.java)
             startActivity(intent)
 
             /*
