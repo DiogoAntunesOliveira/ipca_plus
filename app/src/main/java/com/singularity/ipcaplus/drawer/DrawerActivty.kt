@@ -42,6 +42,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.app.ActivityOptionsCompat
 import com.singularity.ipcaplus.AddButtonActivity
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
+import com.singularity.ipcaplus.utils.Backend
 
 
 class DrawerActivty : AppCompatActivity() {
@@ -58,6 +59,7 @@ class DrawerActivty : AppCompatActivity() {
        // binding2 = ActivityProfileBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
        /* var imageView = binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
         var imageView2 = binding2.imageViewProfile.id*/
 
@@ -73,7 +75,7 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Utilis.getImage("profilePictures/" + Firebase.auth.uid!! + ".png") { bitmap ->
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
         if(!UserLoggedIn.name.isNullOrEmpty()){

@@ -8,6 +8,7 @@ class Profile {
     var gender : String = ""
     var contact : String = ""
     var course : String = ""
+    var courseTag : String = ""
     var age : String = ""
     var role : String = ""
     var id : String? =  null
@@ -16,12 +17,13 @@ class Profile {
 
     }
 
-    constructor(age: String, contact: String, course: String, gender: String, name : String, role : String, studentNumber : String) {
+    constructor(age: String, contact: String, course: String, courseTag: String, gender: String, name : String, role : String, studentNumber : String) {
         this.name = name
         this.gender = gender
         this.studentNumber = studentNumber
         this.contact = contact
         this.course = course
+        this.courseTag = courseTag
         this.age = age
         this.role = role
     }
@@ -31,6 +33,7 @@ class Profile {
         hashMap.put("age", age)
         hashMap.put("contact", contact)
         hashMap.put("course", course)
+        hashMap.put("course_tag", courseTag)
         hashMap.put("gender", gender)
         hashMap.put("name", name)
         hashMap.put("role", role)
@@ -40,10 +43,12 @@ class Profile {
 
     companion object {
         fun fromHash(hashMap: QueryDocumentSnapshot) : Profile {
+
             val profile = Profile(
                 hashMap["age"] as String,
                 hashMap["contact"] as String,
                 hashMap["course"] as String,
+                hashMap["course_tag"] as String,
                 hashMap["gender"] as String,
                 hashMap["name"] as String,
                 hashMap["role"] as String,
