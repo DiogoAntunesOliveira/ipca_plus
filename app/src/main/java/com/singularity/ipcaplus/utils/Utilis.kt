@@ -1,8 +1,10 @@
 package com.singularity.ipcaplus.utils
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -15,6 +17,7 @@ import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.cryptography.encryptMeta
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -188,7 +191,6 @@ object  Utilis {
         return nameArray[0] + " " + nameArray[nameArray.size-1]
     }
 
-
     /*
        ------------------------------------------------ Images ------------------------------------------------
     */
@@ -203,7 +205,15 @@ object  Utilis {
         storageRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             callback(bitmap)
+        }.addOnFailureListener {
+            val bitmap: BitmapDrawable = BitmapDrawable(Resources.getSystem(), R.drawable.circle.toString())
+            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + BitmapDrawable.)
+            //callback(bitmap)
+            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + R.mipmap.ic_launcher.t) R.drawable.circle.toByte()
+            //bitmap = null
         }
+
+
     }
 
 

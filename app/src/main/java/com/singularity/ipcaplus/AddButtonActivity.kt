@@ -60,7 +60,6 @@ class AddButtonActivity: AppCompatActivity() {
 
         }
 
-
         // Get All Users
         db.collection("profile")
             .addSnapshotListener { documents, e ->
@@ -118,7 +117,7 @@ class AddButtonActivity: AppCompatActivity() {
             holder.v.apply {
                 // Variables
                 val textViewName = findViewById<TextView>(R.id.textViewProfileName)
-                val imageViewImage = findViewById<ImageView>(R.id.imageViewProfileGroup)
+                val imageViewImage = findViewById<ImageView>(R.id.imageViewProfile)
 
                 // give data
                 textViewName.text = users[position].name
@@ -128,11 +127,6 @@ class AddButtonActivity: AppCompatActivity() {
 
             }
             holder.v.setOnClickListener {
-               /*
-                val intent = Intent(this@AddButtonActivity, ChatActivity::class.java)
-                intent.putExtra("chat_id", chatIds[position])
-                startActivity(intent)
-               */
 
                 db.collection("profile").document(users[position].id.toString()).collection("chat")
                     .addSnapshotListener { documents, e ->

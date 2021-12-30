@@ -1,6 +1,8 @@
 package com.singularity.ipcaplus
 
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
 import android.media.Image
 import android.os.Bundle
@@ -12,9 +14,12 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.util.Util
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -62,9 +67,6 @@ class AddPeopleActivity: AppCompatActivity() {
             selectedUsers.add(it)
         }
 
-
-
-
         // Recycler View All Users
         userLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewUsers.layoutManager = userLayoutManager
@@ -79,7 +81,6 @@ class AddPeopleActivity: AppCompatActivity() {
         binding.recyclerViewUsersSelected.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewUsersSelected.adapter = userSelectedAdapter
 
-        println("--------------------" + selectedUsers.size)
     }
 
 
@@ -98,21 +99,22 @@ class AddPeopleActivity: AppCompatActivity() {
             holder.v.apply {
                 // Variables
                 val username = findViewById<TextView>(R.id.textViewProfileName)
-                val imageViewUser = findViewById<ImageView>(R.id.imageViewProfileGroup)
+                val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
                 // Set data
                 Utilis.getFile("profilePictures/${users[position].id}.png", "png") { bitmap ->
                     imageViewUser.setImageBitmap(bitmap)
                 }
 
-                username.text = users[position].name
+                username.text = Utilis.getFirstAndLastName(users[position].name)
 
             }
             holder.v.setOnClickListener {
 
                 selectedUsers.add(users[position])
+                users.remove(users[position])
                 userSelectedAdapter?.notifyDataSetChanged()
-                println(" -------------------------------------------------------------- tou a clicar" + users[position].name)
+                userAdapter?.notifyDataSetChanged()
             }
 
         }
@@ -137,31 +139,28 @@ class AddPeopleActivity: AppCompatActivity() {
             holder.v.apply {
                 // Variables
                 val username = findViewById<TextView>(R.id.textViewProfileNameAdd)
-                val imageViewUser = findViewById<ImageView>(R.id.imageViewAddProfile)
+                val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
+                // Set data
+                Utilis.getFile("profilePictures/${selectedUsers[position].id}.png", "png") { bitmap ->
+                    imageViewUser.setImageBitmap(bitmap)
+                }
 
-                    println("------------------------------------------    " + selectedUsers.size)
-                    println("------------------------------------------    " + position)
-                    // Set data
-                /*
-                    Utilis.getFile(
-                        "profilePictures/${selectedUsers[position].id}.png",
-                        "png"
-                    ) { bitmap ->
-                        imageViewUser.setImageBitmap(bitmap)
-                    }
+                username.text = Utilis.getFirstAndLastName(selectedUsers[position].name)
 
-                    username.text = selectedUsers[position].name
-*/
             }
             holder.v.setOnClickListener {
 
+                users.add(selectedUsers[position])
+                selectedUsers.remove(selectedUsers[position])
+                userAdapter?.notifyDataSetChanged()
+                userSelectedAdapter?.notifyDataSetChanged()
             }
 
         }
 
         override fun getItemCount(): Int {
-            return users.size
+            return selectedUsers.size
         }
     }
 }

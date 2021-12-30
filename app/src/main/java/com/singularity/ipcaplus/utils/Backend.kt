@@ -376,6 +376,7 @@ object Backend {
 
                         if (document.id == userId) {
                             profile = Profile.fromHash(document)
+                            profile.id = document.id
                         }
                     }
 
@@ -393,12 +394,14 @@ object Backend {
                 documents?.let {
 
                     for (document in documents) {
-                            profiles.add(Profile.fromHash(document))
-                        }
+                        val profile = Profile.fromHash(document)
+                        profile.id = document.id
+                        profiles.add(profile)
                     }
-
-                    callBack(profiles)
                 }
+
+                callBack(profiles)
+            }
     }
 
 
