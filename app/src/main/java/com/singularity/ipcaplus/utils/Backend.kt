@@ -387,7 +387,6 @@ object Backend {
 
         db.collection("profile")
             .addSnapshotListener { documents, _ ->
-
                 documents?.let {
 
                     for (document in documents) {
@@ -432,6 +431,10 @@ object Backend {
     }
 
 
+    /*
+        Search in an array duplicated items
+
+     */
     fun hasDuplicates(array1: Array<*>, array2: Array<*>): Boolean {
         for (i in 1 until array1.size)
         {

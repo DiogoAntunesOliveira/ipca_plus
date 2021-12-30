@@ -28,13 +28,15 @@ import com.singularity.ipcaplus.utils.Utilis
 class AddPeopleActivity: AppCompatActivity() {
 
     var users = arrayListOf<Profile>()
-    var selectedUsers = arrayListOf<String>()
+    var selectedUsers = arrayListOf<Profile>()
 
     private lateinit var binding: ActivityAddPeopleBinding
 
     private var userAdapter: RecyclerView.Adapter<*>? = null
     private var userSelectedAdapter: RecyclerView.Adapter<*>? = null
+
     private var userLayoutManager: LinearLayoutManager? = null
+    private var userSelectedLayoutManager: LinearLayoutManager? = null
 
 
     val db = Firebase.firestore
@@ -56,6 +58,17 @@ class AddPeopleActivity: AppCompatActivity() {
             users.addAll(it)
         }
 
+        Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
+            selectedUsers.add(it)
+        }
+
+
+        // Recycler View Selected Users
+        userSelectedLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewUsersSelected.layoutManager = userSelectedLayoutManager
+        userSelectedAdapter = SelectedUsersAdapter()
+        binding.recyclerViewUsersSelected.itemAnimator = DefaultItemAnimator()
+        binding.recyclerViewUsersSelected.adapter = userSelectedAdapter
 
         // Recycler View All Users
         userLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -64,7 +77,7 @@ class AddPeopleActivity: AppCompatActivity() {
         binding.recyclerViewUsers.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewUsers.adapter = userAdapter
 
-
+        println("--------------------" + selectedUsers.size)
     }
 
 
@@ -91,6 +104,50 @@ class AddPeopleActivity: AppCompatActivity() {
                 }
 
                 username.text = users[position].name
+
+            }
+            holder.v.setOnClickListener {
+
+                selectedUsers.add(users[position])
+                userSelectedAdapter?.notifyDataSetChanged()
+                println(" -------------------------------------------------------------- tou a clicar" + users[position].name)
+            }
+
+        }
+
+        override fun getItemCount(): Int {
+            return users.size
+        }
+    }
+
+    inner class SelectedUsersAdapter : RecyclerView.Adapter<SelectedUsersAdapter.ViewHolder>() {
+
+        inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.row_add_pp, parent, false)
+            )
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+            holder.v.apply {
+                // Variables
+                val username = findViewById<TextView>(R.id.textViewProfileNameAdd)
+                val imageViewUser = findViewById<ImageView>(R.id.imageViewAddProfile)
+
+
+                    println("------------------------------------------    " + selectedUsers.size)
+                    // Set data
+                    Utilis.getFile(
+                        "profilePictures/${selectedUsers[position].id}.png",
+                        "png"
+                    ) { bitmap ->
+                        imageViewUser.setImageBitmap(bitmap)
+                    }
+
+                    username.text = selectedUsers[position].name
 
             }
             holder.v.setOnClickListener {
