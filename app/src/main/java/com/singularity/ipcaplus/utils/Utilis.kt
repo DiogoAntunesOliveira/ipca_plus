@@ -216,6 +216,17 @@ object  Utilis {
             ref.putFile(filePath)
         }
     }
+/*
+    fun uploadFolder(filePath: Uri, targetPath: String) {
+
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+
+        if (filePath != null) {
+            val ref: StorageReference = storageRef.child(targetPath)
+            ref.putFile(filePath)
+        }
+    }*/
 
 
     fun getFileIcon(fileName:String): Int {
@@ -226,8 +237,6 @@ object  Utilis {
             else -> R.drawable.ic_file
 
         }
-
-
     }
 
     fun uniqueImageNameGen(): String {
