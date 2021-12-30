@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityCreateChatBinding
+import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.utils.Backend
@@ -101,7 +102,7 @@ class CreateChatActivity : AppCompatActivity() {
                     Log.w(ContentValues.TAG, "Error adding document", e)
                 }
 
-            val intent = Intent(this, ChatsFragment::class.java)
+            val intent = Intent(this, DrawerActivty::class.java)
             startActivity(intent)
         }
 

@@ -41,6 +41,7 @@ import androidx.core.view.ViewCompat
 
 import androidx.core.app.ActivityOptionsCompat
 import com.singularity.ipcaplus.AddButtonActivity
+import com.singularity.ipcaplus.chat.CreateChatActivity
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
 import com.singularity.ipcaplus.utils.Backend
 
@@ -111,7 +112,7 @@ class DrawerActivty : AppCompatActivity() {
         // Criação de Chat
         binding.appBarMain.fabAddChat.setOnClickListener {
 
-            val intent = Intent(this, AddButtonActivity::class.java)
+            val intent = Intent(this, CreateChatActivity::class.java)
             startActivity(intent)
 
            /* val chat = Chat(
