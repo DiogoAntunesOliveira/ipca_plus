@@ -382,6 +382,24 @@ object Backend {
     }
 
 
+    fun getAllUsers (callBack:(List<Profile>)->Unit) {
+        val profiles = arrayListOf<Profile>()
+
+        db.collection("profile")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+                            profiles.add(Profile.fromHash(document))
+                        }
+                    }
+
+                    callBack(profiles)
+                }
+    }
+
+
     /*
        ------------------------------------------------ Chats ------------------------------------------------
     */
@@ -413,9 +431,19 @@ object Backend {
             .update("name", newName)
     }
 
-    fun getAllChats() {
 
+    fun hasDuplicates(array1: Array<*>, array2: Array<*>): Boolean {
+        for (i in 1 until array1.size)
+        {
+            for (j in 1 until array2.size)
+            {
+                if (array1[i] == array2[j]) {
 
+                    return true
+                }
+            }
+        }
+        return false    // no repeated elements
     }
 
 

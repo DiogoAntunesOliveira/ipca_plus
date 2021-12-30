@@ -75,7 +75,7 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
         if(!UserLoggedIn.name.isNullOrEmpty()){
@@ -114,7 +114,8 @@ class DrawerActivty : AppCompatActivity() {
             val intent = Intent(this, AddButtonActivity::class.java)
             startActivity(intent)
 
-           /* val chat = Chat(
+            /*
+            val chat = Chat(
                 "Chat Teste " + Random.nextInt(256),
                 "chat",
                 keygen
@@ -152,8 +153,8 @@ class DrawerActivty : AppCompatActivity() {
                 }
                 .addOnFailureListener { e ->
                     Log.w(ContentValues.TAG, "Error adding document", e)
-                }
-                */
+                }*/
+
         }
 
         // Log Out Button

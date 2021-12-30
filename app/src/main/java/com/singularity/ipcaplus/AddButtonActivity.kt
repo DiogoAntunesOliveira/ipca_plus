@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,9 @@ class AddButtonActivity: AppCompatActivity() {
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
 
+    var currentUserchats = arrayListOf<String>()
+    var selectedUserchats = arrayListOf<String>()
+
     private lateinit var binding: ActivityAddButtonBinding
 
     private var userAdapter: RecyclerView.Adapter<*>? = null
@@ -46,10 +50,16 @@ class AddButtonActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         // finish de activity
-        val back = findViewById<ImageView>(R.id.back_btn)
-        back.setOnClickListener(){
+        binding.backBtn.setOnClickListener(){
             finish()
         }
+
+        binding.constraintLayoutNewGroup.setOnClickListener() {
+            val intent = Intent(this, AddPeopleActivity::class.java)
+            startActivity(intent)
+
+        }
+
 
         // Get All Users
         db.collection("profile")
@@ -67,17 +77,16 @@ class AddButtonActivity: AppCompatActivity() {
 
             }
 
-        // Get All Chats
+        // Get All User Chats
         db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
             .addSnapshotListener { documents, e ->
                 documents?.let {
                     chats.clear()
-                    chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
                         if (chat.type == "chat") {
                             chats.add(chat)
-                            chatIds.add(document.id)
+                            currentUserchats.add(document.id)
                         }
                     }
                 }
@@ -119,9 +128,26 @@ class AddButtonActivity: AppCompatActivity() {
 
             }
             holder.v.setOnClickListener {
+               /*
                 val intent = Intent(this@AddButtonActivity, ChatActivity::class.java)
                 intent.putExtra("chat_id", chatIds[position])
                 startActivity(intent)
+               */
+
+                db.collection("profile").document(users[position].id.toString()).collection("chat")
+                    .addSnapshotListener { documents, e ->
+                        documents?.let {
+                            chats.clear()
+                            for (document in it) {
+                                val chat = Chat.fromHash(document)
+                                if (chat.type == "chat") {
+                                    chats.add(chat)
+                                    selectedUserchats.add(document.id)
+                                }
+                            }
+                        }
+                    }
+
             }
 
         }

@@ -65,6 +65,11 @@
             android:label="AddButtonActivity"
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
+            android:name=".AddPeopleActivity"
+            android:exported="true"
+            android:label="AddButtonActivity"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
             android:name=".chat.ChatActivity"
             android:exported="true" />
         <activity
