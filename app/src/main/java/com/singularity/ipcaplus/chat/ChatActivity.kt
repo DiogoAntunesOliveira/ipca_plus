@@ -67,7 +67,6 @@ class ChatActivity : AppCompatActivity() {
                     val message = Message(
                         Firebase.auth.currentUser!!.uid,
                         meta.toString(),
-                        "",
                         Timestamp.now(),
                         ""
 

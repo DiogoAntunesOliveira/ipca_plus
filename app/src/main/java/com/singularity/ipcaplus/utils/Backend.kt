@@ -1,10 +1,12 @@
 package com.singularity.ipcaplus.utils
 
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.cryptography.encryptMeta
 import com.singularity.ipcaplus.models.*
 
 object Backend {
@@ -346,34 +348,6 @@ object Backend {
 
     /*
        ------------------------------------------------ Chats ------------------------------------------------
-    */
-    /*
-    /*
-       This function returns chats based on given type
-       @callBack = return the list
-    */
-    fun getChatByType(type: String ,callBack: (List<Chat>, List<String>)->Unit) {
-
-        val chats = arrayListOf<Chat>()
-        val chatIds = arrayListOf<String>()
-
-        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
-            .addSnapshotListener { documents, _ ->
-                documents?.let {
-                    for (document in documents) {
-                        val chat = Chat.fromHash(document)
-                        if (type == chat.type) {
-                            chats.add(chat)
-                            chatIds.add(document.id)
-                        }
-                    }
-
-                    callBack(chats, chatIds)
-                }
-
-            }
-
-    }
     */
 
     /*

@@ -88,53 +88,6 @@ class DrawerActivty : AppCompatActivity() {
             ), drawerLayout
         )
 
-        // Generate key for chats
-        val keygen = metaGenrateKey()
-
-        // Criação de Chat
-        binding.appBarMain.fabAddChat.setOnClickListener {
-            val chat = Chat(
-                "Chat Teste " + Random.nextInt(256),
-                "chat",
-                keygen
-            )
-            // Build encryptation data of first message send by the system
-            var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
-                    " please report them if you found some. Welcome to Singularity!", keygen)
-            val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"
-            val message = Message(
-                "system",
-                meta.toString(),
-                "2021-12-22",
-                Timestamp.now(),
-                ""
-
-            )
-            db.collection("chat")
-                .add(chat.toHash())
-                .addOnSuccessListener { documentReference ->
-                    db.collection("chat")
-                        .document("${documentReference.id}")
-                        .collection("message")
-                        .add(message.toHash())
-                    db.collection("profile")
-                        .document("${Firebase.auth.currentUser!!.uid}")
-                        .collection("chat")
-                        .document("${documentReference.id}")
-                        .set(chat)
-                    db.collection("profile")
-                        .document(id_amigo)
-                        .collection("chat")
-                        .document("${documentReference.id}")
-                        .set(chat)
-
-                }
-                .addOnFailureListener { e ->
-                    Log.w(ContentValues.TAG, "Error adding document", e)
-                }
-
-        }
-
         // Log Out Button
         binding.logoutLayout.setOnClickListener {
 
