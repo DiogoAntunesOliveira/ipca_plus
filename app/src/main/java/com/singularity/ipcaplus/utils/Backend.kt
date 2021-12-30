@@ -1,9 +1,12 @@
 package com.singularity.ipcaplus.utils
 
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.cryptography.encryptMeta
 import com.google.firebase.storage.ktx.storage
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.*

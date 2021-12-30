@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ import com.singularity.ipcaplus.cryptography.getMetaOx
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
+import com.singularity.ipcaplus.utils.Backend
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -67,7 +69,6 @@ class ChatActivity : AppCompatActivity() {
                     val message = Message(
                         Firebase.auth.currentUser!!.uid,
                         meta.toString(),
-                        "",
                         Timestamp.now(),
                         ""
 
@@ -175,14 +176,18 @@ class ChatActivity : AppCompatActivity() {
 
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
 
+        var otherUser = false
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             if(viewType == 1) {
+                otherUser = false
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_message_self, parent, false))
             } else if (viewType == 2){
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_message_system, parent, false))
             } else {
+                otherUser = true
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_message_others, parent, false))
             }
@@ -212,6 +217,15 @@ class ChatActivity : AppCompatActivity() {
                     )
                     timeLastMessage.isVisible = true
                     timeLastMessage.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+                }
+
+                if (otherUser) {
+                    val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+                    if (imageViewUser != null) {
+                        Utilis.getFile("profilePictures/${messages[position].user}.png", "png") { bitmap ->
+                            imageViewUser.setImageBitmap(bitmap)
+                        }
+                    }
                 }
 
             }

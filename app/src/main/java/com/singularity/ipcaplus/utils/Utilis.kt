@@ -12,6 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.encryptMeta
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -260,6 +261,23 @@ object  Utilis {
         val result= strArray[1]
 
         return result.toString()
+
+    }
+
+    /*
+        ------------------------------------------------ Chat ------------------------------------------------
+     */
+
+    /*
+       This function returns the encrypted system message
+       @callBack = return the list
+    */
+    fun buildSystemMessage(key: String) : String {
+
+        // Build encryptation data of first message send by the system
+        var message = encryptMeta("This chat is being encripted with Singularity Encryption!", key)
+
+        return message.toString()
 
     }
 
