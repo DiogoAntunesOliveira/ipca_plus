@@ -39,6 +39,7 @@ class CalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
 
         // Create the layout for this fragment
         binding = ActivityCalendarBinding.inflate(layoutInflater)

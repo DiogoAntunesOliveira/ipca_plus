@@ -17,6 +17,7 @@ import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
 
 class RegisterActivity : AppCompatActivity() {
+
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityRegisterBinding
 
@@ -28,54 +29,66 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Create Action Bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
+        supportActionBar?.title = "Voltar"
+
         auth = Firebase.auth
 
 
         binding.buttonRegister.setOnClickListener {
-            val email : String = binding.editTextEmail.text.toString()
-            val password : String = binding.editTextTextPassword.text.toString()
+            if (!binding.editTextTextPassword.text.isNullOrBlank() && !binding.editTextEmail.text.isNullOrBlank()) {
+            if (binding.editTextTextPassword.text.toString() == binding.editTextTextConfirmPassword.text.toString()) {
+                val email : String = binding.editTextEmail.text.toString()
+                val password : String = binding.editTextTextPassword.text.toString()
 
-            val emailDomain = Utilis.getEmailDomain(email)
-            if(emailDomain != "alunos.ipca.pt" && emailDomain != "ipca.pt"){
-                Snackbar.make(binding.root,
-                    "You need to Sign Up with (ipca.pt) email!", Snackbar.LENGTH_SHORT).show()
-            }else{
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(ContentValues.TAG, "createUserWithEmail:success")
-                            val user = auth.currentUser
-                            emailVerification()
+                val emailDomain = Utilis.getEmailDomain(email)
+                if(emailDomain != "alunos.ipca.pt" && emailDomain != "ipca.pt"){
+                    Snackbar.make(binding.root,
+                        "Precisas de usar um email do ipca (ipca.pt)!", Snackbar.LENGTH_SHORT).show()
+                }else{
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
 
-                            Backend.getIpcaData(email){
+                                emailVerification()
 
-                                val profile = it?.let {
-                                    Profile(
-                                        it.age,
-                                        it.contact,
-                                        it.course,
-                                        it.gender,
-                                        it.name,
-                                        it.role,
-                                        it.studentNumber
-                                    )
+                                Backend.getIpcaData(email){
+
+                                    val profile = it
+
+                                    val userID = auth.currentUser!!.uid
+
+                                    db.collection("profile")
+                                        .document(userID)
+                                        .set(profile!!.toHash())
+
+                                    // Find Course Based on course_tag and create a collection with that document
+                                    Backend.getUserCoursesIds(userID, profile.courseTag) { list ->
+                                        for (courseID in list)
+                                            Backend.setUserCourses(userID, courseID)
+                                    }
+
                                 }
 
-                                db.collection("profile")
-                                    .add(profile!!.toHash())
+                                startActivity(Intent(this, LoginActivity::class.java ))
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
+                                Toast.makeText(baseContext, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show()
                             }
-
-                            startActivity(Intent(this, LoginActivity::class.java ))
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
                         }
-                    }
+                }
+            }
+            else {
+                Snackbar.make(binding.root,
+                    "Tens de confirmar a Password corretamente!", Snackbar.LENGTH_SHORT).show()
+            }
             }
         }
+
     }
 
     private fun emailVerification() {
@@ -91,5 +104,11 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
 
+    }
+
+    // When the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

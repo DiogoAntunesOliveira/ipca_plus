@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".rgpdActivityEnd">
+
+    <ImageView
+        android:id="@+id/header_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/content_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="32dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            app:lineHeight="26dp" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="136dp"
+        android:background="@drawable/pop_up_round_corners"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/textViewInfo1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Este documento descreve as condições e os termos de utilização que devem ser observados aquando da utilização desta app. Ao utilizar este site reconhece que fica obrigado a cumprir os mesmos e que o IPCA + pode periodicamente modificar, adicionar, remover ou atualizar os Termos de Utilização ao seu critério, sem aviso prévio.
+
+        O utilizador ficará sujeito a quaisquer alterações e deve dessa forma consultar periodicamente esta página para rever os termos e condições vigentes nesse período.
+        "
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewInfo2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O acesso e utilização do presente site por parte do utilizador estão sujeitos aos seguintes termos e condições, bem como a todas as leis aplicáveis. Ao aceder e navegar neste site o utilizador expressamente aceita sem qualquer limitação ou restrição estes termos e condições e reconhece que quaisquer outros acordos relacionados com a utilização desta app celebrados entre si e o IPCA + são substituídos por este ficando assim sem qualquer vínculo ou efeito.
+        "
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo1" />
+
+                <TextView
+                    android:id="@+id/textViewInfo3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Qualquer elemento que o utilizador transmita ou coloque na app torna-se propriedade do IPCA + ou das entidades que integram o respetivo Grupo e pode ser utilizado em qualquer âmbito, incluindo, mas não estando limitado, à reprodução, divulgação, transmissão, publicação, emissão e envio por correio. Adicionalmente, o IPCA + tem o direito de utilizar, sem qualquer compensação para o utilizador, quaisquer ideias, conceitos, conhecimentos ou técnicas contidas em qualquer comunicação que o mesmo envie para a app devido a qualquer motivo, incluindo, mas não estando limitado, ao desenvolvimento, fabrico e comercialização de produtos que utilizem tal informação.
+        "
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo2" />
+
+                <TextView
+                    android:id="@+id/textViewInfo4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Direitos de propriedade industrial / direitos de autor"
+                    android:textColor="@color/green_200"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo3" />
+
+                <TextView
+                    android:id="@+id/textViewInfo5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O utilizador deve partir do princípio que todos os nomes de produtos que apareçam neste site independentemente de se encontrarem em letra de imprensa ou com o símbolo de marca registada são marcas registadas do IPCA +. Este site também pode conter ou fazer referência a patentes, informação protegida, tecnologias, produtos, processos ou outros direitos de propriedade industrial ou de autor do IPCA + e/ou de terceiros. Nenhuma licença ou direito relacionado com qualquer uma dessas marcas registadas, patentes, segredo industrial ou comercial, tecnologias, produtos, processos e outros direitos de propriedade industrial do IPCA + e/ou de terceiros são concedidos ou conferidos ao utilizador.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo4" />
+
+                <TextView
+                    android:id="@+id/textViewInfo6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Utilização da informação"
+                    android:textColor="@color/green_200"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo5" />
+
+                <TextView
+                    android:id="@+id/textViewInfo7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Poderá navegar livremente pela app podendo apenas visualizar informação a partir do mesmo incluindo qualquer texto, imagens, áudio e vídeo (a “Informação”). Não pode distribuir, modificar, transmitir, reutilizar, publicar, imprimir, fazer download ou por qualquer outra forma reproduzir qualquer material constante da app com caráter científico. O utilizador deve partir do princípio de que tudo o que vê ou lê nesta app está protegido por direitos de autor a não ser quando houver indicação expressa em contrário e que tal informação não pode ser utilizada exceto como indicado nestes termos e condições ou no texto da app sem o consentimento escrito prévio do IPCA +. O IPCA + não garante que a utilização do material exposto na app possa infringir os direitos de terceiros que não sejam propriedade ou afiliadas do IPCA +. Com exceção da autorização limitada apresentada anteriormente, nenhuma licença ou direito relacionado com informação ou quaisquer direitos de autor do IPCA + ou de qualquer outra entidade são concedidos ou conferidos ao utilizador.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo6" />
+
+                <TextView
+                    android:id="@+id/textViewInfo8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Colocação de informação neste site e monitorização"
+                    android:textColor="@color/green_200"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo7" />
+
+                <TextView
+                    android:id="@+id/textViewInfo9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Qualquer elemento, informação, comentário ou conteúdo que o utilizador transmita ou coloque na app é visualizado e monitorizado pelo IPCA +, diretamente ou através de terceiros contratados para o efeito.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo8" />
+
+                <TextView
+                    android:id="@+id/textViewInfo10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O IPCA +, diretamente ou através de terceiros contratados para o efeito, irá monitorizar diariamente e analisar as discussões, chats e informação ou conteúdos colocados independentemente da respetiva natureza."
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo9" />
+
+                <TextView
+                    android:id="@+id/textViewInfo11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Ao registar-se como utilizador expressamente declara, reconhece e aceita que o IPCA + tem acesso a toda a informação e conteúdos que colocar na app. Igualmente, ao registar-se como utilizador nesta app, expressamente declara, aceita e obriga-se a não transmitir ou disponibilizar no mesmo quaisquer informações e conteúdos que permitam identificar ou tornar identificável qualquer pessoa quer seja ou não um doente. Consequentemente o utilizador reconhece e aceita que é proibido colocar nesta app qualquer informação ou transmitir qualquer material que permita identificar ou torne identificável um doente.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo10" />
+
+                <TextView
+                    android:id="@+id/textViewInfo12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O utilizador está proibido de colocar nesta app qualquer informação ou conteúdo que seja ilegal, calunioso, difamatório, obsceno, escandaloso, incitador, pornográfico ou profano, bem como que constitua uma ameaça ou que possa constituir ou encorajar uma conduta que possa ser considerada uma ofensa criminal originar responsabilidade civil ou violar de qualquer outro modo a lei.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo11" />
+
+                <TextView
+                    android:id="@+id/textViewInfo13"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O IPCA + irá cooperar inteiramente com qualquer autoridade legal ou ordem do tribunal que solicite ou indique ao IPCA + a divulgação da identidade de qualquer indivíduo que coloque informação ou materiais do tipo descrito anteriormente.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo12" />
+
+                <TextView
+                    android:id="@+id/textViewInfo14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O IPCA + reserva-se o direito de eliminar quaisquer comentários ou conteúdos colocados pelo utilizador na app (ainda que de visualização exclusiva do utilizador e do IPCA +) se, de acordo com o critério exclusivo do IPCA + esta considerar tais comentários e/ou conteúdos inapropriados, desadequados, ilegais, ilícitos e, em particular, se entender que torna identificável qualquer doente, sem que daí resultem quaisquer direitos para o utilizador. O IPCA + poderá a todo o tempo alterar e/ou retificar os critérios por si definidos para eliminar quaisquer comentários ou conteúdos colocados na app por qualquer utilizador.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo13" />
+
+                <TextView
+                    android:id="@+id/textViewInfo15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="A partilha de qualquer informação ou conteúdo colocado pelo utilizador a outro utilizador na app depende da prévia validação do IPCA +.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo14" />
+
+                <TextView
+                    android:id="@+id/textViewInfo16"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Consequências"
+                    android:textColor="@color/green_200"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo15" />
+
+                <TextView
+                    android:id="@+id/textViewInfo17"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Se tomarmos conhecimento que o utilizador violou qualquer um dos termos de utilizações contidos na presente declaração legal poderemos tomar imediatamente ações corretivas, incluindo a proibição do utilizador utilizar os serviços oferecidos pelo IPCA + e remover qualquer informação de dados e conteúdos colocados na app pelo utilizador a qualquer momento e sem aviso prévio. Caso tenhamos sofrido danos devidos à violação por parte do utilizador podemos solicitar ao utilizador indemnização pelos prejuízos sofridos.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo16" />
+
+                <TextView
+                    android:id="@+id/textViewInfo18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Links para outros sites e links para este site"
+                    android:textColor="@color/green_200"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo17" />
+
+                <TextView
+                    android:id="@+id/textViewInfo19"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Esta Política de Privacidade aplica-se apenas a esta app e não a sites de terceiros. Poderemos fornecer links para outros sites que acreditamos possam ser de interesse para os utilizadores. Não podemos garantir os padrões de privacidade dos sites para os quais fornecemos link ou nem somos responsáveis pelo conteúdo dos mesmos.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo18" />
+
+                <TextView
+                    android:id="@+id/textViewInfo20"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="O IPCA + não analisou qualquer conteúdo de sites de terceiros que contenham links para este site, não sendo responsável pelo conteúdo desses outros sites ou quaisquer outros sites que estejam ligados a este. Caso queira efetuar um link do seu site para este pode apenas efetuá-lo para a página principal e após obtido o prévio consentimento expresso do IPCA + para efeito.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo19" />
+
+                <TextView
+                    android:id="@+id/textViewInfo21"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="As citações ou utilização de qualquer uma das partes/conteúdos desta app no site de terceiros sem o consentimento prévio por escrito do IPCA + também são proibidas.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo20" />
+
+                <TextView
+                    android:id="@+id/textViewInfo22"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Termo de responsabilidade de garantias
+"
+                    android:textColor="@color/green_200"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo21" />
+
+                <TextView
+                    android:id="@+id/textViewInfo23"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="60dp"
+                    android:text="Apesar do IPCA + envidar todos os esforços possíveis para assegurar que a informação é precisa e se encontra atualizada a informação pode conter imprecisões técnicas ou erros tipográficos. Toda a informação é fornecida “como está” não existindo nenhuma obrigação por parte do IPCA + de atualizar a mesma. Contudo, o IPCA + reserva-se o direito de efetuar alterações, correções e/ou melhorias à informação, bem como aos produtos em programas descritos nessa mesma informação a qualquer momento e sem aviso prévio. O IPCA + não fornece quaisquer garantias sobre as possíveis utilizações da informação contida nesta app. Consequentemente a informação deve ser cuidadosamente avaliada pelos utilizadores do site. O IPCA + também não assume qualquer responsabilidade e não será responsável por quaisquer danos ou vírus que possam a vir a afetar o seu equipamento informático ou qualquer outra propriedade de utilizador devido ao acesso ou utilização da informação. O IPCA + reserva-se no direito de suspender esta app a qualquer momento sem aviso prévio e sem que seja devida qualquer compensação, a qualquer título, aos utilizadores.
+"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewInfo22" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

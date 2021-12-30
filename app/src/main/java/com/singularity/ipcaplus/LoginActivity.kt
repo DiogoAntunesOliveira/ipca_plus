@@ -3,8 +3,12 @@ package com.singularity.ipcaplus
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -18,6 +22,7 @@ import com.singularity.ipcaplus.databinding.ActivityLoginBinding
 import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.UserLoggedIn
+import com.singularity.ipcaplus.utils.UserLoggedIn.email
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,6 +43,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Create Action Bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
+        supportActionBar?.title = "Voltar"
+
         email_save = binding.editTextEmail
         password_save = binding.editTextTextPassword
 
@@ -57,7 +67,6 @@ class LoginActivity : AppCompatActivity() {
 
             var email : String = binding.editTextEmail.text.toString()
             var password : String = binding.editTextTextPassword.text.toString()
-
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -83,6 +92,47 @@ class LoginActivity : AppCompatActivity() {
                 }
 
         }
+
+        binding.textViewForgotPassword.setOnClickListener {
+            println("-----------> forgot password")
+            openResetPasswordDialog()
+        }
+
+        binding.registerLinearLayout.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java ))
+        }
+    }
+
+    /*
+        This function display a dialog window with a text box to send reset password email
+     */
+    private fun openResetPasswordDialog() {
+
+        val alertDialog = AlertDialog.Builder(this)
+
+        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
+        alertDialog.setView(row)
+        val show = alertDialog.show()
+
+        // Variables
+        val editTextView = row.findViewById<TextView>(R.id.editTextName)
+        row.findViewById<TextView>(R.id.textView).text = "Email de recuperação"
+        editTextView.hint = "Insira email de recuperação"
+        row.findViewById<Button>(R.id.buttonSave).text = "Enviar"
+
+        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
+            val mAuth = FirebaseAuth.getInstance()
+            val value = editTextView.text.toString()
+            mAuth.sendPasswordResetEmail(value)
+            show.dismiss()
+        }
+
+    }
+
+    // When the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun updateUI(currentUser: FirebaseUser?, emailAdd: String) {

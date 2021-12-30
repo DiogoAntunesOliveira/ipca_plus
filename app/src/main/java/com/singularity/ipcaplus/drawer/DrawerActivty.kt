@@ -37,28 +37,45 @@ import com.singularity.ipcaplus.utils.PreferenceHelper
 import com.singularity.ipcaplus.utils.UserLoggedIn
 import com.singularity.ipcaplus.utils.Utilis
 import kotlin.random.Random
+import androidx.core.view.ViewCompat
+
+import androidx.core.app.ActivityOptionsCompat
+import com.singularity.ipcaplus.AddButtonActivity
+import com.singularity.ipcaplus.databinding.ActivityProfileBinding
+import com.singularity.ipcaplus.utils.Backend
 
 
 class DrawerActivty : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDrawerActivtyBinding
-
+    private lateinit var binding2: ActivityProfileBinding
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDrawerActivtyBinding.inflate(layoutInflater)
+       // binding2 = ActivityProfileBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
+       /* var imageView = binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
+        var imageView2 = binding2.imageViewProfile.id*/
+
         binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
+
+            /*val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                imageView,
+                imageView2.toString()
+            )*/
 
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
 
-        Utilis.getUserImage(Firebase.auth.uid!!) { bitmap ->
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
         if(!UserLoggedIn.name.isNullOrEmpty()){
@@ -88,6 +105,57 @@ class DrawerActivty : AppCompatActivity() {
             ), drawerLayout
         )
 
+        // Generate key for chats
+        val keygen = metaGenrateKey()
+
+        // Criação de Chat
+        binding.appBarMain.fabAddChat.setOnClickListener {
+
+            val intent = Intent(this, AddButtonActivity::class.java)
+            startActivity(intent)
+
+           /* val chat = Chat(
+                "Chat Teste " + Random.nextInt(256),
+                "chat",
+                keygen
+            )
+            // Build encryptation data of first message send by the system
+            var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
+                    " please report them if you found some. Welcome to Singularity!", keygen)
+            val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"
+            val message = Message(
+                "system",
+                meta.toString(),
+                "2021-12-22",
+                Timestamp.now(),
+                ""
+
+            )
+            db.collection("chat")
+                .add(chat.toHash())
+                .addOnSuccessListener { documentReference ->
+                    db.collection("chat")
+                        .document("${documentReference.id}")
+                        .collection("message")
+                        .add(message.toHash())
+                    db.collection("profile")
+                        .document("${Firebase.auth.currentUser!!.uid}")
+                        .collection("chat")
+                        .document("${documentReference.id}")
+                        .set(chat)
+                    db.collection("profile")
+                        .document(id_amigo)
+                        .collection("chat")
+                        .document("${documentReference.id}")
+                        .set(chat)
+
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error adding document", e)
+                }
+                */
+        }
+
         // Log Out Button
         binding.logoutLayout.setOnClickListener {
 
@@ -100,14 +168,26 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         // Passing each fragment ID as a set of Ids
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+    /*
+        Refresh Activity Content
+    */
+    override fun onResume() {
+        super.onResume()
+
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
+            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
+        }
+    }
+
+
+        override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.drawer, menu)
         return true
