@@ -1,5 +1,6 @@
 package com.singularity.ipcaplus.chat
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,13 +15,21 @@ import com.singularity.ipcaplus.databinding.ActivityChatFilesBinding
 import com.singularity.ipcaplus.models.FirebaseFile
 import com.singularity.ipcaplus.utils.Backend
 import java.util.regex.Pattern
+import androidx.core.app.ActivityCompat.startActivityForResult
+import android.content.ClipData
+import android.database.Cursor
+import android.net.Uri
+import androidx.core.net.toUri
+import com.singularity.ipcaplus.utils.Utilis
+import android.provider.MediaStore.Images
+import android.provider.OpenableColumns
 
 
 class ChatFilesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatFilesBinding
 
-    private lateinit var path: String
+    private lateinit var currentPath: String
     private lateinit var titlePath: String
     var files = arrayListOf<FirebaseFile>()
     private var filesAdapter: RecyclerView.Adapter<*>? = null
@@ -38,11 +47,11 @@ class ChatFilesActivity : AppCompatActivity() {
         val chat_id = intent.getStringExtra("chat_id").toString()
 
         titlePath = "root"
-        path = "chats/$chat_id/files"
+        currentPath = "chats/$chat_id/files"
         binding.currentfolderName.text = titlePath
         binding.arrowLeft.visibility = View.GONE
 
-        Backend.getAllChatFolderFiles(path) { _files ->
+        Backend.getAllChatFolderFiles(currentPath) { _files ->
 
             files.clear()
             files.addAll(_files)
@@ -68,7 +77,7 @@ class ChatFilesActivity : AppCompatActivity() {
         binding.currentfolderName.text = titlePath
         binding.arrowLeft.visibility = View.VISIBLE
 
-        Backend.getAllChatFolderFiles(path) { _files ->
+        Backend.getAllChatFolderFiles(currentPath) { _files ->
 
             files.clear()
             files.addAll(_files)
@@ -112,11 +121,13 @@ class ChatFilesActivity : AppCompatActivity() {
     fun addDialog() {
         val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
         val view = layoutInflater.inflate(R.layout.dialog_add_file, null)
+        dialog.setContentView(view)
+        dialog.show()
 
         view.findViewById<ImageView>(R.id.imageViewAddFile).setOnClickListener {
 
-            println("--------------------------> add file ")
-
+            chooseFile()
+            dialog.dismiss()
             //startPickAFile("ola1", "ola2")
         }
 
@@ -124,22 +135,79 @@ class ChatFilesActivity : AppCompatActivity() {
             println("--------------------------> add folder")
         }
 
-        dialog.setContentView(view)
-        dialog.show()
     }
 
-    /*
-       This function happen after picking photo, and make changes in the activity
-    */
+    private val CHOOSE_FILE_REQUEST = 1
+
+    fun chooseFile() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_OPEN_DOCUMENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "*/*"
+        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+            "text/plain",
+            "application/pdf",
+            "application/zip",
+        "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
+            "application/json",
+            "text/json",
+            "text/javascript"
+        )
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
+        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, CHOOSE_FILE_REQUEST)
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        var path = ""
+        var fileName = ""
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CHOOSE_FILE_REQUEST) {
+                val clipData = data?.clipData
+                //null and not null path
+                if (clipData == null) {
 
-        if(requestCode == 86 && resultCode == RESULT_OK && data != null){
-            println("----------------> " + data.data?.lastPathSegment)
-            //Utilis.uploadFile(result.uri, path + ".pdf")
+                    //println("---------------------------------> " + contentResolver.getType(data?.data!!))
+
+                    var cursor: Cursor? = null
+
+                    try {
+                        contentResolver.query(data?.data!!, null, null, null, null).use {
+
+                            cursor = it
+
+                            if (cursor != null && cursor!!.moveToFirst()) {
+
+                                fileName = cursor!!.getString(cursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME).toInt())
+
+                            }
+
+                        }
+                    } finally {
+                        cursor?.close()
+
+                    }
+
+                    path += data?.data.toString()
+                }
+                else {
+                    for (i in 0 until clipData.itemCount) {
+                        val item = clipData.getItemAt(i)
+                        val uri: Uri = item.uri
+                        path += uri.toString().toString() + "\n"
+                    }
+                }
+
+            }
         }
-
-
+        Utilis.uploadFile(path.toUri(), "$currentPath/$fileName")
+        files.add(FirebaseFile(fileName, Utilis.getFileIcon(fileName)))
+        filesAdapter?.notifyDataSetChanged()
+        //selectedFileTV.setText(path)
     }
 
 
@@ -149,11 +217,11 @@ class ChatFilesActivity : AppCompatActivity() {
         if (titlePath != "root") {
 
             // Remove last folder in the path
-            val strArrayPath = Pattern.compile("/").split(path)
+            val strArrayPath = Pattern.compile("/").split(currentPath)
             var newPath = ""
             for (i in 0 until strArrayPath.size-1)
                 newPath += "/${strArrayPath[i]}"
-            path = newPath
+            currentPath = newPath
 
             // Remove last folder in the title path
             val strArrayTitlePath = Pattern.compile("/").split(titlePath)
@@ -166,7 +234,7 @@ class ChatFilesActivity : AppCompatActivity() {
             if (titlePath == "root")
                 binding.arrowLeft.visibility = View.GONE
 
-            Backend.getAllChatFolderFiles(path) { _files ->
+            Backend.getAllChatFolderFiles(currentPath) { _files ->
 
                 files.clear()
                 files.addAll(_files)
@@ -205,7 +273,7 @@ class ChatFilesActivity : AppCompatActivity() {
 
                 linearLayout.setOnClickListener {
                     if (files[position].icon == R.drawable.ic_folder) {
-                        path += "/${files[position].name}"
+                        currentPath += "/${files[position].name}"
                         titlePath += "/${files[position].name}"
                         refreshView()
                     }
