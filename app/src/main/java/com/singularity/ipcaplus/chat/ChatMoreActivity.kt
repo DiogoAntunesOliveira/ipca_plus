@@ -25,7 +25,6 @@ import com.theartofdev.edmodo.cropper.CropImageView
 
 class ChatMoreActivity : ActivityImageHelper() {
 
-    private var imageUri: Uri? = null
     lateinit var imageViewGroup: ImageView
     lateinit var imageViewDialog: ImageView
     lateinit var chat_id: String
@@ -53,7 +52,7 @@ class ChatMoreActivity : ActivityImageHelper() {
 
         // Get Group Image
         imageViewGroup = binding.imageViewGroup
-        Utilis.getImage("chats/$chat_id.png") { bitmap ->
+        Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
             imageViewGroup.setImageBitmap(bitmap)
         }
 
@@ -71,7 +70,9 @@ class ChatMoreActivity : ActivityImageHelper() {
         }
 
         binding.groupFiles.setOnClickListener {
-            println("-------------> 4")
+            val intent = Intent(this, ChatFilesActivity::class.java)
+            intent.putExtra("chat_id", chat_id)
+            startActivity(intent)
         }
 
         binding.notifications.setOnClickListener {
@@ -102,31 +103,19 @@ class ChatMoreActivity : ActivityImageHelper() {
         // Variables
         val alertDialog = AlertDialog.Builder(this)
         val row = layoutInflater.inflate(R.layout.dialog_select_image, null)
+        alertDialog.setView(row)
+        val show = alertDialog.show()
         imageViewDialog = row.findViewById(R.id.imageViewGroup)
 
-        Utilis.getImage("chats/$chat_id.png") { bitmap ->
+        Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
             row.findViewById<ImageView>(R.id.imageViewGroup).setImageBitmap(bitmap)
-        }
-
-        alertDialog.setOnCancelListener {
-            println("------------------ saiu")
         }
 
         imageViewDialog.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+            show.dismiss()
         }
 
-        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
-            try {
-                Utilis.uploadImage(imageUri!!, "chats/$chat_id.png", this)
-            }
-            catch (error: Throwable){
-            }
-        }
-
-        // Create dialog
-        alertDialog.setView(row)
-        alertDialog.create().show()
     }
 
 
@@ -138,19 +127,18 @@ class ChatMoreActivity : ActivityImageHelper() {
         // Variables
         val alertDialog = AlertDialog.Builder(this)
         val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
+        alertDialog.setView(row)
+        val show = alertDialog.show()
 
-        alertDialog.setOnCancelListener {
-            println("------------------ saiu")
-        }
+        row.findViewById<EditText>(R.id.editTextName).setText(binding.textViewGroupName.text.toString())
 
         row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
             val newName = row.findViewById<EditText>(R.id.editTextName).text.toString()
             Backend.changeChatName(chat_id, newName)
+            show.dismiss()
+            binding.textViewGroupName.text = newName
         }
 
-        // Create dialog
-        alertDialog.setView(row)
-        alertDialog.create().show()
     }
 
 
@@ -171,8 +159,7 @@ class ChatMoreActivity : ActivityImageHelper() {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
                 imageViewGroup.setImageURI(result.uri)
-                imageViewDialog.setImageURI(result.uri)
-                imageUri = result.uri
+                Utilis.uploadFile(result.uri, "chats/$chat_id/icon.png")
             }
         }
     }

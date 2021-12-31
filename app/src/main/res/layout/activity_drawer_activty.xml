@@ -47,7 +47,7 @@
             android:layout_marginStart="10dp"
             android:fontFamily="@font/poppins"
             android:gravity="start"
-            android:text="Log out"
+            android:text="Sair"
             android:textColor="@color/black"/>
       </LinearLayout>
 

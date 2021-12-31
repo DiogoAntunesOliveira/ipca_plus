@@ -7,15 +7,13 @@ class Message {
 
     var user : String = ""
     var message : String = ""
-    var date : String = ""
     var time :  Timestamp
     var files : String = ""
     var id : String? =  null
 
-    constructor(user: String, message: String, date: String, time: Timestamp, files: String) {
+    constructor(user: String, message: String, time: Timestamp, files: String) {
         this.user = user
         this.message = message
-        this.date = date
         this.time = time
         this.files = files
     }
@@ -24,7 +22,6 @@ class Message {
         var hashMap = HashMap<String, Any>()
         hashMap.put("user", user)
         hashMap.put("message", message)
-        hashMap.put("date", date)
         hashMap.put("time", time)
         hashMap.put("files", files)
         return hashMap
@@ -35,7 +32,6 @@ class Message {
             val message = Message(
                 hashMap["user"] as String,
                 hashMap["message"] as String,
-                hashMap["date"] as String,
                 hashMap["time"] as Timestamp,
                 hashMap["files"] as String
             )

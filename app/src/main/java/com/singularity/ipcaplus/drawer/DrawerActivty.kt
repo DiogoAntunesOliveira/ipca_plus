@@ -41,6 +41,7 @@ import androidx.core.view.ViewCompat
 
 import androidx.core.app.ActivityOptionsCompat
 import com.singularity.ipcaplus.AddButtonActivity
+import com.singularity.ipcaplus.chat.CreateChatActivity
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
 import com.singularity.ipcaplus.utils.Backend
 
@@ -75,7 +76,7 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Utilis.getImage("profilePictures/" + Firebase.auth.uid!! + ".png") { bitmap ->
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
         if(!UserLoggedIn.name.isNullOrEmpty()){
@@ -114,7 +115,8 @@ class DrawerActivty : AppCompatActivity() {
             val intent = Intent(this, AddButtonActivity::class.java)
             startActivity(intent)
 
-           /* val chat = Chat(
+            /*
+            val chat = Chat(
                 "Chat Teste " + Random.nextInt(256),
                 "chat",
                 keygen
@@ -152,8 +154,8 @@ class DrawerActivty : AppCompatActivity() {
                 }
                 .addOnFailureListener { e ->
                     Log.w(ContentValues.TAG, "Error adding document", e)
-                }
-                */
+                }*/
+
         }
 
         // Log Out Button
@@ -174,7 +176,20 @@ class DrawerActivty : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+    /*
+        Refresh Activity Content
+    */
+    override fun onResume() {
+        super.onResume()
+
+        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
+            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
+        }
+    }
+
+
+        override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.drawer, menu)
         return true

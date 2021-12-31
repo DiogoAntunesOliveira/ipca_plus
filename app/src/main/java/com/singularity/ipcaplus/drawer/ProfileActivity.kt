@@ -47,7 +47,7 @@ class ProfileActivity : ActivityImageHelper() {
             binding.textViewAge.text = profileData.age
             binding.textViewCourse.text = profileData.course
 
-            Utilis.getImage("profilePictures/" + Firebase.auth.uid!! + ".png") { bitmap ->
+            Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
                 binding.imageViewProfile.setImageBitmap(bitmap)
             }
         }
@@ -78,7 +78,7 @@ class ProfileActivity : ActivityImageHelper() {
                 binding.imageViewProfile.setImageURI(result.uri)
                 imageUri = result.uri
 
-                Utilis.uploadImage(result.uri, "profilePictures/" + Firebase.auth.uid!! + ".png", this)
+                Utilis.uploadFile(result.uri, "profilePictures/" + Firebase.auth.uid!! + ".png")
             }
         }
     }

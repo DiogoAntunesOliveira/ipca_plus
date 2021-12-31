@@ -81,13 +81,15 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun blankSpaces(key : String): String {
+
+        var result = ""
+        for (i in key.indices)
+            result += if (i % 4 == 0) " ${key[i]}" else key[i]
+
+        return result
+    }
+
 }
 
-private fun blankSpaces(key : String): String {
-
-    var result = ""
-    for (i in key.indices)
-        result += if (i % 4 == 0) " ${key[i]}" else key[i]
-
-    return result
-}

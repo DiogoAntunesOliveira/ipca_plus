@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
+            android:name=".chat.CreateChatActivity"
+            android:exported="true" />
+        <activity
+            android:name=".chat.ChatFilesActivity"
+            android:exported="false" />
+        <activity
             android:name=".TermsAndCondictionsActivity"
             android:exported="false" />
         <activity
@@ -58,6 +64,11 @@
             android:theme="@style/Theme.IPCA.NoActionBar" />
         <activity
             android:name=".AddButtonActivity"
+            android:exported="true"
+            android:label="AddButtonActivity"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
+            android:name=".AddPeopleActivity"
             android:exported="true"
             android:label="AddButtonActivity"
             android:theme="@style/Theme.IPCA.NoActionBar" />

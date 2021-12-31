@@ -31,10 +31,10 @@
         <ImageView
             android:id="@+id/imageView_profile"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:transitionName="simple_activity_transition"
+            android:transitionName="shared_activity_transition"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
     </androidx.cardview.widget.CardView>

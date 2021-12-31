@@ -74,10 +74,37 @@ class ChatsFragment : Fragment() {
         return root
     }
 
+    /*
+        Refresh Activity Content
+    */
+    override fun onResume() {
+        super.onResume()
+
+        // Get Group Chats
+        db.collection("profile").document("${Firebase.auth.currentUser!!.uid}").collection("chat")
+            .addSnapshotListener { documents, e ->
+                documents?.let {
+                    chats.clear()
+                    chatIds.clear()
+                    for (document in it) {
+                        val chat = Chat.fromHash(document)
+                        if (chat.type == "chat") {
+                            chats.add(chat)
+                            chatIds.add(document.id)
+                        }
+                    }
+                    mAdapter?.notifyDataSetChanged()
+                }
+            }
+
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 
     inner class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
@@ -114,7 +141,7 @@ class ChatsFragment : Fragment() {
                         lastMessageText.text = it.message
                     }
 
-                    Utilis.getImage("chats/${chatIds[position]}.png") { bitmap ->
+                    Utilis.getFile("chats/${chatIds[position]}/icon.png", "png") { bitmap ->
                         imageViewChatGroup.setImageBitmap(bitmap)
                     }
 

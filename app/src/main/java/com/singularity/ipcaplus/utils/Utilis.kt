@@ -1,8 +1,10 @@
 package com.singularity.ipcaplus.utils
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -11,8 +13,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.encryptMeta
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -186,33 +191,66 @@ object  Utilis {
         return nameArray[0] + " " + nameArray[nameArray.size-1]
     }
 
-
     /*
        ------------------------------------------------ Images ------------------------------------------------
     */
 
-    fun getImage(path: String, callback:(Bitmap)->Unit) {
+    fun getFile(path: String, suffix: String, callback:(Bitmap)->Unit) {
 
         // Retrieve image from firebase
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
-        val localfile = File.createTempFile("tempImage", "jpg")
+        val localfile = File.createTempFile("tempImage", suffix)
 
         // Set ImageView
         storageRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             callback(bitmap)
+        }.addOnFailureListener {
+            val bitmap: BitmapDrawable = BitmapDrawable(Resources.getSystem(), R.drawable.circle.toString())
+            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + BitmapDrawable.)
+            //callback(bitmap)
+            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + R.mipmap.ic_launcher.t) R.drawable.circle.toByte()
+            //bitmap = null
         }
+
+
     }
 
 
-    fun uploadImage(filePath: Uri, targetPath: String, context: Context) {
+    fun deleteFile(filePath: String) {
+
+        val fileRef = Firebase.storage.reference.child("chats/mwAwDDco5Pg2gzmGeUHs/files/documentos/a/temp.txt")
+        println("-------------------------------------> ta " + filePath)
+
+        fileRef.delete().addOnSuccessListener {
+            println("-------------------------------------> deu")
+        }.addOnFailureListener {
+            println("-------------------------------------> nao deu")
+        }
+
+    }
+
+
+    fun uploadFile(filePath: Uri, targetPath: String) {
 
         val storage = Firebase.storage
         val storageRef = storage.reference
 
-        if (filePath != null) {
+        if (filePath != Uri.EMPTY) {
             val ref: StorageReference = storageRef.child(targetPath)
             ref.putFile(filePath)
+        }
+    }
+
+
+    fun getFileIcon(fileName:String): Int {
+        val extension = Pattern.compile("[.]").split(fileName)[1]
+
+        return when (extension) {
+            "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
+            "invisible" -> -1
+            else -> R.drawable.ic_file
+
         }
     }
 
@@ -237,6 +275,23 @@ object  Utilis {
         val result= strArray[1]
 
         return result.toString()
+
+    }
+
+    /*
+        ------------------------------------------------ Chat ------------------------------------------------
+     */
+
+    /*
+       This function returns the encrypted system message
+       @callBack = return the list
+    */
+    fun buildSystemMessage(key: String) : String {
+
+        // Build encryptation data of first message send by the system
+        var message = encryptMeta("This chat is being encripted with Singularity Encryption!", key)
+
+        return message.toString()
 
     }
 
