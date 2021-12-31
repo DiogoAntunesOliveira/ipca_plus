@@ -17,12 +17,20 @@ import com.singularity.ipcaplus.utils.Backend
 import java.util.regex.Pattern
 import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.ClipData
+import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import androidx.core.net.toUri
 import com.singularity.ipcaplus.utils.Utilis
 import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
+import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import java.io.File
 
 
 class ChatFilesActivity : AppCompatActivity() {
@@ -128,16 +136,14 @@ class ChatFilesActivity : AppCompatActivity() {
 
             chooseFile()
             dialog.dismiss()
-            //startPickAFile("ola1", "ola2")
         }
 
         view.findViewById<ImageView>(R.id.imageViewAddFolder).setOnClickListener {
-            println("--------------------------> add folder")
+            openSelectFolderNameDialog(this)
+            dialog.dismiss()
         }
 
     }
-
-    private val CHOOSE_FILE_REQUEST = 1
 
     fun chooseFile() {
         val intent = Intent()
@@ -157,7 +163,65 @@ class ChatFilesActivity : AppCompatActivity() {
         )
         intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
         //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, CHOOSE_FILE_REQUEST)
+        startActivityForResult(intent, 1)
+    }
+
+
+    fun createFolder(context: Context, folderName: String) {
+
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+
+
+        // Create a folder with a temp file
+        val outputDir: File = context.cacheDir // context being the Activity pointer
+        val outputFile: File = File.createTempFile("temp", ".txt", outputDir)
+
+        val ref: StorageReference = storageRef.child("$currentPath/$folderName/temp.invisible")
+        ref.putFile(outputFile.toUri())
+            .addOnSuccessListener {
+
+                // Refresh Folder
+                Backend.getAllChatFolderFiles(currentPath) { _files ->
+
+                    files.clear()
+                    files.addAll(_files)
+                    filesAdapter?.notifyDataSetChanged()
+
+                }
+
+            }
+
+
+
+
+
+    }
+
+    /*
+        This function display a dialog window with a text box to send reset password email
+     */
+    private fun openSelectFolderNameDialog(context: Context) {
+
+        val alertDialog = AlertDialog.Builder(this)
+
+        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
+        alertDialog.setView(row)
+        val show = alertDialog.show()
+
+        // Variables
+        val editTextView = row.findViewById<TextView>(R.id.editTextName)
+        row.findViewById<TextView>(R.id.textView).text = "Criar Pasta"
+        editTextView.hint = "Nome"
+        row.findViewById<Button>(R.id.buttonSave).text = "Criar"
+
+        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
+
+            val name = if (editTextView.text != "") editTextView.text.toString() else "Nova pasta"
+            createFolder(this, name)
+            show.dismiss()
+        }
+
     }
 
 
@@ -166,12 +230,10 @@ class ChatFilesActivity : AppCompatActivity() {
         var path = ""
         var fileName = ""
         if (resultCode == RESULT_OK) {
-            if (requestCode == CHOOSE_FILE_REQUEST) {
+            if (requestCode == 1) {
                 val clipData = data?.clipData
                 //null and not null path
                 if (clipData == null) {
-
-                    //println("---------------------------------> " + contentResolver.getType(data?.data!!))
 
                     var cursor: Cursor? = null
 
@@ -265,19 +327,20 @@ class ChatFilesActivity : AppCompatActivity() {
 
             holder.v.apply {
 
-                val textViewName = findViewById<TextView>(R.id.textViewName)
-                val imageViewIcon = findViewById<ImageView>(R.id.imageViewIcon)
-                val linearLayout = findViewById<LinearLayout>(R.id.linearLayout)
-                textViewName.text = files[position].name
-                imageViewIcon.setImageDrawable(resources.getDrawable(files[position].icon))
+                    val textViewName = findViewById<TextView>(R.id.textViewName)
+                    val imageViewIcon = findViewById<ImageView>(R.id.imageViewIcon)
+                    val linearLayout = findViewById<ConstraintLayout>(R.id.linearLayout)
+                    textViewName.text = files[position].name
+                    imageViewIcon.setImageDrawable(resources.getDrawable(files[position].icon))
 
-                linearLayout.setOnClickListener {
-                    if (files[position].icon == R.drawable.ic_folder) {
-                        currentPath += "/${files[position].name}"
-                        titlePath += "/${files[position].name}"
-                        refreshView()
+                    linearLayout.setOnClickListener {
+                        if (files[position].icon == R.drawable.ic_folder) {
+                            currentPath += "/${files[position].name}"
+                            titlePath += "/${files[position].name}"
+                            refreshView()
+                        }
                     }
-                }
+
 
             }
         }

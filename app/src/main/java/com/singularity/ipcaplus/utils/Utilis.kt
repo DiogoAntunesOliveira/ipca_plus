@@ -217,27 +217,30 @@ object  Utilis {
     }
 
 
+    fun deleteFile(filePath: String) {
+
+        val fileRef = Firebase.storage.reference.child("chats/mwAwDDco5Pg2gzmGeUHs/files/documentos/a/temp.txt")
+        println("-------------------------------------> ta " + filePath)
+
+        fileRef.delete().addOnSuccessListener {
+            println("-------------------------------------> deu")
+        }.addOnFailureListener {
+            println("-------------------------------------> nao deu")
+        }
+
+    }
+
+
     fun uploadFile(filePath: Uri, targetPath: String) {
 
         val storage = Firebase.storage
         val storageRef = storage.reference
 
-        if (filePath != null) {
+        if (filePath != Uri.EMPTY) {
             val ref: StorageReference = storageRef.child(targetPath)
             ref.putFile(filePath)
         }
     }
-/*
-    fun uploadFolder(filePath: Uri, targetPath: String) {
-
-        val storage = Firebase.storage
-        val storageRef = storage.reference
-
-        if (filePath != null) {
-            val ref: StorageReference = storageRef.child(targetPath)
-            ref.putFile(filePath)
-        }
-    }*/
 
 
     fun getFileIcon(fileName:String): Int {
@@ -245,6 +248,7 @@ object  Utilis {
 
         return when (extension) {
             "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
+            "invisible" -> -1
             else -> R.drawable.ic_file
 
         }

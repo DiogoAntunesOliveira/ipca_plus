@@ -538,8 +538,11 @@ object Backend {
             }
 
             for (i in it.items) {
-                val file = FirebaseFile(i.name, Utilis.getFileIcon(i.name))
-                files.add(file)
+                val icon = Utilis.getFileIcon(i.name)
+                if (icon != -1) {
+                    val file = FirebaseFile(i.name, icon)
+                    files.add(file)
+                }
             }
 
             callBack(files)
