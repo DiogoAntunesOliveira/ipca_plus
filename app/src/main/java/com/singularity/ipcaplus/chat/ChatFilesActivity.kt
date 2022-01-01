@@ -1,6 +1,5 @@
 package com.singularity.ipcaplus.chat
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,33 +14,38 @@ import com.singularity.ipcaplus.databinding.ActivityChatFilesBinding
 import com.singularity.ipcaplus.models.FirebaseFile
 import com.singularity.ipcaplus.utils.Backend
 import java.util.regex.Pattern
-import androidx.core.app.ActivityCompat.startActivityForResult
-import android.content.ClipData
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import androidx.core.net.toUri
 import com.singularity.ipcaplus.utils.Utilis
-import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import java.io.File
+import android.view.ContextMenu
+import android.view.ContextMenu.ContextMenuInfo
+import com.google.firebase.storage.FirebaseStorage
+
+
+
 
 
 class ChatFilesActivity : AppCompatActivity() {
 
+    // Variables
     private lateinit var binding: ActivityChatFilesBinding
-
     private lateinit var currentPath: String
     private lateinit var titlePath: String
+    var selectedFile = ""
     var files = arrayListOf<FirebaseFile>()
     private var filesAdapter: RecyclerView.Adapter<*>? = null
     private var filesLayoutManager: LinearLayoutManager? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +63,8 @@ class ChatFilesActivity : AppCompatActivity() {
         binding.currentfolderName.text = titlePath
         binding.arrowLeft.visibility = View.GONE
 
-        Backend.getAllChatFolderFiles(currentPath) { _files ->
-
-            files.clear()
-            files.addAll(_files)
-            filesAdapter?.notifyDataSetChanged()
-
-        }
+        // Get All data
+        refreshList()
 
         binding.linearLayoutPathDisplay.setOnClickListener {
             goBack()
@@ -79,21 +78,6 @@ class ChatFilesActivity : AppCompatActivity() {
         binding.filesRecyclerView.adapter = filesAdapter
     }
 
-
-    fun refreshView() {
-
-        binding.currentfolderName.text = titlePath
-        binding.arrowLeft.visibility = View.VISIBLE
-
-        Backend.getAllChatFolderFiles(currentPath) { _files ->
-
-            files.clear()
-            files.addAll(_files)
-            filesAdapter?.notifyDataSetChanged()
-
-        }
-
-    }
 
     /*
    This function create the action bar above the activity
@@ -124,104 +108,6 @@ class ChatFilesActivity : AppCompatActivity() {
             }
         }
         return false
-    }
-
-    fun addDialog() {
-        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
-        val view = layoutInflater.inflate(R.layout.dialog_add_file, null)
-        dialog.setContentView(view)
-        dialog.show()
-
-        view.findViewById<ImageView>(R.id.imageViewAddFile).setOnClickListener {
-
-            chooseFile()
-            dialog.dismiss()
-        }
-
-        view.findViewById<ImageView>(R.id.imageViewAddFolder).setOnClickListener {
-            openSelectFolderNameDialog(this)
-            dialog.dismiss()
-        }
-
-    }
-
-    fun chooseFile() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_OPEN_DOCUMENT
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "*/*"
-        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-            "text/plain",
-            "application/pdf",
-            "application/zip",
-        "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
-            "application/json",
-            "text/json",
-            "text/javascript"
-        )
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
-        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, 1)
-    }
-
-
-    fun createFolder(context: Context, folderName: String) {
-
-        val storage = Firebase.storage
-        val storageRef = storage.reference
-
-
-        // Create a folder with a temp file
-        val outputDir: File = context.cacheDir // context being the Activity pointer
-        val outputFile: File = File.createTempFile("temp", ".txt", outputDir)
-
-        val ref: StorageReference = storageRef.child("$currentPath/$folderName/temp.invisible")
-        ref.putFile(outputFile.toUri())
-            .addOnSuccessListener {
-
-                // Refresh Folder
-                Backend.getAllChatFolderFiles(currentPath) { _files ->
-
-                    files.clear()
-                    files.addAll(_files)
-                    filesAdapter?.notifyDataSetChanged()
-
-                }
-
-            }
-
-
-
-
-
-    }
-
-    /*
-        This function display a dialog window with a text box to send reset password email
-     */
-    private fun openSelectFolderNameDialog(context: Context) {
-
-        val alertDialog = AlertDialog.Builder(this)
-
-        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
-        alertDialog.setView(row)
-        val show = alertDialog.show()
-
-        // Variables
-        val editTextView = row.findViewById<TextView>(R.id.editTextName)
-        row.findViewById<TextView>(R.id.textView).text = "Criar Pasta"
-        editTextView.hint = "Nome"
-        row.findViewById<Button>(R.id.buttonSave).text = "Criar"
-
-        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
-
-            val name = if (editTextView.text != "") editTextView.text.toString() else "Nova pasta"
-            createFolder(this, name)
-            show.dismiss()
-        }
-
     }
 
 
@@ -273,6 +159,252 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
+    // When the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+
+        selectedFile = v.findViewById<TextView>(R.id.textViewName).text.toString()
+
+        menu.add(0, v.id, 0, "Transferir")
+        menu.add(0, v.id, 0, "Editar")
+        menu.add(0, v.id, 0, "Apagar")
+    }
+
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+
+        val fileRef = Firebase.storage.reference.child("$currentPath/$selectedFile")
+
+        if (item.title === "Transferir") {
+
+            confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+
+                val strArray = Pattern.compile("[.]").split(selectedFile)
+                val fileName = strArray[0]
+                val fileExtension = strArray[1]
+                fileRef.downloadUrl.addOnSuccessListener {
+                    Utilis.downloadFile(this, fileName, ".$fileExtension", DIRECTORY_DOWNLOADS, it)
+                }
+
+            }
+
+        } else if (item.title === "Editar") {
+
+            // Show Edit Dialog
+            openEditFileNameDialog { newName ->
+
+            // Change name
+                /*
+                storage = FirebaseStorage.getInstance().reference
+                val tsLong = System.currentTimeMillis() / 1000
+                val ts = tsLong.toString()
+                val storageReference: StorageReference = storage.child("image").child("$ts.jpg")
+*/
+
+            // Refresh List View
+
+                println("-------------------------- novo nome = $newName")
+
+                refreshList()
+            }
+
+            println("----------------------------------> Editar " + selectedFile)
+        } else if (item.title === "Apagar") {
+
+
+            // Missing Delete Folder --------------------------------------------------------------------------------------
+            println("-------------------------------------------------------- selectedFile = " + selectedFile)
+
+
+            // Verify If the selected File is a folder or a file
+            if (selectedFile.contains(".")) {
+                // File
+
+                confirmationDialog("Apagar Ficheiro", "Tens certeza que queres apagar este ficheiro?") {
+
+                    fileRef.delete()
+                        .addOnSuccessListener {
+                            refreshList()
+                        }
+                }
+
+            }
+            else {
+                // Folder
+
+                confirmationDialog("Apagar Pasta", "Tens certeza que queres apagar esta pasta e tudo dentro dela?") {
+/*
+                    fileRef.delete()
+                        .addOnSuccessListener {
+                            refreshList()
+                        }*/
+                }
+
+            }
+/*
+
+*/
+        }
+        return true
+    }
+
+
+    fun refreshView() {
+
+        binding.currentfolderName.text = titlePath
+        binding.arrowLeft.visibility = View.VISIBLE
+
+        refreshList()
+
+    }
+
+
+    private fun refreshList() {
+        Backend.getAllChatFolderFiles(currentPath) { _files ->
+            files.clear()
+            files.addAll(_files)
+            filesAdapter?.notifyDataSetChanged()
+        }
+    }
+
+
+    private fun addDialog() {
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        val view = layoutInflater.inflate(R.layout.dialog_add_file, null)
+        dialog.setContentView(view)
+        dialog.show()
+
+        view.findViewById<ImageView>(R.id.imageViewAddFile).setOnClickListener {
+
+            chooseFile()
+            dialog.dismiss()
+        }
+
+        view.findViewById<ImageView>(R.id.imageViewAddFolder).setOnClickListener {
+            openSelectFolderNameDialog()
+            dialog.dismiss()
+        }
+
+    }
+
+
+    private fun confirmationDialog(title: String, description: String, callBack: ()->Unit) {
+        val alertDialog = AlertDialog.Builder(this)
+
+        alertDialog.setTitle(title)
+        alertDialog.setMessage(description)
+
+        alertDialog.setPositiveButton("Sim") { _, _ ->
+            callBack()
+        }
+
+        alertDialog.setNegativeButton("Não") { _, _ ->
+            alertDialog.show().dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+
+    /*
+    This function display a dialog window with a text box to send reset password email
+ */
+    private fun openSelectFolderNameDialog() {
+
+        val alertDialog = AlertDialog.Builder(this)
+
+        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
+        alertDialog.setView(row)
+        val show = alertDialog.show()
+
+        // Variables
+        val editTextView = row.findViewById<TextView>(R.id.editTextName)
+        row.findViewById<TextView>(R.id.textView).text = "Criar Pasta"
+        editTextView.hint = "Nome"
+        row.findViewById<Button>(R.id.buttonSave).text = "Criar"
+
+        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
+
+            val name = if (editTextView.text != "") editTextView.text.toString() else "Nova pasta"
+            createFolder(this, name)
+            show.dismiss()
+        }
+
+    }
+
+
+    private fun openEditFileNameDialog(callBack: (newName: String)->Unit) {
+
+        val alertDialog = AlertDialog.Builder(this)
+
+        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
+        alertDialog.setView(row)
+        val show = alertDialog.show()
+
+        // Variables
+        val editTextView = row.findViewById<TextView>(R.id.editTextName)
+        row.findViewById<TextView>(R.id.textView).text = "Mudar Nome"
+        editTextView.hint = "Nome"
+        row.findViewById<Button>(R.id.buttonSave).text = "Editar"
+
+        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
+
+            val name = if (editTextView.text != "") editTextView.text.toString() else "Sem nome"
+            callBack(name)
+            show.dismiss()
+        }
+
+    }
+
+
+    private fun chooseFile() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_OPEN_DOCUMENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "*/*"
+        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+            "text/plain",
+            "application/pdf",
+            "application/zip",
+        "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
+            "application/json",
+            "text/json",
+            "text/javascript"
+        )
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
+        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, 1)
+    }
+
+
+    private fun createFolder(context: Context, folderName: String) {
+
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+
+
+        // Create a folder with a temp file
+        val outputDir: File = context.cacheDir // context being the Activity pointer
+        val outputFile: File = File.createTempFile("temp", ".txt", outputDir)
+
+        val ref: StorageReference = storageRef.child("$currentPath/$folderName/temp.invisible")
+        ref.putFile(outputFile.toUri())
+            .addOnSuccessListener {
+
+                // Refresh Folder
+                refreshList()
+            }
+    }
+
+
     private fun goBack() {
 
         // Don't allow go more back than the root folder
@@ -296,22 +428,11 @@ class ChatFilesActivity : AppCompatActivity() {
             if (titlePath == "root")
                 binding.arrowLeft.visibility = View.GONE
 
-            Backend.getAllChatFolderFiles(currentPath) { _files ->
-
-                files.clear()
-                files.addAll(_files)
-                filesAdapter?.notifyDataSetChanged()
-
-            }
+            refreshList()
 
         }
     }
 
-    // When the support action bar back button is pressed, the app will go back to the previous activity
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
 
     inner class FileAdapter : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
@@ -327,22 +448,29 @@ class ChatFilesActivity : AppCompatActivity() {
 
             holder.v.apply {
 
-                    val textViewName = findViewById<TextView>(R.id.textViewName)
-                    val imageViewIcon = findViewById<ImageView>(R.id.imageViewIcon)
-                    val linearLayout = findViewById<ConstraintLayout>(R.id.linearLayout)
-                    textViewName.text = files[position].name
-                    imageViewIcon.setImageDrawable(resources.getDrawable(files[position].icon))
+                val textViewName = findViewById<TextView>(R.id.textViewName)
+                val imageViewIcon = findViewById<ImageView>(R.id.imageViewIcon)
+                val linearLayout = findViewById<ConstraintLayout>(R.id.linearLayout)
 
+                textViewName.text = files[position].name
+                imageViewIcon.setImageDrawable(resources.getDrawable(files[position].icon))
+
+                if (files[position].icon == R.drawable.ic_folder) {
                     linearLayout.setOnClickListener {
-                        if (files[position].icon == R.drawable.ic_folder) {
-                            currentPath += "/${files[position].name}"
-                            titlePath += "/${files[position].name}"
-                            refreshView()
-                        }
+                        currentPath += "/${files[position].name}"
+                        titlePath += "/${files[position].name}"
+                        refreshView()
                     }
+                }
+                else {
+                    linearLayout.setOnClickListener {
+                        println("---------------------------------> show preview")
+                    }
+                }
 
-
+                registerForContextMenu(linearLayout)
             }
+
         }
 
         override fun getItemCount(): Int {
