@@ -18,8 +18,11 @@
         <item name="android:background" tools:ignore="NewApi">@android:color/transparent</item>
         <item name="background">@android:color/transparent</item>
         <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:drawableRight">@drawable/ic_search_24</item>
+        <item name="android:textAlignment">textEnd</item>
 
     </style>
 
