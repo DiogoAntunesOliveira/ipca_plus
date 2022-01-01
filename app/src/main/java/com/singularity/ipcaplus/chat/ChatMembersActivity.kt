@@ -2,9 +2,7 @@ package com.singularity.ipcaplus.chat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -35,19 +33,15 @@ class ChatMembersActivity : AppCompatActivity() {
         binding = ActivityChatMembersBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Create Action Bar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
-        supportActionBar?.title = "Membros"
-
         // Get previous data
         val chat_id = intent.getStringExtra("chat_id").toString()
 
         // Get Users in chat
         Backend.getChatUsers(chat_id) {
-
+            members.clear()
+            members.addAll(it)
+            membersAdapter?.notifyDataSetChanged()
         }
-        members.add(Profile())
 
         // List
         membersLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -55,6 +49,37 @@ class ChatMembersActivity : AppCompatActivity() {
         membersAdapter = EventAdapter()
         binding.membersRecyclerView.itemAnimator = DefaultItemAnimator()
         binding.membersRecyclerView.adapter = membersAdapter
+    }
+
+    /*
+    This function create the action bar above the activity
+    */
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_add, menu)
+
+        // Create Action Bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
+        supportActionBar?.title = "Membros"
+
+        return true
+    }
+
+
+    /*
+        This function define the events of the action bar buttons
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item.itemId){
+            R.id.add -> {
+                println("-------------------> adicionar")
+                return true
+            }
+        }
+        return false
     }
 
     // When the support action bar back button is pressed, the app will go back to the previous activity
@@ -78,16 +103,18 @@ class ChatMembersActivity : AppCompatActivity() {
             holder.v.apply {
 
                 // Get data
-                val imageViewUser = findViewById<ImageView>(R.id.imageViewUser)
+                val imageViewProfile = findViewById<ImageView>(R.id.imageViewProfile)
                 val textViewNomeUser = findViewById<TextView>(R.id.textViewNomeUser)
                 val textViewAdminTag = findViewById<TextView>(R.id.textViewAdminTag)
 
                 // Set data
-                // println("-------------------> " + members[position].id)
-                textViewNomeUser.text = members[position].name
+                Utilis.getFile("profilePictures/${members[position].id}.png", "png") { bitmap ->
+                    imageViewProfile.setImageBitmap(bitmap)
+                }
 
-                val isAdmin = true
-                if (!isAdmin)
+                textViewNomeUser.text = Utilis.getFirstAndLastName(members[position].name)
+
+                if (members[position].isAdmin)
                     textViewAdminTag.visibility = View.GONE
 
             }

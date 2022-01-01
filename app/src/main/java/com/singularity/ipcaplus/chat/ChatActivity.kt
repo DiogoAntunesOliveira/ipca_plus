@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.drawer.CalendarActivity
@@ -87,7 +88,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         // Show Messages
-        db.collection("chat").document("$chat_id").collection("message").orderBy("time")
+        db.collection("chat").document("$chat_id").collection("message").orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { documents, e ->
 
                 documents?.let {
@@ -110,6 +111,7 @@ class ChatActivity : AppCompatActivity() {
         binding.recycleViewChat.itemAnimator = DefaultItemAnimator()
         binding.recycleViewChat.adapter = mAdapter
 
+        mLayoutManager!!.reverseLayout = true
 
     }
 

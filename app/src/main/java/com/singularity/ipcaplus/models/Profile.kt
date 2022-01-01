@@ -11,7 +11,8 @@ class Profile {
     var courseTag : String = ""
     var age : String = ""
     var role : String = ""
-    var id : String? =  null
+    var id : String? = null
+    var isAdmin : Boolean = false
 
     constructor() {
 
