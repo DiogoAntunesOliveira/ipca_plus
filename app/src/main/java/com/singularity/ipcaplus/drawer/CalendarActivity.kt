@@ -1,6 +1,7 @@
 package com.singularity.ipcaplus.drawer
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
@@ -136,6 +138,7 @@ class CalendarActivity : AppCompatActivity() {
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+            placeCustomCalendarPins()
         }
     }
 
@@ -145,6 +148,7 @@ class CalendarActivity : AppCompatActivity() {
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+            placeCustomCalendarPins()
         }
     }
 
@@ -154,6 +158,7 @@ class CalendarActivity : AppCompatActivity() {
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+            placeCustomCalendarPins()
         }
     }
 
@@ -163,6 +168,17 @@ class CalendarActivity : AppCompatActivity() {
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+            placeCustomCalendarPins()
+        }
+    }
+
+
+    private fun placeCustomCalendarPins() {
+
+        binding.compactcalendarView.removeAllEvents()
+        for (event in events) {
+            val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+            binding.compactcalendarView.addEvent(ev1)
         }
     }
 

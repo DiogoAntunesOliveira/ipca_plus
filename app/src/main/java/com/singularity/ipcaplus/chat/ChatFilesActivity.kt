@@ -80,8 +80,8 @@ class ChatFilesActivity : AppCompatActivity() {
 
 
     /*
-   This function create the action bar above the activity
-*/
+       This function create the action bar above the activity
+    */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_add, menu)

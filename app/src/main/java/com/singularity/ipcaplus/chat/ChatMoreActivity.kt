@@ -58,6 +58,7 @@ class ChatMoreActivity : ActivityImageHelper() {
 
         binding.seeGroupMembers.setOnClickListener {
             val intent = Intent(this, ChatMembersActivity::class.java)
+            intent.putExtra("chat_id", chat_id)
             startActivity(intent)
         }
 
