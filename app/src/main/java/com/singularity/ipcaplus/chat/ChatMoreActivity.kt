@@ -6,6 +6,7 @@ import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -28,6 +29,7 @@ class ChatMoreActivity : ActivityImageHelper() {
     lateinit var imageViewGroup: ImageView
     lateinit var imageViewDialog: ImageView
     lateinit var chat_id: String
+    var is_admin: Boolean = false
     private lateinit var binding: ActivityChatMoreBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,7 @@ class ChatMoreActivity : ActivityImageHelper() {
         // Get previous data
         chat_id = intent.getStringExtra("chat_id").toString()
         val chat_name = intent.getStringExtra("chat_name").toString()
+        is_admin = intent.getBooleanExtra("is_admin", false)
         binding.textViewGroupName.text = chat_name
 
         // Get Group Image
@@ -59,15 +62,22 @@ class ChatMoreActivity : ActivityImageHelper() {
         binding.seeGroupMembers.setOnClickListener {
             val intent = Intent(this, ChatMembersActivity::class.java)
             intent.putExtra("chat_id", chat_id)
+            intent.putExtra("is_admin", is_admin)
             startActivity(intent)
         }
 
-        binding.changeGroupName.setOnClickListener {
-            openSelectNameDialog()
-        }
+        if (is_admin) {
+            binding.changeGroupName.setOnClickListener {
+                openSelectNameDialog()
+            }
 
-        binding.changeGroupImage.setOnClickListener {
-            openSelectImageDialog()
+            binding.changeGroupImage.setOnClickListener {
+                openSelectImageDialog()
+            }
+        }
+        else {
+            binding.changeGroupName.visibility = View.GONE
+            binding.changeGroupImage.visibility = View.GONE
         }
 
         binding.groupFiles.setOnClickListener {

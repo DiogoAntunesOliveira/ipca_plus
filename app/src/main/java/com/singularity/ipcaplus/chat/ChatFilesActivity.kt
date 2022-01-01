@@ -31,10 +31,6 @@ import android.view.ContextMenu
 import android.view.ContextMenu.ContextMenuInfo
 import com.google.firebase.storage.FirebaseStorage
 
-
-
-
-
 class ChatFilesActivity : AppCompatActivity() {
 
     // Variables

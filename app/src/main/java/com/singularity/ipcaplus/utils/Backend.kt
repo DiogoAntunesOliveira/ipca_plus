@@ -405,6 +405,17 @@ object Backend {
     }
 
 
+    fun changeUserChatAdminStatus(chatId: String, userId: String, status: Boolean) {
+
+        db.collection("chat")
+            .document(chatId)
+            .collection("user")
+            .document(userId)
+            .update("admin", status)
+
+    }
+
+
     /*
        ------------------------------------------------ Chats ------------------------------------------------
     */
@@ -425,7 +436,7 @@ object Backend {
                     for (document in documents) {
                         userIds.add(document.id)
 
-                        if (document["admin"] == null)
+                        if (document["admin"] != true)
                             adminIds.add(document.id)
 
                     }
@@ -525,7 +536,7 @@ object Backend {
                 documents?.let {
                     for (document in documents) {
 
-                        if (document["admin"] != null)
+                        if (document["admin"] == true)
                             adminIds.add(document.id)
 
                     }

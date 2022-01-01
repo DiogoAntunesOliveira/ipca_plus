@@ -1,13 +1,18 @@
 package com.singularity.ipcaplus.chat
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
 import com.singularity.ipcaplus.databinding.ActivityChatMembersBinding
@@ -21,7 +26,10 @@ class ChatMembersActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatMembersBinding
 
+    var currentUserIsAdmin = false
     var members = arrayListOf<Profile>()
+    var selectedUser = ""
+    private lateinit var chat_id: String
     private var membersAdapter: RecyclerView.Adapter<*>? = null
     private var membersLayoutManager: LinearLayoutManager? = null
 
@@ -34,14 +42,11 @@ class ChatMembersActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Get previous data
-        val chat_id = intent.getStringExtra("chat_id").toString()
+        chat_id = intent.getStringExtra("chat_id").toString()
+        currentUserIsAdmin = intent.getBooleanExtra("is_admin", false)
 
         // Get Users in chat
-        Backend.getChatUsers(chat_id) {
-            members.clear()
-            members.addAll(it)
-            membersAdapter?.notifyDataSetChanged()
-        }
+        refreshList()
 
         // List
         membersLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -50,6 +55,15 @@ class ChatMembersActivity : AppCompatActivity() {
         binding.membersRecyclerView.itemAnimator = DefaultItemAnimator()
         binding.membersRecyclerView.adapter = membersAdapter
     }
+
+    private fun refreshList() {
+        Backend.getChatUsers(chat_id) {
+            members.clear()
+            members.addAll(it)
+            membersAdapter?.notifyDataSetChanged()
+        }
+    }
+
 
     /*
     This function create the action bar above the activity
@@ -82,11 +96,46 @@ class ChatMembersActivity : AppCompatActivity() {
         return false
     }
 
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+
+        selectedUser = v.findViewById<TextView>(R.id.userId).text.toString()
+        val isAdmin = v.findViewById<TextView>(R.id.isAdmin).text.toString()
+
+        if (isAdmin == "1")
+            menu.add(0, v.id, 0, "Atribuir admin")
+        else
+            menu.add(0, v.id, 0, "Remover admin")
+
+        menu.add(0, v.id, 0, "Remover do grupo")
+    }
+
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+
+        if (item.title == "Atribuir admin") {
+            Backend.changeUserChatAdminStatus(chat_id, selectedUser, true)
+        }
+        else if (item.title == "Remover admin") {
+            Backend.changeUserChatAdminStatus(chat_id, selectedUser, false)
+        }
+        else if (item.title == "Remover do grupo") {
+            println("-------------------> remover $selectedUser")
+        }
+
+        refreshList()
+
+        return true
+    }
+
+
     // When the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
+
 
     inner class EventAdapter : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
@@ -98,14 +147,19 @@ class ChatMembersActivity : AppCompatActivity() {
             )
         }
 
+        @RequiresApi(Build.VERSION_CODES.N)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
             holder.v.apply {
 
                 // Get data
                 val imageViewProfile = findViewById<ImageView>(R.id.imageViewProfile)
+                val imageViewThreePoints = findViewById<ImageView>(R.id.imageViewThreePoints)
                 val textViewNomeUser = findViewById<TextView>(R.id.textViewNomeUser)
                 val textViewAdminTag = findViewById<TextView>(R.id.textViewAdminTag)
+                val rowMoreOptions = findViewById<ConstraintLayout>(R.id.rowMoreOptions)
+                val userId = findViewById<TextView>(R.id.userId)
+                val isAdmin = findViewById<TextView>(R.id.isAdmin)
 
                 // Set data
                 Utilis.getFile("profilePictures/${members[position].id}.png", "png") { bitmap ->
@@ -113,9 +167,26 @@ class ChatMembersActivity : AppCompatActivity() {
                 }
 
                 textViewNomeUser.text = Utilis.getFirstAndLastName(members[position].name)
+                userId.text = members[position].id
+                isAdmin.text = if (members[position].isAdmin) "1" else "0"
 
-                if (members[position].isAdmin)
+                if (members[position].isAdmin) {
                     textViewAdminTag.visibility = View.GONE
+                }
+                else {
+                    textViewAdminTag.visibility = View.VISIBLE
+                }
+
+                if (currentUserIsAdmin) {
+
+                    rowMoreOptions.setOnClickListener {
+                        registerForContextMenu(it)
+                        it.showContextMenu(100f, 50f)
+                    }
+                }
+                else {
+                    imageViewThreePoints.visibility = View.GONE
+                }
 
             }
         }
