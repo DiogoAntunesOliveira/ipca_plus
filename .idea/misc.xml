@@ -126,7 +126,7 @@
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/drawable/shadow.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_button.xml" value="0.33" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_people.xml" value="0.17806484295845998" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_people.xml" value="0.33" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_calendar.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_contacts.xml" value="0.36666666666666664" />
@@ -138,7 +138,11 @@
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_tab.xml" value="0.26766304347826086" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_select_name.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_home.xml" value="0.17806484295845998" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_official_chats.xml" value="0.17806484295845998" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_add_pp.xml" value="0.17806484295845998" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.33" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.67" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.17806484295845998" />

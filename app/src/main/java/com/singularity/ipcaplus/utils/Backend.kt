@@ -404,6 +404,26 @@ object Backend {
             }
     }
 
+    fun getAllUsersExceptCurrent (callBack:(List<Profile>)->Unit) {
+        val profiles = arrayListOf<Profile>()
+
+        db.collection("profile")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+
+                    for (document in documents) {
+                        val profile = Profile.fromHash(document)
+
+                        if (Firebase.auth.currentUser!!.uid != document.id) {
+                            profile.id = document.id
+                            profiles.add(profile)
+                        }
+                    }
+                }
+
+                callBack(profiles)
+            }
+    }
 
     fun changeUserChatAdminStatus(chatId: String, userId: String, status: Boolean) {
 

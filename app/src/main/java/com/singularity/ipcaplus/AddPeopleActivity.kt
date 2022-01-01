@@ -1,31 +1,18 @@
 package com.singularity.ipcaplus
 
-import android.content.Intent
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Icon
-import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.util.Util
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityAddPeopleBinding
-import com.singularity.ipcaplus.databinding.ActivitySearchBinding
-import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
@@ -59,13 +46,16 @@ class AddPeopleActivity: AppCompatActivity() {
         }
 
         // Get Users
-        Backend.getAllUsers {
+        Backend.getAllUsersExceptCurrent {
             users.addAll(it)
         }
 
+        /*
         Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
             selectedUsers.add(it)
         }
+         */
+
 
         // Recycler View All Users
         userLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -101,12 +91,15 @@ class AddPeopleActivity: AppCompatActivity() {
                 val username = findViewById<TextView>(R.id.textViewProfileName)
                 val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
-                // Set data
-                Utilis.getFile("profilePictures/${users[position].id}.png", "png") { bitmap ->
-                    imageViewUser.setImageBitmap(bitmap)
-                }
 
-                username.text = Utilis.getFirstAndLastName(users[position].name)
+                    // Set data
+                    Utilis.getFile("profilePictures/${users[position].id}.png", "png") { bitmap ->
+                        imageViewUser.setImageBitmap(bitmap)
+                    }
+
+                    username.text = Utilis.getFirstAndLastName(users[position].name)
+
+
 
             }
             holder.v.setOnClickListener {
