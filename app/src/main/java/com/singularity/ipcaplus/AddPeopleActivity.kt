@@ -1,5 +1,6 @@
 package com.singularity.ipcaplus
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.chat.ChatActivity
+import com.singularity.ipcaplus.chat.CreateChatActivity
 import com.singularity.ipcaplus.databinding.ActivityAddPeopleBinding
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
@@ -51,11 +54,27 @@ class AddPeopleActivity: AppCompatActivity() {
             users.addAll(it)
         }
 
-        /*
-        Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
-            selectedUsers.add(it)
+        // Continue button
+        binding.fabCreateChat.setOnClickListener {
+
+
+            val selectedUsersIds = arrayListOf<String?>()
+            for(user in selectedUsers) {
+                selectedUsersIds.add(user.id)
+            }
+
+            // Add current user to users list
+            Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
+                selectedUsersIds.add(it.id)
+
+                // Send users list to chat creation
+                println("ANTES ------------------------- " + selectedUsersIds)
+                val intent = Intent(this, CreateChatActivity::class.java)
+                intent.putExtra("users", selectedUsersIds)
+                startActivity(intent)
+            }
         }
-         */
+
 
 
         // Recycler View All Users

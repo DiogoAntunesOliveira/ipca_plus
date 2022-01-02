@@ -1,22 +1,13 @@
 package com.singularity.ipcaplus.chat
 
-import android.app.ActivityOptions
 import android.content.Intent
-import android.media.Image
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
-import com.singularity.ipcaplus.WelcomeActivity
 import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
-import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
@@ -106,10 +97,10 @@ class ChatMoreActivity : ActivityImageHelper() {
         val row = layoutInflater.inflate(R.layout.dialog_select_image, null)
         alertDialog.setView(row)
         val show = alertDialog.show()
-        imageViewDialog = row.findViewById(R.id.imageViewGroup)
+        imageViewDialog = row.findViewById(R.id.imageViewChatPhoto)
 
         Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
-            row.findViewById<ImageView>(R.id.imageViewGroup).setImageBitmap(bitmap)
+            row.findViewById<ImageView>(R.id.imageViewChatPhoto).setImageBitmap(bitmap)
         }
 
         imageViewDialog.setOnClickListener {
