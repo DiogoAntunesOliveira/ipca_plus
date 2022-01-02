@@ -121,7 +121,7 @@ class AddButtonActivity: AppCompatActivity() {
 
                 // give data
                 textViewName.text = users[position].name
-                Utilis.getFile("profilePictures/" + users[position].id + ".png", "png") { bitmap ->
+                Utilis.getFile(this.context, "profilePictures/" + users[position].id + ".png", "png") { bitmap ->
                     imageViewImage.setImageBitmap(bitmap)
                 }
 

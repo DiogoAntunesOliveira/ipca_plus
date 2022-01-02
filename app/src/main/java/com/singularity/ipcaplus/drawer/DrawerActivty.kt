@@ -76,7 +76,7 @@ class DrawerActivty : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Utilis.getFile("profilePictures/" + Firebase.auth.uid + ".png", "png") { bitmap ->
+        Utilis.getFile(this,"profilePictures/" + Firebase.auth.uid + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
         if(!UserLoggedIn.name.isNullOrEmpty()){
@@ -183,7 +183,7 @@ class DrawerActivty : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        Utilis.getFile("profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
+        Utilis.getFile(this,"profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
             binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
         }
     }

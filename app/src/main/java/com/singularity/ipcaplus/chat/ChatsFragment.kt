@@ -120,7 +120,6 @@ class ChatsFragment : Fragment() {
         @RequiresApi(Build.VERSION_CODES.M)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-
                 holder.v.apply {
 
                     // Variables
@@ -141,7 +140,7 @@ class ChatsFragment : Fragment() {
                         lastMessageText.text = it.message
                     }
 
-                    Utilis.getFile("chats/${chatIds[position]}/icon.png", "png") { bitmap ->
+                    Utilis.getFile(this.context, "chats/${chatIds[position]}/icon.png", "png") { bitmap ->
                         imageViewChatGroup.setImageBitmap(bitmap)
                     }
 

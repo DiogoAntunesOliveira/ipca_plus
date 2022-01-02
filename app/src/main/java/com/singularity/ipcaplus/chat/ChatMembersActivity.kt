@@ -162,7 +162,7 @@ class ChatMembersActivity : AppCompatActivity() {
                 val isAdmin = findViewById<TextView>(R.id.isAdmin)
 
                 // Set data
-                Utilis.getFile("profilePictures/${members[position].id}.png", "png") { bitmap ->
+                Utilis.getFile(context, "profilePictures/${members[position].id}.png", "png") { bitmap ->
                     imageViewProfile.setImageBitmap(bitmap)
                 }
 

@@ -236,7 +236,7 @@ class ChatActivity : AppCompatActivity() {
                 if (otherUser) {
                     val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
                     if (imageViewUser != null) {
-                        Utilis.getFile("profilePictures/${messages[position].user}.png", "png") { bitmap ->
+                        Utilis.getFile(context, "profilePictures/${messages[position].user}.png", "png") { bitmap ->
                             imageViewUser.setImageBitmap(bitmap)
                         }
                     }

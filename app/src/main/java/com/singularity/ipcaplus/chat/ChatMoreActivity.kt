@@ -46,7 +46,7 @@ class ChatMoreActivity : ActivityImageHelper() {
 
         // Get Group Image
         imageViewGroup = binding.imageViewGroup
-        Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
+        Utilis.getFile(this, "chats/$chat_id/icon.png", "png") { bitmap ->
             imageViewGroup.setImageBitmap(bitmap)
         }
 
@@ -109,7 +109,7 @@ class ChatMoreActivity : ActivityImageHelper() {
         val show = alertDialog.show()
         imageViewDialog = row.findViewById(R.id.imageViewChatPhoto)
 
-        Utilis.getFile("chats/$chat_id/icon.png", "png") { bitmap ->
+        Utilis.getFile(this,"chats/$chat_id/icon.png", "png") { bitmap ->
             row.findViewById<ImageView>(R.id.imageViewChatPhoto).setImageBitmap(bitmap)
         }
 

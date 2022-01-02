@@ -113,7 +113,7 @@ class AddPeopleActivity: AppCompatActivity() {
 
 
                     // Set data
-                    Utilis.getFile("profilePictures/${users[position].id}.png", "png") { bitmap ->
+                    Utilis.getFile(context, "profilePictures/${users[position].id}.png", "png") { bitmap ->
                         imageViewUser.setImageBitmap(bitmap)
                     }
 
@@ -155,7 +155,7 @@ class AddPeopleActivity: AppCompatActivity() {
                 val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
                 // Set data
-                Utilis.getFile("profilePictures/${selectedUsers[position].id}.png", "png") { bitmap ->
+                Utilis.getFile(context,"profilePictures/${selectedUsers[position].id}.png", "png") { bitmap ->
                     imageViewUser.setImageBitmap(bitmap)
                 }
 

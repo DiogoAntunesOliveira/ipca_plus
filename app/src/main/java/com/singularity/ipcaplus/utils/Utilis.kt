@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -24,6 +25,10 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import java.util.regex.Pattern
+
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
+
 
 object  Utilis {
 
@@ -197,7 +202,12 @@ object  Utilis {
        ------------------------------------------------ Images ------------------------------------------------
     */
 
-    fun getFile(path: String, suffix: String, callback:(Bitmap)->Unit) {
+    fun convertDrawableToBitmap(context: Context, drawable: Int): Bitmap {
+        return BitmapFactory.decodeResource(context.resources, R.drawable.circle)
+    }
+
+
+    fun getFile(context: Context, path: String, suffix: String, callback:(Bitmap)->Unit) {
 
         // Retrieve image from firebase
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
@@ -208,13 +218,13 @@ object  Utilis {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             callback(bitmap)
         }.addOnFailureListener {
-            val bitmap: BitmapDrawable = BitmapDrawable(Resources.getSystem(), R.drawable.circle.toString())
-            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + BitmapDrawable.)
-            //callback(bitmap)
-            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + R.mipmap.ic_launcher.t) R.drawable.circle.toByte()
-            //bitmap = null
+            val bitmap = (ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.circle,
+                null
+            ) as GradientDrawable?)!!.toBitmap()
+            callback(bitmap)
         }
-
 
     }
 
