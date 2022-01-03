@@ -404,6 +404,37 @@ object Backend {
             }
     }
 
+    fun getAllUsersExceptCurrent (callBack:(List<Profile>)->Unit) {
+        val profiles = arrayListOf<Profile>()
+
+        db.collection("profile")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+
+                    for (document in documents) {
+                        val profile = Profile.fromHash(document)
+
+                        if (Firebase.auth.currentUser!!.uid != document.id) {
+                            profile.id = document.id
+                            profiles.add(profile)
+                        }
+                    }
+                }
+
+                callBack(profiles)
+            }
+    }
+
+    fun changeUserChatAdminStatus(chatId: String, userId: String, status: Boolean) {
+
+        db.collection("chat")
+            .document(chatId)
+            .collection("user")
+            .document(userId)
+            .update("admin", status)
+
+    }
+
 
     /*
        ------------------------------------------------ Chats ------------------------------------------------
@@ -412,18 +443,52 @@ object Backend {
 
     fun getChatUsers(chatID: String, callBack: (List<Profile>)->Unit) {
 
+        val userIds = arrayListOf<String>()
+        val adminIds = arrayListOf<String>()
         val users = arrayListOf<Profile>()
 
-        db.collection("profile")
-            .whereEqualTo("gender","M")
-            .get()
-            .addOnSuccessListener { documents ->
+        // Get the ids of the users in the chat
+        db.collection("chat")
+            .document(chatID)
+            .collection("user")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        userIds.add(document.id)
 
-                println("---------------------------- ${documents.size()}")
+                        if (document["admin"] != true)
+                            adminIds.add(document.id)
 
-                for (document in documents) {
-                    println("---------------------------- ${document.id} => ${document.data}")
+                    }
                 }
+
+                // Find the data for each id
+                db.collection("profile")
+                    .addSnapshotListener { documents2, _ ->
+                        documents2?.let {
+                            for (document in documents2) {
+                                for (id in userIds) {
+                                    if (document.id == id) {
+                                        val profile = Profile.fromHash(document)
+                                        profile.id = document.id
+                                        users.add(profile)
+                                    }
+                                }
+                            }
+                        }
+
+                        // Get Admins
+                        for (u in users) {
+                            for (a in adminIds) {
+                                if (u.id == a) {
+                                    u.isAdmin = true
+                                }
+                            }
+                        }
+
+                        callBack(users)
+                    }
+
             }
 
     }
@@ -483,12 +548,17 @@ object Backend {
 
         val adminIds = arrayListOf<String>()
 
-        // Get Group Chats Ids
-        db.collection("chat").document(chatID).collection("admin")
+        // Get Admins
+        db.collection("chat")
+            .document(chatID)
+            .collection("user")
             .addSnapshotListener { documents, _ ->
                 documents?.let {
-                    for (document in it) {
-                        adminIds.add(document.id)
+                    for (document in documents) {
+
+                        if (document["admin"] == true)
+                            adminIds.add(document.id)
+
                     }
 
                     callBack(adminIds)

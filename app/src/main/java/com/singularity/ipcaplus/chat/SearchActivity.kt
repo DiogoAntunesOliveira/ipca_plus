@@ -93,15 +93,12 @@ class SearchActivity: AppCompatActivity() {
                 // Variables
                 val textViewMessage = findViewById<TextView>(R.id.textViewProfileName)
                 val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewProfileGroup)
-                val lastMessageTime = findViewById<TextView>(R.id.lastMessageTime)
                 val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
                 textViewMessage.text = chats[position].name
                 // Set Last Chat Message
                 Backend.getLastMessageByChatID(chatIds[position]) {
-                    val data = Utilis.getDate(it!!.time.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                    lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
-                    lastMessageText.text = it.message
+                    lastMessageText.text = it?.message
                 }
                 imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
 

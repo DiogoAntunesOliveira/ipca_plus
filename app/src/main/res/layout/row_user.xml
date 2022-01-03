@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/viewImageProfile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="10dp"
         android:elevation="12dp"
@@ -23,7 +24,7 @@
         <ImageView
             android:id="@+id/imageViewProfile"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:transitionName="simple_activity_transition"

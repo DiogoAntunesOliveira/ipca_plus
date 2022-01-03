@@ -1,10 +1,12 @@
 package com.singularity.ipcaplus.utils
 
+import android.app.DownloadManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -18,10 +20,15 @@ import com.singularity.ipcaplus.cryptography.encryptMeta
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import java.util.regex.Pattern
+
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
+
 
 object  Utilis {
 
@@ -195,7 +202,12 @@ object  Utilis {
        ------------------------------------------------ Images ------------------------------------------------
     */
 
-    fun getFile(path: String, suffix: String, callback:(Bitmap)->Unit) {
+    fun convertDrawableToBitmap(context: Context, drawable: Int): Bitmap {
+        return BitmapFactory.decodeResource(context.resources, R.drawable.circle)
+    }
+
+
+    fun getFile(context: Context, path: String, suffix: String, callback:(Bitmap)->Unit) {
 
         // Retrieve image from firebase
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
@@ -206,28 +218,25 @@ object  Utilis {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             callback(bitmap)
         }.addOnFailureListener {
-            val bitmap: BitmapDrawable = BitmapDrawable(Resources.getSystem(), R.drawable.circle.toString())
-            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + BitmapDrawable.)
-            //callback(bitmap)
-            //println("eeeeeeeeeeeeeeeeeeeeeeeeeeeee " + R.mipmap.ic_launcher.t) R.drawable.circle.toByte()
-            //bitmap = null
+            val bitmap = (ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.circle,
+                null
+            ) as GradientDrawable?)!!.toBitmap()
+            callback(bitmap)
         }
-
 
     }
 
+    fun downloadFile(context: Context, fileName: String, fileExtension: String, destinationDirectory: String, uri: Uri) {
 
-    fun deleteFile(filePath: String) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val request = DownloadManager.Request(uri)
 
-        val fileRef = Firebase.storage.reference.child("chats/mwAwDDco5Pg2gzmGeUHs/files/documentos/a/temp.txt")
-        println("-------------------------------------> ta " + filePath)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(destinationDirectory, fileName + fileExtension)
 
-        fileRef.delete().addOnSuccessListener {
-            println("-------------------------------------> deu")
-        }.addOnFailureListener {
-            println("-------------------------------------> nao deu")
-        }
-
+        downloadManager.enqueue(request)
     }
 
 
@@ -244,15 +253,20 @@ object  Utilis {
 
 
     fun getFileIcon(fileName:String): Int {
-        val extension = Pattern.compile("[.]").split(fileName)[1]
+        return if (fileName.contains(".")) {
 
-        return when (extension) {
-            "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
-            "invisible" -> -1
-            else -> R.drawable.ic_file
+            val extension = Pattern.compile("[.]").split(fileName)[1]
 
-        }
+            when (extension) {
+                "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
+                "invisible" -> -1
+                else -> R.drawable.ic_file
+            }
+
+        } else
+            -1
     }
+
 
     fun uniqueImageNameGen(): String {
         val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&/()=@[]{}"
@@ -266,6 +280,8 @@ object  Utilis {
 
         return sb.toString()
     }
+
+
     /*
         This function gets the domain of email
         split remove the @ and make the array like this -> [a20115][alunos.ipca.pt]

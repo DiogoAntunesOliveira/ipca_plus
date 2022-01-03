@@ -1,6 +1,7 @@
 package com.singularity.ipcaplus.drawer
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.github.sundeepk.compactcalendarview.domain.Event
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
@@ -59,24 +61,18 @@ class CalendarActivity : AppCompatActivity() {
         chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
 
         // Get All Events This Month
-        if (chat_id == "none")
+        if (chat_id == "none") {
             addAllMonthEvents(binding.monthTitle.text.toString())
-        else
+            placeCustomCalendarPinsGeneral()
+        }
+        else {
             addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
+            placeCustomCalendarPinsChat()
+        }
 
         // Check if Player is Chat Admin
         if (chat_id != "none") {
-            Backend.getChatAdminIds(chat_id) {
-                val currentUser = Firebase.auth.currentUser!!.uid
-                for (admin in it) {
-                    if (admin == currentUser)
-                        isAdmin = true
-                }
-
-                // Hide Add Button for normal users
-                if (!isAdmin)
-                    binding.fabAddEvent.visibility = View.GONE
-            }
+            isAdmin = intent.getBooleanExtra("is_admin", false)
         }
 
         // Add Event Button
@@ -97,11 +93,14 @@ class CalendarActivity : AppCompatActivity() {
             override fun onDayClick(dateClicked: Date) {
 
                 // Show All Selected day Events
-                if (chat_id == "none")
+                if (chat_id == "none") {
                     addAllDayEvents(binding.monthTitle.text.toString(), dateClicked.date)
-                else
+                    placeCustomCalendarPinsGeneral()
+                }
+                else {
                     addAllChatDayEvents(binding.monthTitle.text.toString(), dateClicked.date, chat_id)
-
+                    placeCustomCalendarPinsChat()
+                }
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
@@ -109,10 +108,14 @@ class CalendarActivity : AppCompatActivity() {
                 binding.yearTitle.text = Utilis.getYearByCalendarId(firstDayOfNewMonth.year).toString()
 
                 // Refresh with new Month Events
-                if (chat_id == "none")
+                if (chat_id == "none") {
                     addAllMonthEvents(binding.monthTitle.text.toString())
-                else
+                    placeCustomCalendarPinsGeneral()
+                }
+                else {
                     addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
+                    placeCustomCalendarPinsChat()
+                }
             }
         })
 
@@ -163,6 +166,28 @@ class CalendarActivity : AppCompatActivity() {
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
+        }
+    }
+
+
+    private fun placeCustomCalendarPinsGeneral() {
+        Backend.getAllMonthEvents (binding.monthTitle.text.toString()) { allEvents ->
+            binding.compactcalendarView.removeAllEvents()
+            for (event in allEvents) {
+                val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+                binding.compactcalendarView.addEvent(ev1)
+            }
+        }
+    }
+
+
+    private fun placeCustomCalendarPinsChat() {
+        Backend.getAllChatMonthEvents (binding.monthTitle.text.toString(), chat_id) { allEvents ->
+            binding.compactcalendarView.removeAllEvents()
+            for (event in allEvents) {
+                val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+                binding.compactcalendarView.addEvent(ev1)
+            }
         }
     }
 

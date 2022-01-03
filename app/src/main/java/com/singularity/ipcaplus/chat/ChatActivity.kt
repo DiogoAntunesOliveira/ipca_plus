@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.drawer.CalendarActivity
@@ -34,7 +35,7 @@ import java.time.format.DateTimeFormatter
 class ChatActivity : AppCompatActivity() {
 
     var messages = arrayListOf<Message>()
-
+    var currentUserIsAdmin = false
     private lateinit var binding: ActivityChatBinding
     private lateinit var chat_id : String
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -56,38 +57,47 @@ class ChatActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.BASIC_ISO_DATE
         val formatted = current.format(formatter)
 
+        // Check if user is admin
+        Backend.getChatAdminIds(chat_id) {
+            val currentUser = Firebase.auth.currentUser!!.uid
+            for (admin in it) {
+                if (admin == currentUser)
+                    currentUserIsAdmin = true
+            }
+        }
+
         println("Current Date is: $formatted")
 
         // Send Message
-            binding.fabSend.setOnClickListener {
-                if(!binding.editTextMessage.text.isNullOrBlank()) {
-                    // get data of ecripted shared preferences ("chatuid" -> "key")
-                    val keygen = getMetaOx(this, chat_id)
-                    // Build encryptation data of message send by the user
-                    var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
+        binding.fabSend.setOnClickListener {
+            if(!binding.editTextMessage.text.isNullOrBlank()) {
+                // get data of ecripted shared preferences ("chatuid" -> "key")
+                val keygen = getMetaOx(this, chat_id)
+                // Build encryptation data of message send by the user
+                var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
 
-                    val message = Message(
-                        Firebase.auth.currentUser!!.uid,
-                        meta.toString(),
-                        Timestamp.now(),
-                        ""
+                val message = Message(
+                    Firebase.auth.currentUser!!.uid,
+                    meta.toString(),
+                    Timestamp.now(),
+                    ""
 
-                    )
-                    db.collection("chat").document("$chat_id").collection("message")
-                        .add(message.toHash())
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                )
+                db.collection("chat").document("$chat_id").collection("message")
+                    .add(message.toHash())
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
 
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
-                    binding.editTextMessage.text.clear()
-                }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding document", e)
+                    }
+                binding.editTextMessage.text.clear()
+            }
         }
 
         // Show Messages
-        db.collection("chat").document("$chat_id").collection("message").orderBy("time")
+        db.collection("chat").document("$chat_id").collection("message").orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { documents, e ->
 
                 documents?.let {
@@ -110,6 +120,7 @@ class ChatActivity : AppCompatActivity() {
         binding.recycleViewChat.itemAnimator = DefaultItemAnimator()
         binding.recycleViewChat.adapter = mAdapter
 
+        mLayoutManager!!.reverseLayout = true
 
     }
 
@@ -149,12 +160,15 @@ class ChatActivity : AppCompatActivity() {
             R.id.calendario -> {
                 val intent = Intent(this, CalendarActivity::class.java)
                 intent.putExtra("chat_id", chat_id)
+                intent.putExtra("is_admin", currentUserIsAdmin)
                 startActivity(intent)
                 return true
             }
             R.id.chatMore -> {
                 val intent = Intent(this, ChatMoreActivity::class.java)
                 intent.putExtra("chat_id", chat_id)
+                println("3------------------------------ " + currentUserIsAdmin)
+                intent.putExtra("is_admin", currentUserIsAdmin)
                 intent.putExtra("chat_name", supportActionBar?.title)
                 startActivity(intent)
                 return true
@@ -222,7 +236,7 @@ class ChatActivity : AppCompatActivity() {
                 if (otherUser) {
                     val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
                     if (imageViewUser != null) {
-                        Utilis.getFile("profilePictures/${messages[position].user}.png", "png") { bitmap ->
+                        Utilis.getFile(context, "profilePictures/${messages[position].user}.png", "png") { bitmap ->
                             imageViewUser.setImageBitmap(bitmap)
                         }
                     }
