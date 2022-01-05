@@ -1,6 +1,9 @@
 package com.singularity.ipcaplus.drawer
 
+import android.content.BroadcastReceiver
 import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +13,7 @@ import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -33,17 +37,16 @@ import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityDrawerActivtyBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
-import com.singularity.ipcaplus.utils.PreferenceHelper
-import com.singularity.ipcaplus.utils.UserLoggedIn
-import com.singularity.ipcaplus.utils.Utilis
 import kotlin.random.Random
 import androidx.core.view.ViewCompat
 
 import androidx.core.app.ActivityOptionsCompat
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.singularity.ipcaplus.AddButtonActivity
 import com.singularity.ipcaplus.chat.CreateChatActivity
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
-import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.*
 
 
 class DrawerActivty : AppCompatActivity() {
@@ -52,6 +55,7 @@ class DrawerActivty : AppCompatActivity() {
     private lateinit var binding: ActivityDrawerActivtyBinding
     private lateinit var binding2: ActivityProfileBinding
     val db = Firebase.firestore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,6 +177,23 @@ class DrawerActivty : AppCompatActivity() {
         // Passing each fragment ID as a set of Ids
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // Vou buscar os tokens do utilizador
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = "Este é o meu token$token"
+            println("--------------------------------------------- $token")
+            Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
 
     }
 
