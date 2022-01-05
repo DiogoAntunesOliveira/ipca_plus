@@ -80,6 +80,8 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+
+
     }
 
     private fun blankSpaces(key : String): String {
