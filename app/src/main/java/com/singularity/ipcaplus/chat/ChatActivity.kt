@@ -14,11 +14,19 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.singularity.ipcaplus.AppConstants
 import com.singularity.ipcaplus.drawer.CalendarActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.utils.Utilis
@@ -28,7 +36,12 @@ import com.singularity.ipcaplus.cryptography.getMetaOx
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
+import com.singularity.ipcaplus.models.PushNotification
 import com.singularity.ipcaplus.utils.Backend
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -76,6 +89,9 @@ class ChatActivity : AppCompatActivity() {
                 // Build encryptation data of message send by the user
                 var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
 
+                var databaseReference = FirebaseDatabase.getInstance().getReference("Chat").child(chat_id!!)
+
+
                 val message = Message(
                     Firebase.auth.currentUser!!.uid,
                     meta.toString(),
@@ -83,6 +99,9 @@ class ChatActivity : AppCompatActivity() {
                     ""
 
                 )
+
+                //getToken(binding.editTextMessage.text.toString())
+
                 db.collection("chat").document("$chat_id").collection("message")
                     .add(message.toHash())
                     .addOnSuccessListener { documentReference ->
@@ -261,4 +280,80 @@ class ChatActivity : AppCompatActivity() {
 
 
     }
+    }
+
+
+
+
+
+
+
+
+
+
+
+private fun getToken(message: String) {
+
+    val databaseReference = FirebaseDatabase
+        .getInstance()
+        .getReference("Profile")
+        .child("bEWfuAdTu3bfhHgOaOFkynIgHjH3")
+
+    databaseReference
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (snapshot.exists()) {
+                val token = snapshot.child("token")
+                    .value.toString()
+
+                val to = JSONObject()
+                val data = JSONObject()
+
+                data.put("hisId", "Y90PjGQmLsMrxLicWkirOKpPSOx2")
+                data.put("title", "Bruce Wayne")
+                data.put("message", message)
+                data.put("chatId", "CbartuF280ajG8nOAc5L")
+
+                to.put("to", token)
+                to.put("data", data)
+                sendNotification(to)
+
+
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
 }
+
+    private fun sendNotification(to: JSONObject) {
+
+        val request: JsonObjectRequest = object : JsonObjectRequest(
+            Method.POST,
+            AppConstants.NOTIFICATION_URL,
+            to,
+            Response.Listener { response: JSONObject ->
+
+                Log.d("TAG", "onResponse: $response")
+            },
+            Response.ErrorListener {
+
+                Log.d("TAG", "onError: $it")
+            }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val map: MutableMap<String, String> = HashMap()
+
+                map["Authorization"] = "key=" + AppConstants.SERVER_KEY
+                map["Content-type"] = "application/json"
+                return map
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+        }
+
+    }

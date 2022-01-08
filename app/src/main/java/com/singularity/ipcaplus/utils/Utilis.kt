@@ -28,6 +28,7 @@ import java.util.regex.Pattern
 
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.auth.FirebaseAuth
 
 
 object  Utilis {
@@ -309,6 +310,11 @@ object  Utilis {
 
         return message.toString()
 
+    }
+
+    fun getUID(): String? {
+        val firebaseAuth = FirebaseAuth.getInstance()
+        return firebaseAuth.uid
     }
 
 }
