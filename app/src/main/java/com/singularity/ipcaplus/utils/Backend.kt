@@ -6,10 +6,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.*
 import org.json.JSONArray
+import java.io.File
 
 object Backend {
 
@@ -725,6 +727,17 @@ object Backend {
     /*
       ------------------------------------------------ Files ------------------------------------------------
    */
+
+    fun getFileUrl(filePath: String, callback: (Uri)->Unit) {
+
+        val storageRef = FirebaseStorage.getInstance().reference.child(filePath)
+
+        storageRef.downloadUrl.addOnCompleteListener {
+            callback(it.result)
+        }
+
+    }
+
 
     fun postTokenAddress(tokenAdress: String, uid: String){
         println(tokenAdress)

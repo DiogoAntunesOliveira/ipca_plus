@@ -168,7 +168,6 @@ class ChatFilesActivity : AppCompatActivity() {
         selectedFile = v.findViewById<TextView>(R.id.textViewName).text.toString()
 
         menu.add(0, v.id, 0, "Transferir")
-        menu.add(0, v.id, 0, "Editar")
         menu.add(0, v.id, 0, "Apagar")
     }
 
@@ -178,49 +177,16 @@ class ChatFilesActivity : AppCompatActivity() {
         val fileRef = Firebase.storage.reference.child("$currentPath/$selectedFile")
 
         if (item.title === "Transferir") {
+            downloadFileRequest(currentPath, selectedFile)
 
-            confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
-
-                val strArray = Pattern.compile("[.]").split(selectedFile)
-                val fileName = strArray[0]
-                val fileExtension = strArray[1]
-                fileRef.downloadUrl.addOnSuccessListener {
-                    Utilis.downloadFile(this, fileName, ".$fileExtension", DIRECTORY_DOWNLOADS, it)
-                }
-
-            }
-
-        } else if (item.title === "Editar") {
-
-            // Show Edit Dialog
-            openEditFileNameDialog { newName ->
-
-            // Change name
-                /*
-                storage = FirebaseStorage.getInstance().reference
-                val tsLong = System.currentTimeMillis() / 1000
-                val ts = tsLong.toString()
-                val storageReference: StorageReference = storage.child("image").child("$ts.jpg")
-*/
-
-            // Refresh List View
-
-                println("-------------------------- novo nome = $newName")
-
-                refreshList()
-            }
-
-            println("----------------------------------> Editar " + selectedFile)
-        } else if (item.title === "Apagar") {
-
+        }
+        else if (item.title === "Apagar") {
 
             // Missing Delete Folder --------------------------------------------------------------------------------------
             println("-------------------------------------------------------- selectedFile = " + selectedFile)
 
-
             // Verify If the selected File is a folder or a file
             if (selectedFile.contains(".")) {
-                // File
 
                 confirmationDialog("Apagar Ficheiro", "Tens certeza que queres apagar este ficheiro?") {
 
@@ -335,30 +301,6 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
-    private fun openEditFileNameDialog(callBack: (newName: String)->Unit) {
-
-        val alertDialog = AlertDialog.Builder(this)
-
-        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
-        alertDialog.setView(row)
-        val show = alertDialog.show()
-
-        // Variables
-        val editTextView = row.findViewById<TextView>(R.id.editTextName)
-        row.findViewById<TextView>(R.id.textView).text = "Mudar Nome"
-        editTextView.hint = "Nome"
-        row.findViewById<Button>(R.id.buttonSave).text = "Editar"
-
-        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
-
-            val name = if (editTextView.text != "") editTextView.text.toString() else "Sem nome"
-            callBack(name)
-            show.dismiss()
-        }
-
-    }
-
-
     private fun chooseFile() {
         val intent = Intent()
         intent.action = Intent.ACTION_OPEN_DOCUMENT
@@ -429,6 +371,20 @@ class ChatFilesActivity : AppCompatActivity() {
         }
     }
 
+    fun downloadFileRequest(path: String, name: String) {
+
+        confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+
+            val fileRef = Firebase.storage.reference.child("$path/${name}")
+            val strArray = Pattern.compile("[.]").split(name)
+            val fileName = strArray[0]
+            val fileExtension = strArray[strArray.size - 1]
+
+            fileRef.downloadUrl.addOnSuccessListener {
+                Utilis.downloadFile(this, fileName, ".$fileExtension", DIRECTORY_DOWNLOADS, it)
+            }
+        }
+    }
 
     inner class FileAdapter : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
@@ -460,7 +416,30 @@ class ChatFilesActivity : AppCompatActivity() {
                 }
                 else {
                     linearLayout.setOnClickListener {
-                        println("---------------------------------> show preview")
+
+                        // Verify if its an image
+                        val extensionArray = Pattern.compile("[.]").split(files[position].name)
+                        val extension = extensionArray[extensionArray.size-1]
+
+                        // Show Preview if its an image. Ask to download if dont
+                        if (extension == "png" || extension == "jpg" || extension == "jpeg" || extension == "jep" || extension == "jfif" || extension == "gif") {
+
+                            Backend.getFileUrl("$currentPath/${files[position].name}") {
+
+                                val intent = Intent(this.context, FilePreviewActivity::class.java)
+                                intent.putExtra("url", it.toString())
+                                intent.putExtra("fileName", files[position].name)
+                                intent.putExtra("currentPath", currentPath)
+                                startActivity(intent)
+
+                            }
+
+                        }
+                        else {
+
+                            downloadFileRequest(currentPath, files[position].name)
+
+                        }
                     }
                 }
 

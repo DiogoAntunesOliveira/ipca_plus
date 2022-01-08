@@ -255,7 +255,8 @@ object  Utilis {
     fun getFileIcon(fileName:String): Int {
         return if (fileName.contains(".")) {
 
-            val extension = Pattern.compile("[.]").split(fileName)[1]
+            val extensionArray = Pattern.compile("[.]").split(fileName)
+            val extension = extensionArray[extensionArray.size-1]
 
             when (extension) {
                 "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
