@@ -1,5 +1,6 @@
 package com.singularity.ipcaplus.utils
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,33 +9,22 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.singularity.ipcaplus.R
-import com.singularity.ipcaplus.drawer.DrawerActivty
 import java.lang.Exception
 
+const val channelId = ""
+const val channelName = "com.singularity.ipcaplus"
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    // [START on_new_token]
-    /**
-     * Called if the FCM registration token is updated. This may occur if the security of
-     * the previous token had been compromised. Note that this is called when the
-     * FCM registration token is initially generated so this is where you would retrieve the token.
-     */
-    override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
-
-    }
-    // [END on_new_token]
-
+    //Here the application on receiving a message will check if its not empty and then it will handle the message by sending it to the context
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+
+
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
@@ -50,26 +40,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 // Handle message within 10 seconds
                 handleNow()
             }
+            val clickAction = remoteMessage.data["click_action"]
+
+            println("click Action")
+            println(clickAction)
+
+            //broadcastContentReady(applicationContext, remoteMessage.data["title"]!!, remoteMessage.data["content"]!!)
+            sendNotification(remoteMessage.data["title"]!!, remoteMessage.data["content"]!!, clickAction!!)
         }
 
-        // Check if message contains a notification payload.
-        remoteMessage.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
-
-            it.body?.let { it1 ->
-                broadcastContentReady(applicationContext, it1)
-
-            }
-        }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    fun broadcastContentReady(context: Context, message:String) {
+    //here the message will be sent back to the application
+    private fun broadcastContentReady(context: Context, messageHead: String, messageBody: String) {
         val intent = Intent(BROADCAST_NEW_NOTIFICATION)
         try {
-            intent.putExtra(NOTIFICATION_MESSAGE, message)
+            intent.putExtra(NOTIFICATION_HEAD, messageHead)
+            intent.putExtra(NOTIFICATION_BODY, messageBody)
+            //sends the message to the corresponding context
             context.sendBroadcast(intent)
         } catch (e: Exception) {
             //Log Message
@@ -79,7 +70,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     // [END receive_message]
 
+    // [START on_new_token]
+    /**
+     * Called if the FCM registration token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the
+     * FCM registration token is initially generated so this is where you would retrieve the token.
+     */
+    override fun onNewToken(token: String) {
+        Log.d(TAG, "Refreshed token: $token")
 
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // FCM registration token to your app server.
+        sendRegistrationToServer(token)
+    }
+    // [END on_new_token]
 
     /**
      * Schedule async work using WorkManager.
@@ -116,29 +121,54 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String) {
-        val intent = Intent(this, DrawerActivty::class.java)
+
+
+    @SuppressLint("RemoteViewLayout")
+    fun getRemoteView(messageTitle : String, messageBody: String) : RemoteViews {
+        val remoteView = RemoteViews("com.singularity.ipcaplus", R.layout.notification)
+
+        remoteView.setTextViewText(R.id.title, messageTitle)
+        remoteView.setTextViewText(R.id.message, messageBody)
+        remoteView.setImageViewResource(R.id.app_logo, R.drawable.ic_notification)
+
+        return remoteView
+    }
+
+
+    private fun sendNotification(messageTitle: String, messageBody: String, clickAction : String) {
+        //val intent = Intent(this, MainActivity::class.java)
+
+        val intent = Intent(clickAction)
+
+        //I will implement this in the future
+        //intent.putExtra("chat_id", chatId)
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT)
 
-        val channelId = getString(R.string.default_notification_channel_id)
+
+        //Defining the sound that the notification makes when appearing
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        //Configuring the notification
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_contact_icon)
-            .setContentTitle("IPCA+")
+            .setSmallIcon(R.drawable.chat_photo)
+            .setContentTitle(messageTitle)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
+
+        notificationBuilder.setContent(getRemoteView(messageTitle, messageBody))
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
         }
 
@@ -148,7 +178,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
 
         private const val TAG = "MyFirebaseMsgService"
-        const val BROADCAST_NEW_NOTIFICATION = "ipca.example.photoshare.notification"
-        const val NOTIFICATION_MESSAGE = "ipca.example.photoshare.notification.message"
+        const val BROADCAST_NEW_NOTIFICATION = "com.singularity.ipcaplus.notification"
+        const val NOTIFICATION_BODY = "com.singularity.ipcaplus.notification.body"
+        const val NOTIFICATION_HEAD = "com.singularity.ipcaplus.notification.head"
     }
 }

@@ -46,7 +46,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.singularity.ipcaplus.AddButtonActivity
 import com.singularity.ipcaplus.chat.CreateChatActivity
 import com.singularity.ipcaplus.databinding.ActivityProfileBinding
+import com.singularity.ipcaplus.models.EventCalendar
 import com.singularity.ipcaplus.utils.*
+import com.singularity.ipcaplus.utils.Backend.getAllTokens
+import com.singularity.ipcaplus.utils.Backend.postTokenAddress
 
 
 class DrawerActivty : AppCompatActivity() {
@@ -70,7 +73,7 @@ class DrawerActivty : AppCompatActivity() {
 
         binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
 
-            /*val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            /*val options = ActivityOptionsCogetAllTokensmpat.makeSceneTransitionAnimation(
                 this,
                 imageView,
                 imageView2.toString()
@@ -88,6 +91,26 @@ class DrawerActivty : AppCompatActivity() {
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textView3).text = name
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text = UserLoggedIn.email
         }
+
+        // Getting device FCM token
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            var fcmToken = task.result
+
+            // Log and toast
+            Log.d(ContentValues.TAG, "O FCM é  $fcmToken")
+            Toast.makeText(this, "O FCM é  $fcmToken", Toast.LENGTH_SHORT).show()
+
+            // Posting FCM token address on firebase
+            postTokenAddress(fcmToken.toString(), Firebase.auth.currentUser!!.uid)
+        })
+
+
 
         setSupportActionBar(binding.appBarMain.toolbar)
         window.setFlags(
