@@ -1,15 +1,13 @@
 package com.singularity.ipcaplus.utils
 
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.cryptography.encryptMeta
 import com.google.firebase.storage.ktx.storage
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.*
+import org.json.JSONArray
 
 object Backend {
 
@@ -493,6 +491,24 @@ object Backend {
 
     }
 
+    fun getChatUsersUids(chatID: String, callBack: (List<String>) -> Unit){
+        var userIds = arrayListOf<String>()
+
+        // Get the ids of the users in the chat
+        db.collection("chat")
+            .document(chatID)
+            .collection("user")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                        userIds.add(document.id)
+                    }
+                }
+
+                callBack(userIds)
+            }
+    }
+
 
     fun changeChatName(chatID: String, newName: String) {
 
@@ -620,4 +636,38 @@ object Backend {
 
     }
 
+    /*
+      ------------------------------------------------ Files ------------------------------------------------
+   */
+
+    fun postTokenAddress(tokenAdress: String, uid: String){
+        println(tokenAdress)
+        println(uid)
+        var token = HashMap<String, String>()
+        db.collection("profile")
+            .document(uid)
+            .collection("tokens")
+            .document(tokenAdress)
+            .set(token)
+    }
+
+    fun getAllTokens(uid: String, callBack: (List<String>) -> Unit){
+        val tokens = arrayListOf<String>()
+
+        db.collection("profile").document(uid).collection("tokens")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    for (document in documents) {
+                            tokens.add(document.id)
+                    }
+
+                    callBack(tokens)
+                }
+            }
+
+    }
+
+    fun createJsonArrayString(array: List<String>): JSONArray {
+        return JSONArray(array)
+    }
 }
