@@ -60,7 +60,7 @@ object  Utilis {
     fun getYearByCalendarId(id: Int): Int {
 
         var count = id
-        var result = 2021 - 121
+        var result = 2021 - 121 // add 1900
 
         while (count > 0) {
             count -= 1

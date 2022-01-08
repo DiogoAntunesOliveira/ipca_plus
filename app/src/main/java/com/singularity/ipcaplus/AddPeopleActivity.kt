@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.singularity.ipcaplus.chat.ChatActivity
 import com.singularity.ipcaplus.chat.CreateChatActivity
 import com.singularity.ipcaplus.databinding.ActivityAddPeopleBinding
+import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
@@ -43,39 +43,73 @@ class AddPeopleActivity: AppCompatActivity() {
         binding = ActivityAddPeopleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val back = findViewById<ImageView>(R.id.back_btn)
-
-        back.setOnClickListener(){
+        binding.backBtn.setOnClickListener {
             finish()
         }
 
-        // Get Users
-        Backend.getAllUsersExceptCurrent {
-            users.addAll(it)
-        }
-
-        // Continue button
-        binding.fabCreateChat.setOnClickListener {
-
-
-            val selectedUsersIds = arrayListOf<String?>()
-            for(user in selectedUsers) {
-                selectedUsersIds.add(user.id)
+        // Add people with a chat already created
+        if (intent.hasExtra("chat_id")) {
+            val chat_id = intent.getStringExtra("chat_id")
+            Backend.getAllUsersExceptChatUsers(chat_id!!) {
+                users.clear()
+                users.addAll(it)
+                userAdapter?.notifyDataSetChanged()
             }
 
-            // Add current user to users list
-            Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
-                selectedUsersIds.add(it.id)
+            // Continue button
+            binding.fabCreateChat.setOnClickListener {
 
-                // Send users list to chat creation
-                println("ANTES ------------------------- " + selectedUsersIds)
-                val intent = Intent(this, CreateChatActivity::class.java)
-                intent.putExtra("users", selectedUsersIds)
-                startActivity(intent)
+                Backend.db.collection("chat")
+                    .document(chat_id)
+                    .get()
+                    .addOnSuccessListener { document ->
+
+                        val chat = Chat(
+                            document["name"] as String,
+                            document["type"] as String,
+                            document["ox"] as String
+                        )
+
+                        val selectedUsersIds = arrayListOf<String>()
+                        for(user in selectedUsers) {
+                            selectedUsersIds.add(user.id!!)
+                        }
+
+                        Backend.addUsersIntoChat(chat, chat_id, selectedUsersIds) {
+                            finish()
+                        }
+
+                    }
+
             }
         }
+        // Add people and create chat for the first time
+        else {
+            Backend.getAllUsersExceptCurrent {
+                users.clear()
+                users.addAll(it)
+                userAdapter?.notifyDataSetChanged()
+            }
 
+            // Continue button
+            binding.fabCreateChat.setOnClickListener {
 
+                val selectedUsersIds = arrayListOf<String?>()
+                for(user in selectedUsers) {
+                    selectedUsersIds.add(user.id)
+                }
+
+                // Add current user to users list
+                Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
+                    selectedUsersIds.add(it.id)
+
+                    // Send users list to chat creation
+                    val intent = Intent(this, CreateChatActivity::class.java)
+                    intent.putExtra("users", selectedUsersIds)
+                    startActivity(intent)
+                }
+            }
+        }
 
         // Recycler View All Users
         userLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -111,15 +145,12 @@ class AddPeopleActivity: AppCompatActivity() {
                 val username = findViewById<TextView>(R.id.textViewProfileName)
                 val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
+                // Set data
+                Utilis.getFile(context, "profilePictures/${users[position].id}.png", "png") { bitmap ->
+                    imageViewUser.setImageBitmap(bitmap)
+                }
 
-                    // Set data
-                    Utilis.getFile(context, "profilePictures/${users[position].id}.png", "png") { bitmap ->
-                        imageViewUser.setImageBitmap(bitmap)
-                    }
-
-                    username.text = Utilis.getFirstAndLastName(users[position].name)
-
-
+                username.text = Utilis.getFirstAndLastName(users[position].name)
 
             }
             holder.v.setOnClickListener {

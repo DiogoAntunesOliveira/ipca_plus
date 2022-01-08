@@ -1,5 +1,6 @@
 package com.singularity.ipcaplus.utils
 
+import android.net.Uri
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
@@ -425,6 +426,44 @@ object Backend {
             }
     }
 
+
+    fun getAllUsersExceptChatUsers (chatID: String, callBack:(List<Profile>)->Unit) {
+
+        val currentUserIds = arrayListOf<String>()
+        val profiles = arrayListOf<Profile>()
+
+        // Get current chat users ids
+        getChatUsers(chatID) {
+            for (user in it)
+                currentUserIds.add(user.id!!)
+
+            db.collection("profile")
+                .addSnapshotListener { documents, _ ->
+                    documents?.let {
+
+                        for (document in documents) {
+                            val profile = Profile.fromHash(document)
+
+                            // Verify if user is not in the chat
+                            var found = false
+                            for (id in currentUserIds) {
+                                if (id == document.id)
+                                    found = true
+                            }
+
+                            if (!found) {
+                                profile.id = document.id
+                                profiles.add(profile)
+                            }
+                        }
+                    }
+
+                    callBack(profiles)
+                }
+        }
+    }
+
+
     fun changeUserChatAdminStatus(chatId: String, userId: String, status: Boolean) {
 
         db.collection("chat")
@@ -565,6 +604,52 @@ object Backend {
                 }
             }
 
+    }
+
+
+    fun removeUserFromChat(chatId: String, userId: String) {
+
+        // remover user from chat user list
+        db.collection("chat")
+            .document(chatId)
+            .collection("user")
+            .document(userId)
+            .delete()
+
+        // remove chat from user chat list
+        db.collection("profile")
+            .document(userId)
+            .collection("chat")
+            .document(chatId)
+            .delete()
+    }
+
+
+    fun addUsersIntoChat(chat: Chat, chatId: String, usersId: ArrayList<String>, callBack: ()->Unit) {
+
+        for (userId in usersId) {
+
+            // Create chat in user profile
+            db.collection("profile")
+                .document(userId)
+                .collection("chat")
+                .document(chatId)
+                .set(chat)
+                .addOnCompleteListener {
+
+                    val profile = HashMap<String, Any>()
+                    db.collection("chat")
+                        .document(chatId)
+                        .collection("user")
+                        .document(userId)
+                        .set(profile)
+                        .addOnCompleteListener {
+                            callBack()
+                        }
+
+                }
+
+        }
     }
 
     /*
