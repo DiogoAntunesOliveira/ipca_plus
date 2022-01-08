@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.singularity.ipcaplus.chat.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_chats"
+        android:name="com.singularity.ipcaplus.chat.ChatsFragment"
+        android:label="@string/chats"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_official_chats"
+        android:name="com.singularity.ipcaplus.chat.OfficialChatsFragment"
+        android:label="@string/oficiais"
+        tools:layout="@layout/fragment_home" />
+
+    <activity
+        android:id="@+id/nav_calendar"
+        android:name="com.singularity.ipcaplus.drawer.CalendarActivity"
+        android:label="@string/calendario"
+        tools:layout="@layout/activity_calendar"/>
+
+    <activity
+        android:id="@+id/nav_contacts"
+        android:name="com.singularity.ipcaplus.drawer.ContactsActivity"
+        android:label="@string/contactos"
+        tools:layout="@layout/activity_contacts"/>
+
+    <activity
+        android:id="@+id/nav_profile"
+        android:name="com.singularity.ipcaplus.drawer.ProfileActivity"
+        android:label="@string/perfil"
+        tools:layout="@layout/activity_profile"/>
+
+    <activity
+        android:id="@+id/nav_schedule"
+        android:name="com.singularity.ipcaplus.drawer.ScheduleActivity"
+        android:label="@string/horario"
+        tools:layout="@layout/activity_schedule"/>
+
+    <activity
+        android:id="@+id/nav_news"
+        android:name="com.singularity.ipcaplus.drawer.NewsWebActivity"
+        android:label="News"
+        tools:layout="@layout/activity_news_web"/>
+
+</navigation>

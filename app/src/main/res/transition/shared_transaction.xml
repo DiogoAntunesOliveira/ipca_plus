@@ -1,0 +1,14 @@
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+    <changeBounds>
+        <targets>
+            <target android:targetId="@+id/viewImageProfile" />
+            <target android:targetId="@id/imageView_profile" />
+        </targets>
+    </changeBounds>
+    <changeImageTransform>
+        <targets>
+            <target android:targetId="@id/viewImageProfile" />
+            <target android:targetId="@id/imageView_profile" />
+        </targets>
+    </changeImageTransform>
+</transitionSet>

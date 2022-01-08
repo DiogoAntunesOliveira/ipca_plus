@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_homedrawer_icons"
+            android:title="@string/inicio" />
+        <item
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_folderdrawer_icons"
+            android:title="@string/horario" />
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendardrawer_icons"
+            android:title="@string/calendario" />
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_documentdrawer_icons"
+            android:title="@string/noticias" />
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/ic_contact_icon"
+            android:title="@string/contactos" />
+        <item
+            android:id="@+id/nav_invite"
+            android:icon="@drawable/ic_add_userdrawer_icons"
+            android:title="@string/convidar_amigos" />
+    </group>
+
+</menu>

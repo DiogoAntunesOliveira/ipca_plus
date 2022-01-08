@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.singularity.ipcaplus">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,8 +14,78 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPCA">
         <activity
+            android:name=".chat.CreateChatActivity"
+            android:exported="true" />
+        <activity
+            android:name=".chat.ChatFilesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TermsAndCondictionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".chat.ChatMembersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".chat.VerifySecurityNumberActivity"
+            android:exported="false" />
+        <activity
+            android:name=".chat.ChatMoreActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
+        <activity
+            android:name=".drawer.ScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".drawer.NewsWebActivity"
+            android:exported="false" />
+        <activity
+            android:name=".drawer.ContactsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".drawer.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".drawer.CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".drawer.AddEventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".drawer.DrawerActivty"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
+            android:name=".chat.SearchActivity"
+            android:exported="true"
+            android:label="SearchActivity"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
+            android:name=".AddButtonActivity"
+            android:exported="true"
+            android:label="AddButtonActivity"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
+            android:name=".AddPeopleActivity"
+            android:exported="true"
+            android:label="AddButtonActivity"
+            android:theme="@style/Theme.IPCA.NoActionBar" />
+        <activity
+            android:name=".chat.ChatActivity"
+            android:exported="true" />
+        <activity
             android:name=".RegisterActivity"
-            android:exported="true">
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.IPCA.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,13 +93,36 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <!-- [START firebase_service] -->
+        <service
+            android:name=".utils.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END firebase_service] -->
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+         See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_lg_ipca" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/green_200" />
+
+        <!-- Set "canal de notificação padrão com configurações básicas" -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
     </application>
 
 </manifest>

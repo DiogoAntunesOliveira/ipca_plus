@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/calendario"
+        android:icon="@drawable/ic_calendar_superior"
+        android:title="Adicionar"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/chatMore"
+        android:icon="@drawable/ic_more_circle"
+        android:title="Adicionar"
+        app:showAsAction="ifRoom" />
+
+</menu>
