@@ -728,6 +728,26 @@ object Backend {
       ------------------------------------------------ Files ------------------------------------------------
    */
 
+
+    fun deleteAllFilesInsideFolder(filePath: String, callback: ()->Unit) {
+
+        val storage = Firebase.storage
+        val listRef = storage.reference.child(filePath)
+
+        listRef.listAll()
+            .addOnSuccessListener {
+
+                it.items.forEach { item ->
+                    item.delete()
+                        .addOnCompleteListener {
+                            callback()
+                        }
+                }
+
+            }
+    }
+
+
     fun getFileUrl(filePath: String, callback: (Uri)->Unit) {
 
         val storageRef = FirebaseStorage.getInstance().reference.child(filePath)
