@@ -64,20 +64,9 @@ class DrawerActivty : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDrawerActivtyBinding.inflate(layoutInflater)
-       // binding2 = ActivityProfileBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
-       /* var imageView = binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
-        var imageView2 = binding2.imageViewProfile.id*/
-
         binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
-
-            /*val options = ActivityOptionsCogetAllTokensmpat.makeSceneTransitionAnimation(
-                this,
-                imageView,
-                imageView2.toString()
-            )*/
 
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
@@ -141,47 +130,6 @@ class DrawerActivty : AppCompatActivity() {
 
             val intent = Intent(this, AddButtonActivity::class.java)
             startActivity(intent)
-
-            /*
-            val chat = Chat(
-                "Chat Teste " + Random.nextInt(256),
-                "chat",
-                keygen
-            )
-            // Build encryptation data of first message send by the system
-            var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
-                    " please report them if you found some. Welcome to Singularity!", keygen)
-            val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"
-            val message = Message(
-                "system",
-                meta.toString(),
-                "2021-12-22",
-                Timestamp.now(),
-                ""
-
-            )
-            db.collection("chat")
-                .add(chat.toHash())
-                .addOnSuccessListener { documentReference ->
-                    db.collection("chat")
-                        .document("${documentReference.id}")
-                        .collection("message")
-                        .add(message.toHash())
-                    db.collection("profile")
-                        .document("${Firebase.auth.currentUser!!.uid}")
-                        .collection("chat")
-                        .document("${documentReference.id}")
-                        .set(chat)
-                    db.collection("profile")
-                        .document(id_amigo)
-                        .collection("chat")
-                        .document("${documentReference.id}")
-                        .set(chat)
-
-                }
-                .addOnFailureListener { e ->
-                    Log.w(ContentValues.TAG, "Error adding document", e)
-                }*/
 
         }
 
