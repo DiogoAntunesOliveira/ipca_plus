@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.underline
@@ -20,6 +21,7 @@ import org.bouncycastle.util.Arrays.append
 
 class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 

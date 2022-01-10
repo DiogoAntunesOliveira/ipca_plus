@@ -16,7 +16,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.R
-import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.databinding.ActivitySearchBinding
 import com.singularity.ipcaplus.models.Chat
 

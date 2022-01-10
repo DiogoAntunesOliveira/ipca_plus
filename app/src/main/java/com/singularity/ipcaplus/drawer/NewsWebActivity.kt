@@ -17,7 +17,7 @@ class NewsWebActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
 
         webView = findViewById(R.id.webview)
-        var progDailog = ProgressDialog.show(this, "Loading","Please wait...", true);
+        var progDailog = ProgressDialog.show(this, "A carregar","Espera um bocado...", true);
         progDailog.setCancelable(false);
         webView.settings.setJavaScriptEnabled(true)
 

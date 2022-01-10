@@ -64,20 +64,9 @@ class DrawerActivty : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDrawerActivtyBinding.inflate(layoutInflater)
-       // binding2 = ActivityProfileBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
-       /* var imageView = binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
-        var imageView2 = binding2.imageViewProfile.id*/
-
         binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
-
-            /*val options = ActivityOptionsCogetAllTokensmpat.makeSceneTransitionAnimation(
-                this,
-                imageView,
-                imageView2.toString()
-            )*/
 
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
@@ -101,11 +90,7 @@ class DrawerActivty : AppCompatActivity() {
 
             // Get new FCM registration token
             var fcmToken = task.result
-
-            // Log and toast
-            Log.d(ContentValues.TAG, "O FCM é  $fcmToken")
-            Toast.makeText(this, "O FCM é  $fcmToken", Toast.LENGTH_SHORT).show()
-
+            
             // Posting FCM token address on firebase
             postTokenAddress(fcmToken.toString(), Firebase.auth.currentUser!!.uid)
         })
@@ -169,12 +154,6 @@ class DrawerActivty : AppCompatActivity() {
 
             // Get new FCM registration token
             val token = task.result
-
-            // Log and toast
-            val msg = "Este é o meu token$token"
-            println("--------------------------------------------- $token")
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
 
         /*FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->

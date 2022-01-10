@@ -18,6 +18,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
+import com.singularity.ipcaplus.cryptography.getMetaOx
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.cryptography.saveKeygenOx
 import com.singularity.ipcaplus.databinding.FragmentChatsBinding
@@ -88,11 +90,12 @@ class ChatsFragment : Fragment() {
                     chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
-                        if (chat.type == "chat") {
+                        if (chat.type == "chat" || chat.type == "group") {
                             chats.add(chat)
                             chatIds.add(document.id)
                         }
                     }
+                    println("CHAT " + chats)
                     mAdapter?.notifyDataSetChanged()
                 }
             }
@@ -137,7 +140,9 @@ class ChatsFragment : Fragment() {
                     Backend.getLastMessageByChatID(chatIds[position]) {
                         val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                         lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
-                        lastMessageText.text = it.message
+                        val keygen = getMetaOx(context, chatIds[position])
+                        val message_decripted = decryptWithAESmeta(keygen.toString(), it.message)
+                        lastMessageText.text = message_decripted
                     }
 
                     Utilis.getFile(this.context, "chats/${chatIds[position]}/icon.png", "png") { bitmap ->
@@ -154,7 +159,7 @@ class ChatsFragment : Fragment() {
         }
 
         override fun getItemViewType(position: Int) : Int {
-            if (chats[position].type == "chat") {
+            if (chats[position].type == "group") {
                 return 1
             } else {
                 return 0

@@ -10,6 +10,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -129,7 +130,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         remoteView.setTextViewText(R.id.title, messageTitle)
         remoteView.setTextViewText(R.id.message, messageBody)
-        remoteView.setImageViewResource(R.id.app_logo, R.drawable.ic_notification)
+        remoteView.setImageViewResource(R.id.app_logo, R.mipmap.ic_launcher_foreground)
 
         return remoteView
     }
@@ -169,6 +170,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(channelId,
                 channelName,
                 NotificationManager.IMPORTANCE_HIGH)
+            channel.setShowBadge(true)
             notificationManager.createNotificationChannel(channel)
         }
 

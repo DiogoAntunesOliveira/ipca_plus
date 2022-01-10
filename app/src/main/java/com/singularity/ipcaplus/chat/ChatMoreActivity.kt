@@ -7,8 +7,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.LoginActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
+import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
@@ -65,10 +69,17 @@ class ChatMoreActivity : ActivityImageHelper() {
             binding.changeGroupImage.setOnClickListener {
                 openSelectImageDialog()
             }
+            binding.deleteChat.setOnClickListener {
+                Backend.deleteChat(chat_id) {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
         else {
             binding.changeGroupName.visibility = View.GONE
             binding.changeGroupImage.visibility = View.GONE
+            binding.deleteChat.visibility = View.GONE
         }
 
         binding.groupFiles.setOnClickListener {
@@ -82,12 +93,19 @@ class ChatMoreActivity : ActivityImageHelper() {
         }
 
         binding.securityNumberVerification.setOnClickListener {
-            println("-------------> 6")
             val intent = Intent(this, VerifySecurityNumberActivity::class.java )
             intent.putExtra("chat_id", chat_id)
             startActivity(intent)
-
         }
+
+        binding.leaveGroup.setOnClickListener {
+
+            Backend.removeUserFromChat(chat_id, Firebase.auth.currentUser!!.uid)
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     // When the support action bar back button is pressed, the app will go back to the previous activity

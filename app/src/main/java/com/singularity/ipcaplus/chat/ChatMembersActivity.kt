@@ -1,5 +1,6 @@
 package com.singularity.ipcaplus.chat
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.AddPeopleActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
 import com.singularity.ipcaplus.databinding.ActivityChatMembersBinding
@@ -56,6 +58,11 @@ class ChatMembersActivity : AppCompatActivity() {
         binding.membersRecyclerView.adapter = membersAdapter
     }
 
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
+
     private fun refreshList() {
         Backend.getChatUsers(chat_id) {
             members.clear()
@@ -77,6 +84,9 @@ class ChatMembersActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Membros"
 
+        if (!currentUserIsAdmin)
+            return false
+
         return true
     }
 
@@ -89,6 +99,9 @@ class ChatMembersActivity : AppCompatActivity() {
 
         when (item.itemId){
             R.id.add -> {
+                val intent = Intent(this, AddPeopleActivity::class.java)
+                intent.putExtra("chat_id", chat_id)
+                startActivity(intent)
                 println("-------------------> adicionar")
                 return true
             }
@@ -121,6 +134,7 @@ class ChatMembersActivity : AppCompatActivity() {
             Backend.changeUserChatAdminStatus(chat_id, selectedUser, false)
         }
         else if (item.title == "Remover do grupo") {
+            Backend.removeUserFromChat(chat_id, selectedUser)
             println("-------------------> remover $selectedUser")
         }
 

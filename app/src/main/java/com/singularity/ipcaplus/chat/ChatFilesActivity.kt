@@ -107,6 +107,9 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
+    /*
+        This function is responsible for upload a selected file
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var path = ""
@@ -114,11 +117,9 @@ class ChatFilesActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 val clipData = data?.clipData
-                //null and not null path
                 if (clipData == null) {
 
                     var cursor: Cursor? = null
-
                     try {
                         contentResolver.query(data?.data!!, null, null, null, null).use {
 
@@ -142,85 +143,60 @@ class ChatFilesActivity : AppCompatActivity() {
                     for (i in 0 until clipData.itemCount) {
                         val item = clipData.getItemAt(i)
                         val uri: Uri = item.uri
-                        path += uri.toString().toString() + "\n"
+                        path += uri.toString() + "\n"
                     }
                 }
 
             }
         }
+
+        // Upload and refresh list
         Utilis.uploadFile(path.toUri(), "$currentPath/$fileName")
         files.add(FirebaseFile(fileName, Utilis.getFileIcon(fileName)))
         filesAdapter?.notifyDataSetChanged()
-        //selectedFileTV.setText(path)
     }
 
 
-    // When the support action bar back button is pressed, the app will go back to the previous activity
+    /*
+        When the support action bar back button is pressed, the app will go back to the previous activity
+    */
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
 
 
+    /*
+        Context Menu. When its a folder display option delete, when its a file display, download and delete options
+    */
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
 
         selectedFile = v.findViewById<TextView>(R.id.textViewName).text.toString()
 
-        menu.add(0, v.id, 0, "Transferir")
-        menu.add(0, v.id, 0, "Editar")
+        // Show Download Option if its a file
+        if (selectedFile.contains(".")) {
+            menu.add(0, v.id, 0, "Transferir")
+        }
+
         menu.add(0, v.id, 0, "Apagar")
     }
 
 
+    /*
+        Each context menu item function when its selected
+    */
     override fun onContextItemSelected(item: MenuItem): Boolean {
 
         val fileRef = Firebase.storage.reference.child("$currentPath/$selectedFile")
 
         if (item.title === "Transferir") {
-
-            confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
-
-                val strArray = Pattern.compile("[.]").split(selectedFile)
-                val fileName = strArray[0]
-                val fileExtension = strArray[1]
-                fileRef.downloadUrl.addOnSuccessListener {
-                    Utilis.downloadFile(this, fileName, ".$fileExtension", DIRECTORY_DOWNLOADS, it)
-                }
-
-            }
-
-        } else if (item.title === "Editar") {
-
-            // Show Edit Dialog
-            openEditFileNameDialog { newName ->
-
-            // Change name
-                /*
-                storage = FirebaseStorage.getInstance().reference
-                val tsLong = System.currentTimeMillis() / 1000
-                val ts = tsLong.toString()
-                val storageReference: StorageReference = storage.child("image").child("$ts.jpg")
-*/
-
-            // Refresh List View
-
-                println("-------------------------- novo nome = $newName")
-
-                refreshList()
-            }
-
-            println("----------------------------------> Editar " + selectedFile)
-        } else if (item.title === "Apagar") {
-
-
-            // Missing Delete Folder --------------------------------------------------------------------------------------
-            println("-------------------------------------------------------- selectedFile = " + selectedFile)
-
+            downloadFileRequest(currentPath, selectedFile)
+        }
+        else if (item.title === "Apagar") {
 
             // Verify If the selected File is a folder or a file
             if (selectedFile.contains(".")) {
-                // File
 
                 confirmationDialog("Apagar Ficheiro", "Tens certeza que queres apagar este ficheiro?") {
 
@@ -232,35 +208,36 @@ class ChatFilesActivity : AppCompatActivity() {
 
             }
             else {
-                // Folder
 
                 confirmationDialog("Apagar Pasta", "Tens certeza que queres apagar esta pasta e tudo dentro dela?") {
-/*
-                    fileRef.delete()
-                        .addOnSuccessListener {
-                            refreshList()
-                        }*/
+
+                    Backend.deleteAllFilesInsideFolder("$currentPath/$selectedFile") {
+                        refreshList()
+                    }
                 }
 
             }
-/*
 
-*/
         }
         return true
     }
 
 
+    /*
+        Refresh the entire view (path title and list)
+    */
     fun refreshView() {
 
         binding.currentfolderName.text = titlePath
         binding.arrowLeft.visibility = View.VISIBLE
 
         refreshList()
-
     }
 
 
+    /*
+        Refresh the list
+    */
     private fun refreshList() {
         Backend.getAllChatFolderFiles(currentPath) { _files ->
             files.clear()
@@ -270,6 +247,9 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
+    /*
+        Add new file / folder dialog
+    */
     private fun addDialog() {
         val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
         val view = layoutInflater.inflate(R.layout.dialog_add_file, null)
@@ -277,7 +257,6 @@ class ChatFilesActivity : AppCompatActivity() {
         dialog.show()
 
         view.findViewById<ImageView>(R.id.imageViewAddFile).setOnClickListener {
-
             chooseFile()
             dialog.dismiss()
         }
@@ -290,6 +269,9 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
+    /*
+        Confirmation Dialog Display Yes / No Options
+    */
     private fun confirmationDialog(title: String, description: String, callBack: ()->Unit) {
         val alertDialog = AlertDialog.Builder(this)
 
@@ -309,8 +291,8 @@ class ChatFilesActivity : AppCompatActivity() {
 
 
     /*
-    This function display a dialog window with a text box to send reset password email
- */
+        This function display a dialog window with a text box to send reset password email
+     */
     private fun openSelectFolderNameDialog() {
 
         val alertDialog = AlertDialog.Builder(this)
@@ -335,30 +317,9 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
-    private fun openEditFileNameDialog(callBack: (newName: String)->Unit) {
-
-        val alertDialog = AlertDialog.Builder(this)
-
-        val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
-        alertDialog.setView(row)
-        val show = alertDialog.show()
-
-        // Variables
-        val editTextView = row.findViewById<TextView>(R.id.editTextName)
-        row.findViewById<TextView>(R.id.textView).text = "Mudar Nome"
-        editTextView.hint = "Nome"
-        row.findViewById<Button>(R.id.buttonSave).text = "Editar"
-
-        row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
-
-            val name = if (editTextView.text != "") editTextView.text.toString() else "Sem nome"
-            callBack(name)
-            show.dismiss()
-        }
-
-    }
-
-
+    /*
+        Open Select a file window
+    */
     private fun chooseFile() {
         val intent = Intent()
         intent.action = Intent.ACTION_OPEN_DOCUMENT
@@ -381,15 +342,17 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
+    /*
+        Create a folder in the current path by creating a invisible file inside the folder
+    */
     private fun createFolder(context: Context, folderName: String) {
 
         val storage = Firebase.storage
         val storageRef = storage.reference
 
-
         // Create a folder with a temp file
         val outputDir: File = context.cacheDir // context being the Activity pointer
-        val outputFile: File = File.createTempFile("temp", ".txt", outputDir)
+        val outputFile: File = File.createTempFile("temp", ".invisible", outputDir)
 
         val ref: StorageReference = storageRef.child("$currentPath/$folderName/temp.invisible")
         ref.putFile(outputFile.toUri())
@@ -401,6 +364,9 @@ class ChatFilesActivity : AppCompatActivity() {
     }
 
 
+    /*
+        Go back to the previous folder when the user click on the path title, refresh the list
+    */
     private fun goBack() {
 
         // Don't allow go more back than the root folder
@@ -426,6 +392,25 @@ class ChatFilesActivity : AppCompatActivity() {
 
             refreshList()
 
+        }
+    }
+
+
+    /*
+        Request confirmation before download the file, then download and store the file in the download folder in the mobile device
+    */
+    fun downloadFileRequest(path: String, name: String) {
+
+        confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+
+            val fileRef = Firebase.storage.reference.child("$path/${name}")
+            val strArray = Pattern.compile("[.]").split(name)
+            val fileName = strArray[0]
+            val fileExtension = strArray[strArray.size - 1]
+
+            fileRef.downloadUrl.addOnSuccessListener {
+                Utilis.downloadFile(this, fileName, ".$fileExtension", DIRECTORY_DOWNLOADS, it)
+            }
         }
     }
 
@@ -460,7 +445,30 @@ class ChatFilesActivity : AppCompatActivity() {
                 }
                 else {
                     linearLayout.setOnClickListener {
-                        println("---------------------------------> show preview")
+
+                        // Verify if its an image
+                        val extensionArray = Pattern.compile("[.]").split(files[position].name)
+                        val extension = extensionArray[extensionArray.size-1]
+
+                        // Show Preview if its an image. Ask to download if dont
+                        if (extension == "png" || extension == "jpg" || extension == "jpeg" || extension == "jep" || extension == "jfif" || extension == "gif") {
+
+                            Backend.getFileUrl("$currentPath/${files[position].name}") {
+
+                                val intent = Intent(this.context, FilePreviewActivity::class.java)
+                                intent.putExtra("url", it.toString())
+                                intent.putExtra("fileName", files[position].name)
+                                intent.putExtra("currentPath", currentPath)
+                                startActivity(intent)
+
+                            }
+
+                        }
+                        else {
+
+                            downloadFileRequest(currentPath, files[position].name)
+
+                        }
                     }
                 }
 

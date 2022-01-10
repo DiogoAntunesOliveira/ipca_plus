@@ -61,7 +61,7 @@ object  Utilis {
     fun getYearByCalendarId(id: Int): Int {
 
         var count = id
-        var result = 2021 - 121
+        var result = 2021 - 121 // add 1900
 
         while (count > 0) {
             count -= 1
@@ -256,7 +256,8 @@ object  Utilis {
     fun getFileIcon(fileName:String): Int {
         return if (fileName.contains(".")) {
 
-            val extension = Pattern.compile("[.]").split(fileName)[1]
+            val extensionArray = Pattern.compile("[.]").split(fileName)
+            val extension = extensionArray[extensionArray.size-1]
 
             when (extension) {
                 "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture

@@ -91,11 +91,11 @@ class ChatActivity : AppCompatActivity() {
                     }
                     tokens_adress.addAll(it)
 
-                    GlobalScope.launch {
+                    /*GlobalScope.launch {
                         withContext(Dispatchers.IO){
-                            createNotificationGroup("otorrinolaringoloigista", createJsonArrayString(tokens_adress))
+                            createNotificationGroup("grupotrablahotentativa", createJsonArrayString(tokens_adress))
                         }
-                    }
+                    }*/
 
                 }
 
@@ -112,6 +112,7 @@ class ChatActivity : AppCompatActivity() {
                 val keygen = getMetaOx(this, chat_id)
                 // Build encryptation data of message send by the user
                 var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
+                val savedText = binding.editTextMessage.text.toString()
 
                 val message = Message(
                     Firebase.auth.currentUser!!.uid,
@@ -127,7 +128,8 @@ class ChatActivity : AppCompatActivity() {
                         GlobalScope.launch {
                             withContext(Dispatchers.IO){
                                 //APA91bEKDInIYA242YofpahBmhB57pEI4gNT63DJJenWCccJGqeSYrWzj0BSruX49DhVp2vGSY5xJ2fEJk2vhtoraT3_bbjEKw4Nx3eJKj7tttVRPjQs0Uc_OPkrcj4twR70H5tAilnY
-                                sendNotificationToGroup( Firebase.auth.currentUser!!.uid, "Depois temos de mudar", "APA91bHFEOWkBe0cf6ZBdBqDiZ1WzYf--PmimY3tWzDlhAPWZ3UL1eSCSuO7nVt5k3i-2FNg6U5d6NoR767JXg9W_NT9lo4u3kiuT46w79LXjcK63dXUzyzIZEzac9olNNb2_siLHA-K")
+                                println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"+ savedText)
+                                sendNotificationToGroup( chat_id, savedText, "APA91bGaOoMTjTD2s9MU63F1AvLqP6tkwdAFE0Mqs9jbghlSgcWlfe_38CboFiE2iiWFoKqNRwhF0G_TA5X9xegTL0_Tg0OGuFadJuBj1sGZqjqCcmF1EH2ZeRU7ySHosdNkmLmmOyFF")
                             }
                         }
                         Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
@@ -266,7 +268,6 @@ class ChatActivity : AppCompatActivity() {
 
                 timeLastMessage?.isVisible = false
                 val keygen = getMetaOx(context, chat_id)
-                print( getMetaOx(context, chat_id)).toString()
                 val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message)
                 textViewMessage.text = message_decripted
                 println(message_decripted)
