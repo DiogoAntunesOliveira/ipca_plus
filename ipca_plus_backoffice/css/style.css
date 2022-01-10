@@ -1,0 +1,261 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color: #209D6A;
+}
+
+/* 
+ ****************************
+    Estilo da NavBAr
+ ****************************
+*/
+
+.sideBar {
+    height: 100%;
+    width: 10%;
+
+    /* Stay in place */
+    position: fixed;
+
+    /* Stay on top */
+    z-index: 1;
+
+    /* Stay at the top */
+    top: 0;
+
+    background-color: #037B4A;
+    /* Black*/
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 60px;
+
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.sideBar a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+
+}
+
+.sideBar a:hover {
+    text-shadow: 2px black;
+}
+
+/* 
+ ****************************
+    Estilo dos quadrados 
+ ****************************
+*/
+.cardButton {
+
+    height: 150px;
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+    background-color: #209D6A;
+    border-radius: 10px;
+    padding-top: 60px;
+
+}
+
+.cardButton h3 {
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+/* 
+ ****************************
+    Codigo Exemplo Stora
+ ****************************
+*/
+:root {
+    --form-bg: white;
+    --form-border: rgb(44, 36, 36);
+    --form-shadow: #dfae4b;
+    --form-focus: rgb(123, 121, 121);
+    --font-size: 12pt;
+    --font-face: Arial, sans-serif;
+    --font-color: #2a293e;
+}
+
+
+input {
+    width: 100%;
+    font-size: var(--font-size);
+    line-height: var(--font-size);
+    font-family: var(--font-face);
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: var(--form-bg);
+}
+
+ul li {
+    width: 100%;
+    font-family: var(--font-face);
+    font-size: var(--font-size);
+    color: #a4a4a9;
+    margin-top: 20px;
+    list-style: none;
+    /* border: 1px solid black; */
+}
+
+select {
+    /* A reset of styles, including removing the default dropdown arrow */
+    /*appearance: none;*/
+    padding: 20px;
+    /* height: 60px; */
+    width: 100%;
+    cursor: inherit;
+    font-size: var(--font-size);
+    line-height: var(--font-size);
+    font-family: var(--font-face);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: var(--form-bg);
+    color: var(--font-color);
+}
+
+button {
+    float: right;
+    font-size: var(--font-size);
+    line-height: var(--font-size * 2);
+    padding: 15px 60px;
+    border: none;
+    background-color: var(--form-border);
+    color: white;
+    letter-spacing: 4px;
+}
+
+button:hover {
+    background: inherit;
+    /* herda do pai */
+    color: var(--form-border);
+    border-bottom: 3px solid var(--form-border);
+}
+
+hr {
+    margin-top: 10px;
+    border-top: 0.5px solid var(--form-focus);
+}
+
+.rem,
+.edit {
+    position: relative;
+    float: right;
+    background-color: var(--form-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 10px; */
+    /* height: 30px; */
+    padding: 5px;
+    margin-left: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    align-content: center;
+}
+
+#rem:hover,
+#edit:hover {
+    background-color: var(--form-bg);
+}
+
+.wrapper {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 40% 60%;
+    background-color: rgb(247, 243, 243);
+    color: #444;
+    font-size: 20px;
+    margin-top: 2%;
+}
+
+.box {
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.a {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.b {
+    grid-column: 2;
+    grid-row: 1 / 9;
+}
+
+.b .list {
+    overflow: auto;
+    width: 100%;
+    height: 95%;
+    margin: 10px 10px 10px 0px;
+    font-size: var(--font-size);
+    line-height: var(--font-size);
+    font-family: var(--font-face);
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: var(--form-bg);
+}
+
+.c {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.d {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.e {
+    grid-column: 1;
+    grid-row: 6;
+}
+
+.f {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+.g {
+    grid-column: 1;
+    grid-row: 5;
+}
+
+.h {
+    grid-column: 1;
+    grid-row: 6;
+}
+
+.i {
+    grid-column: 1;
+    grid-row: 7;
+}
+
+.j {
+    grid-column: 1;
+    grid-row: 8;
+}
+
+.k {
+    grid-column: 1;
+    grid-row: 9;
+}

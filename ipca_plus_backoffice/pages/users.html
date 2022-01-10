@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Utilizadores</title>
+    <meta charset="utf-8">
+    <meta name="description" content="IPCA + Backoffice">
+    <meta name="keywords" content="HTML, WEB IPCA +, 2020/21">
+    <meta name="author" content="André Cerqueira, Nuno Fernandes, Vitor Silva, Diogo Antunês Oliveira">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../images/icon_v2.png" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col">
+                <div class="sideBar">
+                    <img src="../images/logo.png" alt="IPCA+">
+
+                    <br><br><br>
+                    <a class="active" href="../index.html">Painel de Controlo</a><br>
+                    <a href="users.html">Utilizadores</a><br>
+                    <a href="#contact">Cursos</a><br>
+                    <a href="#about">Contactos</a><br>
+                </div>
+            </div>
+
+            <div class="col-10">
+
+                <h1> Utilizadores </h1>
+
+                <form id="userForm" class="wrapper">
+
+                    <div class="box a">
+                        <label for="name">Nome</label>
+                        <input type="text" id="name" required placeholder="Inserir nome" />
+                    </div>
+
+                    <div class="box b">
+
+                        <div class="list">
+                            <ul id="list"></ul>
+                        </div>
+
+                    </div>
+
+                    <div class="box c">
+                        <label for="number">Número</label>
+                        <input type="text" id="number" required placeholder="Inserir número" />
+                    </div>
+
+                    <div class="box d">
+                        <label for="name">Contacto</label>
+                        <input type="text" id="contact" required placeholder="Inserir contacto" />
+                    </div>
+
+                    <div class="box f">
+                        <label for="nomnumbere">Idade</label>
+                        <input type="text" id="age" required placeholder="Inserir idade" />
+                    </div>
+
+                    <div class="box g">
+                        <label for="name">Curso</label>
+                        <select id="courses" required placeholder="Inserir curso">
+
+                        </select>
+
+                    </div>
+
+                    <div class="box h">
+                        <label for="name">Cargo</label>
+                        <select id="role" required placeholder="Inserir cargo">
+                            <option value="Aluno"> Aluno </option>
+                            <option value="Professor"> Professor </option>
+                        </select>
+                    </div>
+
+                    <div class="box i">
+                        <label for="name">Email</label>
+                        <input type="text" id="email" required placeholder="Inserir email" />
+                    </div>
+
+                    <div class="box j">
+                        <label for="name">Género</label>
+                        <select id="gender" required placeholder="Inserir género">
+                            <option value="M"> Masculino </option>
+                            <option value="F"> Feminino </option>
+                            <option value="I"> Indefinido </option>
+                        </select>
+
+                       <!-- <input type="text" id="gender" required placeholder="Inserir género" />-->
+                    </div>
+
+                    <div class="box k">
+                        <button id="addUser" type="submit" value="new">Salvar</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="../js/configDB.js" defer></script>
+    <script src="../js/Users/crud.js" defer></script>
+
+</body>
+
+
+
+<footer>
+
+</footer>
+
+</html>
