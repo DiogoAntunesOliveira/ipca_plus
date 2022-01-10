@@ -266,7 +266,6 @@ class ChatActivity : AppCompatActivity() {
 
                 timeLastMessage?.isVisible = false
                 val keygen = getMetaOx(context, chat_id)
-                print( getMetaOx(context, chat_id)).toString()
                 val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message)
                 textViewMessage.text = message_decripted
                 println(message_decripted)

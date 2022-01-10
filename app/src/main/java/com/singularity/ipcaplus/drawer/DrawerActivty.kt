@@ -162,8 +162,6 @@ class DrawerActivty : AppCompatActivity() {
             // Log and toast
             val msg = "Este é o meu token$token"
             println("--------------------------------------------- $token")
-            Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
 
     }
