@@ -90,11 +90,7 @@ class DrawerActivty : AppCompatActivity() {
 
             // Get new FCM registration token
             var fcmToken = task.result
-
-            // Log and toast
-            Log.d(ContentValues.TAG, "O FCM é  $fcmToken")
-            Toast.makeText(this, "O FCM é  $fcmToken", Toast.LENGTH_SHORT).show()
-
+            
             // Posting FCM token address on firebase
             postTokenAddress(fcmToken.toString(), Firebase.auth.currentUser!!.uid)
         })
@@ -158,10 +154,6 @@ class DrawerActivty : AppCompatActivity() {
 
             // Get new FCM registration token
             val token = task.result
-
-            // Log and toast
-            val msg = "Este é o meu token$token"
-            println("--------------------------------------------- $token")
         })
 
     }

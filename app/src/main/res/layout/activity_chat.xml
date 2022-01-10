@@ -81,6 +81,7 @@
                 android:ems="10"
                 android:hint="Mensagem"
                 android:text=""
+                android:inputType="textCapSentences|textAutoCorrect"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSendAnexo"
                 app:layout_constraintStart_toEndOf="@+id/imageButton3"
