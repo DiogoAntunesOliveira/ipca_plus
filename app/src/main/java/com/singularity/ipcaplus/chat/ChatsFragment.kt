@@ -154,7 +154,7 @@ class ChatsFragment : Fragment() {
         }
 
         override fun getItemViewType(position: Int) : Int {
-            if (chats[position].type == "chat") {
+            if (chats[position].type == "chat" || chats[position].type == "group") {
                 return 1
             } else {
                 return 0

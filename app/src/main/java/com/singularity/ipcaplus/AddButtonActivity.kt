@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.databinding.ActivityAddButtonBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Profile
+import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
 
 class AddButtonActivity: AppCompatActivity() {
@@ -24,6 +26,7 @@ class AddButtonActivity: AppCompatActivity() {
     var users = arrayListOf<Profile>()
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
+    var directChat : String? = null
 
     var currentUserchats = arrayListOf<String>()
     var selectedUserchats = arrayListOf<String>()
@@ -121,7 +124,7 @@ class AddButtonActivity: AppCompatActivity() {
             }
             holder.v.setOnClickListener {
 
-                db.collection("profile").document(users[position].id.toString()).collection("chat")
+                /*db.collection("profile").document(users[position].id.toString()).collection("chat")
                     .addSnapshotListener { documents, e ->
                         documents?.let {
                             chats.clear()
@@ -134,6 +137,25 @@ class AddButtonActivity: AppCompatActivity() {
                             }
                         }
                     }
+
+                 */
+                /* Backend.getAllDirectChatIdsFromProfile(Firebase.auth.currentUser!!.uid) {
+                    chatIds.addAll(it)
+                    println("AQUDIADJAIJDD" + chatIds)
+                } */
+
+                Backend.getDirectChatById(chatIds, users[position].id.toString()) {
+                    directChat = it
+                    println("AQUDIADJAIJDD" + directChat)
+
+                    if(directChat == null) {
+                        val msg = "Criar chat"
+                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    } else {
+                        val msg = "Abrir chat"
+                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    }
+                }
 
             }
 

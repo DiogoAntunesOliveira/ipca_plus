@@ -671,6 +671,50 @@ object Backend {
         }
     }
 
+
+    fun getAllDirectChatIdsByUser(userId: String, callBack: (List<String>) -> Unit){
+
+        var chatIds = arrayListOf<String>()
+
+        // Get all profile chat ids
+        db.collection("profile")
+            .document(userId)
+            .collection("chat")
+            .whereEqualTo("type", "chat")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    chatIds.add(document.id)
+                }
+
+                callBack(chatIds)
+            }
+
+    }
+
+    fun getDirectChatById(chatIds: List<String>, userId: String, callBack: (String?)-> Unit) {
+
+        var chatId : String? = null
+
+        for (id in chatIds) {
+            db.collection("chat")
+                .document(id)
+                .collection("user")
+                .get()
+                .addOnSuccessListener { documents ->
+                    for(document in documents) {
+                        if(document.id == userId){
+                            chatId = id
+                        }
+                    }
+
+                    println("ACABOU2---------------------------------------")
+                    callBack(chatId)
+                }
+        }
+
+    }
+
     /*
        ------------------------------------------------ Register Manipulation ------------------------------------------------
     */
@@ -733,7 +777,7 @@ object Backend {
         val storageRef = FirebaseStorage.getInstance().reference.child(filePath)
 
         storageRef.downloadUrl.addOnCompleteListener {
-            callback(it.result)
+            callback(it.result!!)
         }
 
     }

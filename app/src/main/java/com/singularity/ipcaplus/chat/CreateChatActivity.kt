@@ -57,7 +57,7 @@ class CreateChatActivity : ActivityImageHelper() {
             // Chat data
             val chat = Chat(
                 chatName,
-                "chat",
+                "group",
                 keygen
             )
 
