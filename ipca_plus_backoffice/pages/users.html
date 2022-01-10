@@ -73,7 +73,8 @@
 
                     <div class="box g">
                         <label for="name">Curso</label>
-                        <select id="courses" required placeholder="Inserir curso">
+                        <select id="courses" required>
+                            <option disabled selected value> Inserir curso </option>
 
                         </select>
 
@@ -81,7 +82,8 @@
 
                     <div class="box h">
                         <label for="name">Cargo</label>
-                        <select id="role" required placeholder="Inserir cargo">
+                        <select id="role" required>
+                            <option disabled selected value> Inserir cargo </option>
                             <option value="Aluno"> Aluno </option>
                             <option value="Professor"> Professor </option>
                         </select>
@@ -94,7 +96,8 @@
 
                     <div class="box j">
                         <label for="name">Género</label>
-                        <select id="gender" required placeholder="Inserir género">
+                        <select id="gender" required>
+                            <option disabled selected value> Inserir género </option>
                             <option value="M"> Masculino </option>
                             <option value="F"> Feminino </option>
                             <option value="I"> Indefinido </option>
@@ -117,8 +120,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
     <script src="../js/configDB.js" defer></script>
-    <script src="../js/Users/crud.js" defer></script>
+    <script src="../js/users/crud.js" defer></script>
 
 </body>
 

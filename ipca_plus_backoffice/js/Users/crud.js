@@ -1,10 +1,9 @@
-
 // Add all courses to select object
 function addCoursesToSelect(doc) {
   let course = doc.data();
   let html = "";
 
-  html += '<option value="' + course.tag +'"> ' + course.name + ' </option>';
+  html += '<option value="' + course.tag + '"> ' + course.name + ' </option>';
 
   console.log(doc.data())
 
@@ -17,18 +16,25 @@ function addUserToList(doc) {
   let user = doc.data();
   let html = "";
 
-  html += "<li><a>";
+/*
+  storageRef.child('profilePictures/' + doc.id + '.png').getDownloadURL().then(function(url) {
+    var test = url;
+
+    console.log("entrou ----> " + test);
+
+  })*/
+
+  html += "<li> <a>"; // <img src='../images/defaultUser.png' width='35' height='35'> style="padding-left:40px"
   html += user.student_number + " - " + user.name;
   html +=
     '<button id="' +
     doc.id +
-    'Edit" class="edit" type="button" onClick="paraEdicao(this.id)"><i class="fa fa-edit"></i></button>';
+    'Edit" class="edit" type="button" onClick="forEdition(this.id)"><i class="fa fa-edit"></i></button>';
   html +=
     '<button id="' +
     doc.id +
-    'Rem" class="rem" type="button" onClick="removeAluno(this.id)"><i class="fa fa-trash"></i></button>';
-  html += '<p class = "descPar"> Curso: ' + user.course + "</p>";
-  html += '<p id="' + doc.id + 'Contacto" class = "descPar"></p>';
+    'Rem" class="rem" type="button" onClick="removeUser(this.id)"><i class="fa fa-trash"></i></button>';
+  html += '<p> Curso: ' + user.course + "</p>";
 
   html += "</a></li>";
   html += "<hr>";
@@ -41,13 +47,14 @@ function addUserToList(doc) {
 
 
 // Put user data in text boxes
-function paraEdicao(id) {
+function forEdition(id) {
   let docRef;
   id = id.replace("Edit", "");
 
   docRef = db.collection("ipca_data").doc(id);
 
   docRef.get().then((doc) => {
+    userForm.value = id;
     userForm.name.value = doc.data().name;
     userForm.number.value = doc.data().student_number;
     userForm.contact.value = doc.data().contact;
@@ -73,32 +80,44 @@ userForm.addEventListener("submit", (e) => {
   if (button.value == "new") {
     addUser();
   } else {
-    editAluno(userForm.value);
+    editUser(userForm.value);
     document.querySelector("#addUser").value = "new";
   }
 
-  let menu = document.getElementById('list');
-  while (menu.firstChild) {
-      menu.removeChild(menu.firstChild);
-  }
-
-  db.collection("ipca_data")
-  .get()
-  .then((snap) => {
-    snap.docs.forEach((doc) => {
-
-  console.log("entrou")
-      document.querySelector("#list").innerHTML += addUserToList(doc);
-
-    });
-  });
+  // Refresh List
+  refreshUserList()
 
   userForm.reset();
 });
 
 
+// Refresh User List
+function refreshUserList() {
+
+  // Delete Previous List
+  let menu = document.getElementById('list');
+  while (menu.firstChild) {
+    menu.removeChild(menu.firstChild);
+  }
+
+  // Add the elements
+  db.collection("ipca_data")
+    .orderBy("student_number")
+    .get()
+    .then((snap) => {
+      snap.docs.forEach((doc) => {
+        document.querySelector("#list").innerHTML += addUserToList(doc);
+      });
+    });
+}
+
+
 // Add User
 function addUser() {
+
+  var e = userForm.courses;
+  var selected_tag = e.options[e.selectedIndex].value;
+  var selected_course = e.options[e.selectedIndex].text;
 
   db.collection("ipca_data")
     .add({
@@ -106,8 +125,8 @@ function addUser() {
       student_number: userForm.number.value,
       contact: userForm.contact.value,
       age: userForm.age.value,
-      course: userForm.courses.innerText,
-      course_tag: userForm.courses.value,
+      course: selected_course,
+      course_tag: selected_tag,
       role: userForm.role.value,
       email: userForm.email.value,
       gender: userForm.gender.value
@@ -117,55 +136,42 @@ function addUser() {
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
-    }); 
+    });
 
 }
 
-//editar um aluno - carrega formulário com dados
-/*
+
+// Edit User
 function editUser(id) {
   let docRef;
-  let i = 0;
 
-  const array = [
-    {
-      type: "email",
-      value: form.email.value,
-    },
-    {
-      type: "mobile",
-      value: form.mobile.value,
-    },
-  ];
+  var e = userForm.courses;
+  var selected_tag = e.options[e.selectedIndex].value;
+  var selected_course = e.options[e.selectedIndex].text;
 
   docRef = db.collection("ipca_data").doc(id);
-  docRef
-    .set({
-      number: form.number.value,
-      name: form.name.value,
-      curso: form.curse.value,
+  docRef.set({
+      name: userForm.name.value,
+      student_number: userForm.number.value,
+      contact: userForm.contact.value,
+      age: userForm.age.value,
+      course: selected_course,
+      course_tag: selected_tag,
+      role: userForm.role.value,
+      email: userForm.email.value,
+      gender: userForm.gender.value
     })
-    docRef.collection("contactos").get().then((snap) => {
-      snap.docs.forEach((doc) => {
-        console.log(doc.data());
-        docRef.collection("contactos").doc(doc.id).set({
-          type: array[i].type,
-          value: array[i].value,
-        })
-        i++;
-      });
-      console.log("Document successfully saved!");
+    .then((docRef) => {
+      console.log("New user successfully edited: ", docRef);
     })
     .catch((error) => {
       console.error("Error saving document: ", error);
     });
 
 }
-*/
 
 
-/*
-//remove um aluno
+// Remove User
 function removeUser(id) {
   id = id.replace("Rem", "");
   docRef = db.collection("ipca_data").doc(id);
@@ -176,9 +182,11 @@ function removeUser(id) {
     })
     .then(() => {
       console.log("Document successfully deleted!");
+
+      // Refresh List
+      refreshUserList()
     })
     .catch((error) => {
       console.error("Error removing document: ", error);
     });
 }
- */

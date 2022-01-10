@@ -19,6 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+//const storageRef = firebase.storage().ref();
 
 // Get Users
 db.collection("ipca_data")
