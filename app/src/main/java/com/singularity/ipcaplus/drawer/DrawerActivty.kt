@@ -142,47 +142,6 @@ class DrawerActivty : AppCompatActivity() {
             val intent = Intent(this, AddButtonActivity::class.java)
             startActivity(intent)
 
-            /*
-            val chat = Chat(
-                "Chat Teste " + Random.nextInt(256),
-                "chat",
-                keygen
-            )
-            // Build encryptation data of first message send by the system
-            var meta = encryptMeta("This is an Alpha Chat, bugs are expected," +
-                    " please report them if you found some. Welcome to Singularity!", keygen)
-            val id_amigo = "Y90PjGQmLsMrxLicWkirOKpPSOx2"
-            val message = Message(
-                "system",
-                meta.toString(),
-                "2021-12-22",
-                Timestamp.now(),
-                ""
-
-            )
-            db.collection("chat")
-                .add(chat.toHash())
-                .addOnSuccessListener { documentReference ->
-                    db.collection("chat")
-                        .document("${documentReference.id}")
-                        .collection("message")
-                        .add(message.toHash())
-                    db.collection("profile")
-                        .document("${Firebase.auth.currentUser!!.uid}")
-                        .collection("chat")
-                        .document("${documentReference.id}")
-                        .set(chat)
-                    db.collection("profile")
-                        .document(id_amigo)
-                        .collection("chat")
-                        .document("${documentReference.id}")
-                        .set(chat)
-
-                }
-                .addOnFailureListener { e ->
-                    Log.w(ContentValues.TAG, "Error adding document", e)
-                }*/
-
         }
 
         // Log Out Button
@@ -217,6 +176,32 @@ class DrawerActivty : AppCompatActivity() {
             Log.d(TAG, msg)
             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
+
+        /*FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            var fcmToken = task.result
+
+            // Log and toast
+            Log.d(ContentValues.TAG, "O FCM é $fcmToken")
+            Toast.makeText(this, "O FCM é $fcmToken", Toast.LENGTH_SHORT).show()
+        })
+
+        db.collection("profile").document(Firebase.auth.currentUser!!.uid).collection("tokens")
+            .add(message.toHash())
+            .addOnSuccessListener { documentReference ->
+                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error adding document", e)
+            }
+
+        binding.editTextMessage.text.clear()*/
 
     }
 
