@@ -100,7 +100,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seeGroupMembers">
+        app:layout_constraintTop_toBottomOf="@+id/groupFiles">
 
         <ImageView
             android:id="@+id/imageViewOp2"
@@ -148,7 +148,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/groupFiles"
+        android:id="@+id/deleteChat"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -157,6 +157,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/changeGroupImage">
+
+        <ImageView
+            android:id="@+id/imageViewOp8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_delete" />
+
+        <TextView
+            android:id="@+id/textViewOp8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Apagar Chat"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/groupFiles"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seeGroupMembers">
 
         <ImageView
             android:id="@+id/imageViewOp4"
@@ -188,7 +216,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupFiles" />
+        app:layout_constraintTop_toBottomOf="@+id/deleteChat" />
 
     <LinearLayout
         android:id="@+id/securityNumberVerification"
@@ -241,6 +269,35 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Notificações"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/leaveGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageViewOp7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_logout"
+            android:scaleX="-1"/>
+
+        <TextView
+            android:id="@+id/textViewOp7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Sair do grupo"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

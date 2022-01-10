@@ -533,6 +533,7 @@ object Backend {
 
     }
 
+
     fun getChatUsersUids(chatID: String, callBack: (List<String>) -> Unit){
         var userIds = arrayListOf<String>()
 
@@ -561,27 +562,8 @@ object Backend {
 
 
     /*
-        Search in an array duplicated items
-
-     */
-    fun hasDuplicates(array1: Array<*>, array2: Array<*>): Boolean {
-        for (i in 1 until array1.size)
-        {
-            for (j in 1 until array2.size)
-            {
-                if (array1[i] == array2[j]) {
-
-                    return true
-                }
-            }
-        }
-        return false    // no repeated elements
-    }
-
-
-    /*
        This function returns last chat message by chat id
-       @callBack = return the list
+       @callBack = return the message
     */
     fun getLastMessageByChatID(chatID: String, callBack: (Message?)->Unit) {
 
@@ -670,6 +652,56 @@ object Backend {
 
         }
     }
+
+
+    fun deleteChat(chatId: String, callback: ()->Unit) {
+
+        val userIds = arrayListOf<String>()
+
+        // get all chat members ids
+        db.collection("chat")
+            .document(chatId)
+            .collection("user")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+                    for (document in documents) {
+                        userIds.add(document.id)
+                    }
+
+                    // <------------------------------------------------------- Missing here
+
+                    // delete chat
+                    /*
+                    db.collection("chat")
+                        .document(chatId)
+                        .delete()
+*/
+
+                    // delete chat references in members
+                    for (i in 0 until userIds.size) {
+
+                        db.collection("profile")
+                            .document(userIds[i])
+                            .collection("chat")
+                            .document(chatId)
+                            .delete()
+                            .addOnCompleteListener {
+                                // If its the last callback refresh the activity
+                                if (i == userIds.size - 1)
+                                    callback()
+                            }
+
+                    }
+            }
+        }
+
+
+
+
+
+    }
+
 
 
     fun getAllDirectChatIdsByUser(userId: String, callBack: (List<String>) -> Unit){
@@ -771,6 +803,26 @@ object Backend {
     /*
       ------------------------------------------------ Files ------------------------------------------------
    */
+
+
+    fun deleteAllFilesInsideFolder(filePath: String, callback: ()->Unit) {
+
+        val storage = Firebase.storage
+        val listRef = storage.reference.child(filePath)
+
+        listRef.listAll()
+            .addOnSuccessListener {
+
+                it.items.forEach { item ->
+                    item.delete()
+                        .addOnCompleteListener {
+                            callback()
+                        }
+                }
+
+            }
+    }
+
 
     fun getFileUrl(filePath: String, callback: (Uri)->Unit) {
 
