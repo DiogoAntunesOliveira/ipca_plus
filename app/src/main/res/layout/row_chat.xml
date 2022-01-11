@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="10dp">
 
 
     <androidx.cardview.widget.CardView
         android:id="@+id/viewImageGroup"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:elevation="12dp"
         android:innerRadius="0dp"
         android:shape="ring"
@@ -24,8 +25,8 @@
 
         <ImageView
             android:id="@+id/imageViewChatGroup"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             app:srcCompat="@mipmap/ic_launcher_round" />
@@ -37,10 +38,12 @@
         android:id="@+id/textViewChatName"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="6dp"
         android:fontFamily="@font/poppins_semibold"
+        android:textColor="#242424"
+
         android:maxHeight="22sp"
         android:maxLength="30"
         android:text="Chat Name"
@@ -54,10 +57,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="20dp"
         android:fontFamily="@font/poppins"
         android:maxHeight="22sp"
-        android:maxLength="32"
+        android:maxLength="20"
         android:text="Last Message"
         android:textColor="#A3A3A3"
         android:textSize="14sp"
@@ -72,7 +75,7 @@
 
         android:layout_marginTop="5dp"
 
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/poppins"
 
@@ -88,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

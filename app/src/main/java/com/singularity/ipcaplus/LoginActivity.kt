@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
         password_save = binding.editTextTextPassword
 
         auth = Firebase.auth
+
         val prefs = customPreference(this, VALID_DATA)
 
         UserLoggedIn.id = prefs.getString("USER_ID", null)
