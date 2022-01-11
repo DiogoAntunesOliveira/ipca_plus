@@ -13,9 +13,11 @@ import org.bouncycastle.util.encoders.Base64
 import java.io.UnsupportedEncodingException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
 import java.security.Security
 import java.util.Objects.hash
 import javax.crypto.*
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 
@@ -26,6 +28,11 @@ fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
     Security.addProvider(BouncyCastleProvider())
     hash(strToEncrypt)
     var keyBytes: ByteArray
+    //val initVector = generateRandomIV()
+    val initVector = "7c5afb00aaecb1a1"
+    val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
+    println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE $initVector")
+
 
     try {
         keyBytes = secret_key.toByteArray(charset("UTF8"))
@@ -33,8 +40,8 @@ fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
         val input = strToEncrypt.toByteArray(charset("UTF8"))
 
         synchronized(Cipher::class.java) {
-            val cipher = Cipher.getInstance("AES/ECB/PKCS7Padding")
-            cipher.init(Cipher.ENCRYPT_MODE, skey)
+            val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+            cipher.init(Cipher.ENCRYPT_MODE, skey, iv)
 
             val cipherText = ByteArray(cipher.getOutputSize(input.size))
             var ctLength = cipher.update(
@@ -68,16 +75,18 @@ fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
 fun decryptWithAESmeta(key: String, strToDecrypt: String?): String? {
     Security.addProvider(BouncyCastleProvider())
     var keyBytes: ByteArray
+    val initVector = "7c5afb00aaecb1a1"
 
     try {
+        val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
         keyBytes = key.toByteArray(charset("UTF8"))
         val skey = SecretKeySpec(keyBytes, "AES")
         val input = org.bouncycastle.util.encoders.Base64
             .decode(strToDecrypt?.trim { it <= ' ' }?.toByteArray(charset("UTF8")))
 
         synchronized(Cipher::class.java) {
-            val cipher = Cipher.getInstance("AES/ECB/PKCS7Padding")
-            cipher.init(Cipher.DECRYPT_MODE, skey)
+            val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+            cipher.init(Cipher.DECRYPT_MODE, skey, iv)
 
             val plainText = ByteArray(cipher.getOutputSize(input.size))
             var ptLength = cipher.update(input, 0, input.size, plainText, 0)
@@ -176,4 +185,19 @@ fun getMetaOx(context: Context, chatUid: String): String? {
     // reading a value
     println(sharedPreferences.getString(chatUid, ""))
     return sharedPreferences.getString(chatUid, "") // -> "some_data"
+}
+
+fun generateRandomIV(): String {
+    val ranGen = SecureRandom()
+    val aesKey = ByteArray(16)
+    ranGen.nextBytes(aesKey)
+    val result = StringBuffer()
+    for (b in aesKey) {
+        result.append(String.format("%02x", b))
+    }
+    return if (16 > result.toString().length) {
+        result.toString()
+    } else {
+        result.toString().substring(0, 16)
+    }
 }
