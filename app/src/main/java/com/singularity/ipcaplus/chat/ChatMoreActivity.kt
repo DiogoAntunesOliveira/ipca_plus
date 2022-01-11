@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.LoginActivity
@@ -121,19 +122,19 @@ class ChatMoreActivity : ActivityImageHelper() {
     private fun openSelectImageDialog() {
 
         // Variables
-        val alertDialog = AlertDialog.Builder(this)
-        val row = layoutInflater.inflate(R.layout.dialog_select_image, null)
-        alertDialog.setView(row)
-        val show = alertDialog.show()
-        imageViewDialog = row.findViewById(R.id.imageViewChatPhoto)
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        val view = layoutInflater.inflate(R.layout.dialog_select_image, null)
+        dialog.setContentView(view)
+        dialog.show()
+        imageViewDialog = view.findViewById(R.id.imageViewChatPhoto)
 
         Utilis.getFile(this,"chats/$chat_id/icon.png", "png") { bitmap ->
-            row.findViewById<ImageView>(R.id.imageViewChatPhoto).setImageBitmap(bitmap)
+            view.findViewById<ImageView>(R.id.imageViewChatPhoto).setImageBitmap(bitmap)
         }
 
         imageViewDialog.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
-            show.dismiss()
+            dialog.dismiss()
         }
 
     }
