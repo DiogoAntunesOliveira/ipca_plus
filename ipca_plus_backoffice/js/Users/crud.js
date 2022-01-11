@@ -1,3 +1,30 @@
+
+// Get data
+
+// Get Users
+db.collection("ipca_data")
+  .orderBy("student_number")
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc) => {
+
+      document.querySelector("#list").innerHTML += addUserToList(doc);
+
+    });
+  });
+
+// Get Courses
+db.collection("course")
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc) => {
+
+      document.querySelector("#courses").innerHTML += addCoursesToSelect(doc);
+
+    });
+  });
+
+
 // Add all courses to select object
 function addCoursesToSelect(doc) {
   let course = doc.data();
@@ -22,7 +49,7 @@ function addUserToList(doc) {
   html += " <div class='row'>";
   html += " <div class='col-10'>";
   html += " <div class='item-info'>";
-  html += " <strong>" + user.student_number + " - " + user.name + "</strong> <br> "+ user.course;
+  html += " <strong>" + user.student_number + " - " + user.name + "</strong> <br><br> "+ user.course;
   html += " </div> </div>";
   html += " <div class='col' style='display: flex; justify-content: flex-end;'>";
 
