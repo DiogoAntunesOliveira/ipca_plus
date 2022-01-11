@@ -83,36 +83,70 @@ h1 {
     color: white;
 }
 
+.item-list .item-info {
+
+    margin-left: 5%;
+}
 
 .item-list .delete-item {
-    
+
+    color: white;
+    background: #f34646;
+    width: 10%;
+
     /* Shadow */
-    background: #F90000;
-    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+    border-radius: 0px 10px 10px 0px;
+
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.item-list .edit-item {
+
+    color: black;
+    background: white;
+    width: 10%;
+
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
 
 }
 
 
 .item-list .card-body {
     
+    color: black;
+    width: 30%;
     /* Shadow */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
     transition: 0.3s;
-    border-radius: 10px;
+    border-radius: 10px 0px 0px 10px;
 
 }
 
+button {
+    color: white;
+    background: #037B4A; 
+    border-radius: 8px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
 
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+}
 
+button:hover {
+    
+    background: #209D6A;
+}
 
-
-
-
-/* 
- ****************************
-    Codigo Exemplo Stora
- ****************************
-*/
 :root {
     --form-bg: white;
     --form-border: rgb(44, 36, 36);
@@ -133,6 +167,16 @@ input {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     background: var(--form-bg);
+}
+
+ul li:first-child {
+    width: 100%;
+    font-family: var(--font-face);
+    font-size: var(--font-size);
+    color: #a4a4a9;
+    margin-top: 0px;
+    list-style: none;
+    /* border: 1px solid black; */
 }
 
 ul li {
@@ -159,24 +203,6 @@ select {
     border-radius: 8px;
     background: var(--form-bg);
     color: var(--font-color);
-}
-
-button {
-    float: right;
-    font-size: var(--font-size);
-    line-height: var(--font-size * 2);
-    padding: 15px 60px;
-    border: none;
-    background-color: var(--form-border);
-    color: white;
-    letter-spacing: 4px;
-}
-
-button:hover {
-    background: inherit;
-    /* herda do pai */
-    color: var(--form-border);
-    border-bottom: 3px solid var(--form-border);
 }
 
 hr {
@@ -206,11 +232,19 @@ hr {
     background-color: var(--form-bg);
 }
 
+.formBoxes {
+    background: white;
+
+    /* Shadow */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+    border-radius: 10px 10px 10px 10px;
+}
+
 .wrapper {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 40% 60%;
-    background-color: rgb(247, 243, 243);
     color: #444;
     font-size: 20px;
     margin-top: 2%;
@@ -230,20 +264,19 @@ hr {
 .b {
     grid-column: 2;
     grid-row: 1 / 9;
+
 }
 
 .b .list {
+
     overflow: auto;
     width: 100%;
-    height: 95%;
-    margin: 10px 10px 10px 0px;
+    height: 100%;
     font-size: var(--font-size);
     line-height: var(--font-size);
     font-family: var(--font-face);
     padding: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background: var(--form-bg);
+
 }
 
 .c {

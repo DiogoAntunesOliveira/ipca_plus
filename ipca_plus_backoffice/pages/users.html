@@ -40,7 +40,8 @@
             <div class="row searchList">
 
                 <div class="form-outline mb-4">
-                    <input type="search" id="myInput" onkeyup="myFunction()" class="form-control" id="datatable-search-input" placeholder="Pesquisar aqui">
+                    <input type="search" id="myInput" onkeyup="myFunction()" class="form-control"
+                        id="datatable-search-input" placeholder="Pesquisar aqui">
                 </div>
 
             </div>
@@ -50,29 +51,9 @@
 
                 <div class="col-12">
 
-                    <h1> Utilizadores </h1>
-<!--
-                    <div class="item-list">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <strong>20116 - Nuno Isidoro <br> Aplicações Móveis </strong>
-                                </div>
-                                <div class="col">
-                                    <div class="delete-item">
-                                        <i class="fas fa-remove"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      </div>-->
+                    <h1> <strong> Utilizadores </strong> </h1>
 
                     <form id="userForm" class="wrapper">
-
-                        <div class="box a">
-                            <label for="name">Nome</label>
-                            <input type="text" id="name" required placeholder="Inserir nome" />
-                        </div>
 
                         <div class="box b">
 
@@ -82,60 +63,68 @@
 
                         </div>
 
-                        <div class="box c">
-                            <label for="number">Número</label>
-                            <input type="text" id="number" required placeholder="Inserir número" />
+                        <div class="formBoxes">
+
+                            <div class="box a">
+                                <label for="name"><strong >Nome </strong></label>
+                                <input type="text" id="name" required placeholder="Inserir nome" />
+                            </div>
+
+                            <div class="box c">
+                                <label for="number"><strong > Número </strong></label>
+                                <input type="text" id="number" required placeholder="Inserir número" />
+                            </div>
+
+                            <div class="box d">
+                                <label for="name"><strong > Contacto </strong></label>
+                                <input type="text" id="contact" required placeholder="Inserir contacto" />
+                            </div>
+
+                            <div class="box f">
+                                <label for="nomnumbere"><strong > Idade </strong></label>
+                                <input type="text" id="age" required placeholder="Inserir idade" />
+                            </div>
+
+                            <div class="box g">
+                                <label for="name"><strong > Curso </strong></label>
+                                <select id="courses" required>
+                                    <option disabled selected value> Inserir curso </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="box h">
+                                <label for="name"><strong > Cargo </strong></label>
+                                <select id="role" required>
+                                    <option disabled selected value> Inserir cargo </option>
+                                    <option value="Aluno"> Aluno </option>
+                                    <option value="Professor"> Professor </option>
+                                </select>
+                            </div>
+
+                            <div class="box i">
+                                <label for="name"><strong > Email </strong></label>
+                                <input type="text" id="email" required placeholder="Inserir email" />
+                            </div>
+
+                            <div class="box j">
+                                <label for="name"><strong > Género </strong></label>
+                                <select id="gender" required>
+                                    <option disabled selected value> Inserir género </option>
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Feminino </option>
+                                    <option value="I"> Indefinido </option>
+                                </select>
+
+                                <!-- <input type="text" id="gender" required placeholder="Inserir género" />-->
+                            </div>
+
+                            <div class="box k">
+                                <button id="addUser" type="submit" value="new"> <strong> Guardar </strong></button>
+                            </div>
+
                         </div>
-
-                        <div class="box d">
-                            <label for="name">Contacto</label>
-                            <input type="text" id="contact" required placeholder="Inserir contacto" />
-                        </div>
-
-                        <div class="box f">
-                            <label for="nomnumbere">Idade</label>
-                            <input type="text" id="age" required placeholder="Inserir idade" />
-                        </div>
-
-                        <div class="box g">
-                            <label for="name">Curso</label>
-                            <select id="courses" required>
-                                <option disabled selected value> Inserir curso </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="box h">
-                            <label for="name">Cargo</label>
-                            <select id="role" required>
-                                <option disabled selected value> Inserir cargo </option>
-                                <option value="Aluno"> Aluno </option>
-                                <option value="Professor"> Professor </option>
-                            </select>
-                        </div>
-
-                        <div class="box i">
-                            <label for="name">Email</label>
-                            <input type="text" id="email" required placeholder="Inserir email" />
-                        </div>
-
-                        <div class="box j">
-                            <label for="name">Género</label>
-                            <select id="gender" required>
-                                <option disabled selected value> Inserir género </option>
-                                <option value="M"> Masculino </option>
-                                <option value="F"> Feminino </option>
-                                <option value="I"> Indefinido </option>
-                            </select>
-
-                            <!-- <input type="text" id="gender" required placeholder="Inserir género" />-->
-                        </div>
-
-                        <div class="box k">
-                            <button id="addUser" type="submit" value="new">Salvar</button>
-                        </div>
-
                     </form>
 
                 </div>
