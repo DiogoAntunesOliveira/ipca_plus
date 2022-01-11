@@ -246,6 +246,7 @@ class ChatActivity : AppCompatActivity() {
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_message_self, parent, false))
             } else if (viewType == 2){
+                otherUser = false
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_message_system, parent, false))
             } else {
@@ -257,18 +258,27 @@ class ChatActivity : AppCompatActivity() {
         }
 
         @RequiresApi(Build.VERSION_CODES.M)
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
             holder.v.apply {
 
                 val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
                 val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
+                val textViewUsername = findViewById<TextView?>(R.id.textViewUsername)
 
 
                 timeLastMessage?.isVisible = false
                 val keygen = getMetaOx(context, chat_id)
                 val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message)
+
+                if (otherUser) {
+                    Backend.getUserProfile(messages[position].user) {
+                        val userName = Utilis.getFirstAndLastName(it.name)
+                        textViewUsername.text = userName
+                        }
+                    }
+
                 textViewMessage.text = message_decripted
                 println(message_decripted)
                 if(position == messages.size - 1) {
@@ -305,6 +315,7 @@ class ChatActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return messages.size
         }
+
 
 
     }

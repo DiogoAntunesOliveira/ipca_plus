@@ -7,13 +7,14 @@
     android:layout_marginTop="15dp">
 
     <TextView
+        android:id="@+id/textViewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
         android:text="User name"
-        android:textSize="8sp"
-        android:layout_marginStart="10dp"
         android:textColor="@color/green_200"
-        app:layout_constraintBottom_toTopOf="@+id/viewImageProfile"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewMessage"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.cardview.widget.CardView
