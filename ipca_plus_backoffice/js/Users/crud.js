@@ -16,15 +16,7 @@ function addUserToList(doc) {
   let user = doc.data();
   let html = "";
 
-/*
-  storageRef.child('profilePictures/' + doc.id + '.png').getDownloadURL().then(function(url) {
-    var test = url;
-
-    console.log("entrou ----> " + test);
-
-  })*/
-
-  html += "<li> <a>"; // <img src='../images/defaultUser.png' width='35' height='35'> style="padding-left:40px"
+  html += "<li> <a>";
   html += user.student_number + " - " + user.name;
   html +=
     '<button id="' +
@@ -36,8 +28,7 @@ function addUserToList(doc) {
     'Rem" class="rem" type="button" onClick="removeUser(this.id)"><i class="fa fa-trash"></i></button>';
   html += '<p> Curso: ' + user.course + "</p>";
 
-  html += "</a></li>";
-  html += "<hr>";
+  html += "</a><hr></li>";
 
   userForm.reset();
   document.querySelector("#addUser").value = "new";
