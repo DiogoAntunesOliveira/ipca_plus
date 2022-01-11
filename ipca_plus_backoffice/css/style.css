@@ -6,6 +6,23 @@ h1 {
     color: #209D6A;
 }
 
+
+.searchList {
+    margin-top: 2%;
+    width: 96%;
+}
+
+.searchList input {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left:50px;
+    background-image: url(../images/search.png);
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-position: 10px 13px;
+}
+
+
 /* 
  ****************************
     Estilo da NavBAr
@@ -14,16 +31,13 @@ h1 {
 
 .sideBar {
     height: 100%;
-    width: 10%;
+    width: 10%; 
 
     /* Stay in place */
     position: fixed;
 
     /* Stay on top */
     z-index: 1;
-
-    /* Stay at the top */
-    top: 0;
 
     background-color: #037B4A;
     /* Black*/
@@ -70,7 +84,23 @@ h1 {
 }
 
 
+.item-list .delete-item {
+    
+    /* Shadow */
+    background: #F90000;
+    border-radius: 10px;
 
+}
+
+
+.item-list .card-body {
+    
+    /* Shadow */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+    border-radius: 10px;
+
+}
 
 
 
@@ -184,6 +214,7 @@ hr {
     color: #444;
     font-size: 20px;
     margin-top: 2%;
+    margin-right: 5%;
 }
 
 .box {
