@@ -1,15 +1,23 @@
 package com.singularity.ipcaplus.chat
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.singularity.ipcaplus.LoginActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
@@ -17,8 +25,10 @@ import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
+import com.singularity.ipcaplus.utils.Utilis.calculateInSampleSize
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import java.io.ByteArrayOutputStream
 
 class ChatMoreActivity : ActivityImageHelper() {
 
@@ -128,7 +138,9 @@ class ChatMoreActivity : ActivityImageHelper() {
         dialog.show()
         imageViewDialog = view.findViewById(R.id.imageViewChatPhoto)
 
+
         Utilis.getFile(this,"chats/$chat_id/icon.png", "png") { bitmap ->
+
             view.findViewById<ImageView>(R.id.imageViewChatPhoto).setImageBitmap(bitmap)
         }
 
@@ -146,17 +158,18 @@ class ChatMoreActivity : ActivityImageHelper() {
     private fun openSelectNameDialog() {
 
         // Variables
-        val alertDialog = AlertDialog.Builder(this)
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
         val row = layoutInflater.inflate(R.layout.dialog_select_name, null)
-        alertDialog.setView(row)
-        val show = alertDialog.show()
+        dialog.setContentView(row)
+        dialog.show()
+
 
         row.findViewById<EditText>(R.id.editTextName).setText(binding.textViewGroupName.text.toString())
 
         row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
             val newName = row.findViewById<EditText>(R.id.editTextName).text.toString()
             Backend.changeChatName(chat_id, newName)
-            show.dismiss()
+            dialog.dismiss()
             binding.textViewGroupName.text = newName
         }
 
@@ -180,7 +193,37 @@ class ChatMoreActivity : ActivityImageHelper() {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
                 imageViewGroup.setImageURI(result.uri)
-                Utilis.uploadFile(result.uri, "chats/$chat_id/icon.png")
+
+                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                val storageRef = FirebaseStorage.getInstance().getReference("chats/$chat_id/icon.png")
+
+                // compressing image
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, result.uri)
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 6, byteArrayOutputStream)
+                val reducedImage: ByteArray = byteArrayOutputStream.toByteArray()
+
+                storageRef.putBytes(reducedImage)
+                    .addOnSuccessListener {
+
+                        Log.i("xxx", "Success uploading Image to Firebase!!!")
+
+                        storageRef.downloadUrl.addOnSuccessListener {
+
+                            //getting image url
+                            Log.i("xxx",it.toString())
+                            Utilis.uploadFile(it, "chats/$chat_id/icon.png")
+
+                        }.addOnFailureListener {
+
+                            Log.i("xxx", "Error getting image download url")
+                        }
+
+                    }.addOnFailureListener {
+
+                        Log.i("xxx", "Failed uploading image to server")
+
+                    }
             }
         }
     }
