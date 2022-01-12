@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.chat
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
@@ -54,6 +56,7 @@ class ChatActivity : AppCompatActivity() {
     private var mLayoutManager: LinearLayoutManager? = null
 
     val db = Firebase.firestore
+    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +64,14 @@ class ChatActivity : AppCompatActivity() {
 
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+        findViewById<TextView>(R.id.AppBarTittle).text = "Chat name"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Variables
         chat_id = intent.getStringExtra("chat_id").toString()
@@ -186,12 +197,11 @@ class ChatActivity : AppCompatActivity() {
                         if(document.id == chat_id) {
                             val chat = Chat.fromHash(document)
                             supportActionBar?.title = chat.name
+                            findViewById<TextView>(R.id.AppBarTittle).text = chat.name
                         }
                     }
                 }
             }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
 
 
         return true
