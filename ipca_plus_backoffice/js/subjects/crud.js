@@ -3,16 +3,44 @@
 
 // Get selected course id
 let courseID = getParameterByName("id", window.location.href);
+let courseTag = "";
+let courseName = "";
 
-// Get Course Name
+// Get Course data
 db.collection("course")
   .doc(courseID)
   .get()
   .then(doc => {
     if (doc.exists) {
-      document.querySelector("#titlePage").innerHTML = "<strong>" + doc.data().name + " - Disciplinas </strong>";
+      courseTag = doc.data().tag;
+      courseName = doc.data().name;
+      document.querySelector("#titlePage").innerHTML = "<strong>" + courseName + " - Disciplinas </strong>";
     }
   });
+
+// Get All teachers
+db.collection("ipca_data")
+  .where("role", "==", "Professor")
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc) => {
+
+      document.querySelector("#teacher").innerHTML += addTeachersToSelect(doc);
+
+    });
+  });
+
+
+// Add all Teachers to select object
+function addTeachersToSelect(doc) {
+  let teacher = doc.data();
+  let html = "";
+
+  html += '<option value="' + doc.id + '"> ' + teacher.name + ' </option>';
+
+  return html;
+}
+
 
 // Get Subjects
 db.collection("course")
@@ -49,7 +77,6 @@ function addSubjectToList(doc) {
   html += '<div class="edit-item" id="' + doc.id + 'Edit" type="button" onClick="forEdition(this.id)"> <i class="fa fa-edit"></i> </div>';
   html += " </div> </div> </div>";
 
-  
   html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeSubject(this.id)"> <i class="fa fa-trash"></i> </div>';
   html += " </div> </div> </div> </li>";
 
@@ -103,7 +130,6 @@ form.addEventListener("submit", (e) => {
   // Refresh List
   refreshSubjectList()
 
-  form.reset();
 });
 
 
@@ -133,25 +159,107 @@ function refreshSubjectList() {
 // Add Subject
 function addSubject() {
 
+  var e = form.teacher;
+  var teacherID = e.options[e.selectedIndex].value;
+  var subjectName = form.name.value
+
   db.collection("course")
   .doc(courseID)
   .collection("subject")
     .add({
-      name: form.name.value,
-      teacher: form.teacher.value
+      name: subjectName,
+      teacher: teacherID
     })
     .then((docRef) => {
-      console.log("New Subject successfully added: ", docRef);
+      
+      /* Add subject to teacher */
+      db.collection("ipca_data")
+        .doc(teacherID)
+        .collection("subject")
+        .add({
+          id: docRef.id
+        })
+        .then(() => {
+
+          /* ----------------- Create oficial chat ----------------- */
+          db.collection("chat")
+          .add({
+            name: subjectName,
+            type: "oficial",
+            ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP"
+          })
+          .then((docRef2) => {
+
+            /* ----------------- Create first message ----------------- */
+            db.collection("chat")
+            .doc(docRef2.id)
+            .collection("message")
+            .add({
+              user: "system",
+              message: "AcNj1olXt82HULKQ8Wlgi6cQJ1+mIyZX31zXjTvkY0+n/WJtN5kZp1qccicLsC3YNNyVCQFd1xn/urlBcZuM/g==",
+              time: Date.now(),
+              files: ""
+
+            }).then((docRef3) => {
+              
+              console.log("chat id: " + docRef2.id)
+              console.log("teacher id: " + teacherID)
+
+              /* ----------------- Add teacher admin ----------------- */
+              db.collection("chat")
+              .doc(docRef2.id)
+              .collection("user")
+              .doc(teacherID)
+              .set({
+                admin: true
+              }).then((docRef4) => {
+                form.reset();
+              });
+
+              /* ----------------- Add all users in the course ----------------- */
+
+              db.collection("ipca_data")
+                .get()
+                .then((snap) => {
+                  snap.docs.forEach((doc) => {
+
+                    db.collection("ipca_data")
+                    .doc(doc.id)
+                    .collection("course")
+                    .where("tag", "==", courseTag)
+                    .get()
+                    .then((snap2) => {
+                      snap2.docs.forEach(() => {
+                        
+                        db.collection("chat")
+                        .doc(docRef2.id)
+                        .collection("user")
+                        .doc(doc.id)
+                        .set({
+                          admin: false
+                        }).then(() => {
+                          console.log("user adicionado: " + doc.data());
+                        });
+
+                      });
+                    });
+                  });
+                });
+
+              /* The users are added durind the user creation or edition */
+
+            });
+
+            form.reset();
+          });
+          
+        });
+
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
     });
 
-    /*
-    
-      create oficial chat
-    
-    */
 
 }
 
@@ -170,7 +278,20 @@ function editSubject(id) {
       teacher: form.teacher.value
     })
     .then((docRef) => {
+
+      // Edit teacher
+
+      // remover teacher antigo nos dados dele
+
+      // remover teacher antigo como admin
+
+      // add teacher nos dados dele
+
+      // add teacher no chat como admin
+
       console.log("New Subject successfully edited: ", docRef);
+      
+      form.reset();
     })
     .catch((error) => {
       console.error("Error saving document: ", error);
@@ -183,10 +304,13 @@ function editSubject(id) {
 function removeSubject(id) {
   id = id.replace("Rem", "");
 
+  // Remove the subject in course
   docRef = db.collection("course")
   .doc(courseID)
   .collection("subject")
   .doc(id);
+
+  // Remove subject in every student and teacher
 
   docRef
     .delete(() => {
