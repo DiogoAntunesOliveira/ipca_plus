@@ -387,8 +387,6 @@ object Backend {
             }
     }
 
-
-
     fun getAllUsers (callBack:(List<Profile>)->Unit) {
         val profiles = arrayListOf<Profile>()
 
@@ -705,9 +703,9 @@ object Backend {
 
 
 
-    fun getAllDirectChatIdsByUser(userId: String, callBack: (List<String>) -> Unit){
+    fun getAllDirectChatIdsByUser(userId: String, callBack: (List<String?>) -> Unit){
 
-        var chatIds = arrayListOf<String>()
+        var chatIds = arrayListOf<String?>()
 
         // Get all profile chat ids
         db.collection("profile")
@@ -720,18 +718,19 @@ object Backend {
                     chatIds.add(document.id)
                 }
 
+                println("DEntroooo" + chatIds)
                 callBack(chatIds)
             }
 
     }
 
-    fun getDirectChatById(chatIds: List<String>, userId: String, callBack: (String?)-> Unit) {
+    fun getDirectChatById(chatIds: List<String?>, userId: String, callBack: (String?)-> Unit) {
 
         var chatId : String? = null
 
         for (id in chatIds) {
             db.collection("chat")
-                .document(id)
+                .document(id!!)
                 .collection("user")
                 .get()
                 .addOnSuccessListener { documents ->
@@ -747,6 +746,7 @@ object Backend {
         }
 
     }
+
 
     /*
        ------------------------------------------------ Register Manipulation ------------------------------------------------

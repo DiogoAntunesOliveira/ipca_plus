@@ -272,12 +272,13 @@ class ChatActivity : AppCompatActivity() {
                 val keygen = getMetaOx(context, chat_id)
                 val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message)
 
-                if (otherUser) {
-                    Backend.getUserProfile(messages[position].user) {
-                        val userName = Utilis.getFirstAndLastName(it.name)
-                        textViewUsername.text = userName
+               /* if (otherUser) {
+                        Backend.getUserProfile(messages[position].user) {
+                            val userName = Utilis.getFirstAndLastName(it.name)
+                            textViewUsername.text = userName
                         }
                     }
+                */
 
                 textViewMessage.text = message_decripted
                 println(message_decripted)
