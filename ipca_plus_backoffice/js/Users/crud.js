@@ -13,6 +13,7 @@ db.collection("ipca_data")
     });
   });
 
+
 // Get Courses
 db.collection("course")
   .get()
@@ -25,14 +26,27 @@ db.collection("course")
   });
 
 
+var select = document.querySelector('#role'),
+input = document.querySelector('input[type="button"]');
+
+select.addEventListener('change', function(){
+
+  if (select.value == "Professor") {
+    document.getElementById("coursesDiv").style.display = "none";
+  }
+  else {
+    document.getElementById("coursesDiv").style.display = "";
+  }
+
+});
+
+
 // Add all courses to select object
 function addCoursesToSelect(doc) {
   let course = doc.data();
   let html = "";
 
   html += '<option value="' + course.tag + '"> ' + course.name + ' </option>';
-
-  console.log(doc.data())
 
   return html;
 }
@@ -49,7 +63,7 @@ function addUserToList(doc) {
   html += " <div class='row'>";
   html += " <div class='col-10'>";
   html += " <div class='item-info'>";
-  html += " <strong>" + user.student_number + " - " + user.name + "</strong> <br><br> "+ user.course;
+  html += " <strong>" + user.student_number + " - " + user.name + "</strong> <br><br> "+ user.role;
   html += " </div> </div>";
   html += " <div class='col' style='display: flex; justify-content: flex-end;'>";
 
@@ -76,13 +90,35 @@ function forEdition(id) {
   docRef.get().then((doc) => {
     userForm.value = id;
     userForm.name.value = doc.data().name;
-    userForm.number.value = doc.data().student_number;
     userForm.contact.value = doc.data().contact;
     userForm.age.value = doc.data().age;
     userForm.courses.value = doc.data().course_tag;
     userForm.role.value = doc.data().role;
     userForm.email.value = doc.data().email;
     userForm.gender.value = doc.data().gender;
+
+    if (userForm.role.value == "Professor") {
+      document.getElementById("coursesDiv").style.display = "none";
+    }
+    else {
+
+      // Get course of the student
+      db.collection("ipca_data")
+      .doc(id)
+      .collection("course")
+      .get()
+      .then((snap) => {
+
+        snap.docs.forEach((doc2) => {
+
+          document.getElementById("coursesDiv").style.display = "";
+          userForm.courses.value = doc2.data().tag;
+
+        });
+
+      });
+      
+    }
 
     document.querySelector("#addUser").value = "edit";
 
@@ -95,8 +131,6 @@ userForm.addEventListener("submit", (e) => {
   e.preventDefault();
   let button = document.querySelector("#addUser");
 
-  console.log("submit")
-
   if (button.value == "new") {
     addUser();
   } else {
@@ -107,7 +141,6 @@ userForm.addEventListener("submit", (e) => {
   // Refresh List
   refreshUserList()
 
-  userForm.reset();
 });
 
 
@@ -135,23 +168,37 @@ function refreshUserList() {
 // Add User
 function addUser() {
 
-  var e = userForm.courses;
-  var selected_tag = e.options[e.selectedIndex].value;
-  var selected_course = e.options[e.selectedIndex].text;
-
   db.collection("ipca_data")
     .add({
       name: userForm.name.value,
-      student_number: userForm.number.value,
+      student_number: userForm.email.value.split('@')[0], 
       contact: userForm.contact.value,
       age: userForm.age.value,
-      course: selected_course,
-      course_tag: selected_tag,
       role: userForm.role.value,
       email: userForm.email.value,
       gender: userForm.gender.value
     })
     .then((docRef) => {
+
+      uniqueid = docRef.id;
+
+      // Add course if its a student or course director
+      if (userForm.role.value == "Aluno") {
+        
+        let e = userForm.courses;
+        let selected_tag = e.options[e.selectedIndex].value;
+        let selected_course = e.options[e.selectedIndex].text;
+
+        db.collection("ipca_data").doc(uniqueid).collection("course").add({
+          name: selected_course,
+          tag: selected_tag
+        })
+        .then(() => {
+          userForm.reset();
+        });
+
+      }
+
       console.log("New user successfully added: ", docRef);
     })
     .catch((error) => {
@@ -172,7 +219,7 @@ function editUser(id) {
   docRef = db.collection("ipca_data").doc(id);
   docRef.set({
       name: userForm.name.value,
-      student_number: userForm.number.value,
+      student_number: userForm.email.value.split('@')[0],
       contact: userForm.contact.value,
       age: userForm.age.value,
       course: selected_course,
@@ -182,6 +229,24 @@ function editUser(id) {
       gender: userForm.gender.value
     })
     .then((docRef) => {
+
+      // Add course if its a student or course director
+      if (userForm.role.value == "Aluno") {
+        
+        let e = userForm.courses;
+        let selected_tag = e.options[e.selectedIndex].value;
+        let selected_course = e.options[e.selectedIndex].text;
+
+        db.collection("ipca_data").doc(id).collection("course").set({
+          name: selected_course,
+          tag: selected_tag
+        })
+        .then(() => {
+          userForm.reset();
+        });
+
+      }
+
       console.log("New user successfully edited: ", docRef);
     })
     .catch((error) => {
