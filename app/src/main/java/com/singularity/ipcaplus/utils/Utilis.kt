@@ -1,7 +1,9 @@
 package com.singularity.ipcaplus.utils
 
+import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,6 +31,7 @@ import java.util.regex.Pattern
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.google.firebase.auth.FirebaseAuth
+import com.singularity.ipcaplus.chat.ChatActivity
 
 
 object  Utilis {
@@ -313,6 +316,7 @@ object  Utilis {
 
     }
 
+    // Que merda é esta :v
     fun getUID(): String? {
         val firebaseAuth = FirebaseAuth.getInstance()
         return firebaseAuth.uid

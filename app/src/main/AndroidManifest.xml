@@ -21,6 +21,9 @@
             android:name=".chat.CreateChatActivity"
             android:exported="true" />
         <activity
+            android:name=".chat.CreateDirectChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".chat.ChatFilesActivity"
             android:exported="false" />
         <activity

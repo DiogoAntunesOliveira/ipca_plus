@@ -94,18 +94,19 @@ class AddPeopleActivity: AppCompatActivity() {
             // Continue button
             binding.fabCreateChat.setOnClickListener {
 
-                val selectedUsersIds = arrayListOf<String?>()
+                val selectedUsersIds = arrayListOf<String>()
                 for(user in selectedUsers) {
-                    selectedUsersIds.add(user.id)
+                    selectedUsersIds.add(user.id!!)
                 }
 
                 // Add current user to users list
                 Backend.getUserProfile(Firebase.auth.currentUser!!.uid) {
-                    selectedUsersIds.add(it.id)
+                    selectedUsersIds.add(it.id!!)
 
                     // Send users list to chat creation
                     val intent = Intent(this, CreateChatActivity::class.java)
                     intent.putExtra("users", selectedUsersIds)
+                    intent.putExtra("type", "group")
                     startActivity(intent)
                 }
             }

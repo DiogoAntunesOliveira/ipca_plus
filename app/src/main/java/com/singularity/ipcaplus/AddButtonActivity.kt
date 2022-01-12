@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.singularity.ipcaplus.chat.ChatActivity
+import com.singularity.ipcaplus.chat.CreateChatActivity
+import com.singularity.ipcaplus.chat.CreateDirectChatActivity
 import com.singularity.ipcaplus.databinding.ActivityAddButtonBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Profile
@@ -25,8 +28,10 @@ class AddButtonActivity: AppCompatActivity() {
 
     var users = arrayListOf<Profile>()
     var chats = arrayListOf<Chat>()
-    var chatIds = arrayListOf<String>()
+    var chatIds = arrayListOf<String?>()
+    val userIds = arrayListOf<String>()
     var directChat : String? = null
+    val currentUser = Firebase.auth.currentUser!!.uid
 
     var currentUserchats = arrayListOf<String>()
     var selectedUserchats = arrayListOf<String>()
@@ -123,38 +128,41 @@ class AddButtonActivity: AppCompatActivity() {
 
             }
             holder.v.setOnClickListener {
+                Backend.getAllDirectChatIdsByUser(currentUser) {
+                    chatIds.addAll(it)
+                    println("ITTTTTTT" + it)
 
-                /*db.collection("profile").document(users[position].id.toString()).collection("chat")
-                    .addSnapshotListener { documents, e ->
-                        documents?.let {
-                            chats.clear()
-                            for (document in it) {
-                                val chat = Chat.fromHash(document)
-                                if (chat.type == "chat") {
-                                    chats.add(chat)
-                                    selectedUserchats.add(document.id)
-                                }
+                    if (chatIds.isNotEmpty()) {
+                        Backend.getDirectChatById(it, users[position].id.toString()) {
+                            directChat = it
+                            println("Directttttttt" + directChat)
+
+                            if(directChat.isNullOrEmpty()) {
+                                userIds.add(users[position].id.toString())
+                                userIds.add(currentUser)
+
+                                val intent = Intent(this@AddButtonActivity, CreateDirectChatActivity::class.java)
+                                intent.putExtra("type", "chat")
+                                intent.putExtra("users", userIds)
+                                startActivity(intent)
+
+                            } else {
+                                // Abrir chat ja criado
+                                val intent = Intent(this@AddButtonActivity, ChatActivity::class.java)
+                                intent.putExtra("chat_id", directChat)
+                                startActivity(intent)
                             }
                         }
-                    }
-
-                 */
-                /* Backend.getAllDirectChatIdsFromProfile(Firebase.auth.currentUser!!.uid) {
-                    chatIds.addAll(it)
-                    println("AQUDIADJAIJDD" + chatIds)
-                } */
-
-                Backend.getDirectChatById(chatIds, users[position].id.toString()) {
-                    directChat = it
-                    println("AQUDIADJAIJDD" + directChat)
-
-                    if(directChat == null) {
-                        val msg = "Criar chat"
-                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     } else {
-                        val msg = "Abrir chat"
-                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                        userIds.add(users[position].id.toString())
+                        userIds.add(currentUser)
+
+                        val intent = Intent(this@AddButtonActivity, CreateDirectChatActivity::class.java)
+                        intent.putExtra("users", userIds)
+                        intent.putExtra("type", "chat")
+                        startActivity(intent)
                     }
+
                 }
 
             }
