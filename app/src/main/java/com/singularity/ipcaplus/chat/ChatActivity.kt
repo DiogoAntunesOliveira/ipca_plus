@@ -66,7 +66,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+        supportActionBar?.setCustomView(R.layout.appbar_custom_layout_chat)
         findViewById<TextView>(R.id.AppBarTittle).text = "Chat name"
         // Back button
         findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
@@ -112,6 +112,10 @@ class ChatActivity : AppCompatActivity() {
 
             }
 
+        }
+        val profilePicfromTop = findViewById<ImageView>(R.id.ProfileImageView)
+        Utilis.getFile(this, "chats/$chat_id/icon.png", "png") { bitmap ->
+            profilePicfromTop.setImageBitmap(bitmap)
         }
 
         println("Current Date is: $formatted")
