@@ -3,39 +3,63 @@
 
 // Get selected course id
 let courseID = getParameterByName("courseId", window.location.href);
+courseID = courseID.split('?')[0]
 let subjectID = getParameterByName("subjectId", window.location.href);
 
 console.log(courseID)
 console.log(subjectID)
 
-// Get Course Name
-db.collection("course")
-  .doc(courseID)
-  .get()
-  .then(doc => {
-    if (doc.exists) {
-      document.querySelector("#titlePage").innerHTML = "<strong>" + doc.data().name + " - Disciplinas </strong>";
-    }
-  });
-
-// Get Subjects
+// Get Subject Name
 db.collection("course")
   .doc(courseID)
   .collection("subject")
-  .orderBy("name")
+  .doc(subjectID)
+  .get()
+  .then(doc => {
+    if (doc.exists) {
+      document.querySelector("#titlePage").innerHTML = "<strong>" + doc.data().name + " - Aulas </strong>";
+    }
+  });
+
+// Get Class
+db.collection("course")
+  .doc(courseID)
+  .collection("subject")
+  .doc(subjectID)
+  .collection("class")
+  .orderBy("start_time")
   .get()
   .then((snap) => {
     snap.docs.forEach((doc) => {
 
-      document.querySelector("#list").innerHTML += addSubjectToList(doc);
+      document.querySelector("#list").innerHTML += addClassToList(doc);
 
     });
   });
 
 
-// Get all Subjects and display in the list
-function addSubjectToList(doc) {
-  let subject = doc.data();
+function getDayByTag(tag) {
+
+  switch(tag) {
+    case "seg":
+      return "Segunda-Feira";
+    case "ter":
+      return "Terça-Feira";
+    case "qua":
+      return "Quarta-Feira";
+    case "qui":
+      return "Quinta-Feira";
+      
+    default:
+      return "Sexta-Feira";
+  }
+
+}
+
+
+// Get all Class and display in the list
+function addClassToList(doc) {
+  let aula = doc.data();
   let html = "";
 
   html += "<li> <div class='item-list'>";
@@ -44,29 +68,23 @@ function addSubjectToList(doc) {
   html += " <div class='row'>";
   html += " <div class='col-10'>";
   html += " <div class='item-info'>";
-  html += " <strong>" + subject.name + "</strong> ";
+  html += " <strong>" + getDayByTag(aula.day) + " " + aula.start_time + " - " + aula.end_time + "</strong> ";
   html += " </div> </div>";
-  html += " <div class='col' style='display: flex; justify-content: flex-end;'>";
-  html += '<div class="see-classes" id="' + doc.id + '" type="button" onClick="forClassesPage(this.id)"> <i class="far fa-calendar-alt"></i></i> </div>';
-  html += " </div>";
   html += " <div class='col' style='display: flex; justify-content: flex-end;'>";
   html += '<div class="edit-item" id="' + doc.id + 'Edit" type="button" onClick="forEdition(this.id)"> <i class="fa fa-edit"></i> </div>';
   html += " </div> </div> </div>";
-
   
-  html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeCourse(this.id)"> <i class="fa fa-trash"></i> </div>';
+  html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeClass(this.id)"> <i class="fa fa-trash"></i> </div>';
   html += " </div> </div> </div> </li>";
 
   form.reset();
-  document.querySelector("#addSubject").value = "new";
+  document.querySelector("#addClass").value = "new";
 
   return html;
 }
 
 
-
-
-// Put Subject data in text boxes
+// Put Class data in text boxes
 function forEdition(id) {
   let docRef;
   id = id.replace("Edit", "");
@@ -74,14 +92,18 @@ function forEdition(id) {
   docRef = db.collection("course")
   .doc(courseID)
   .collection("subject")
+  .doc(subjectID)
+  .collection("class")
   .doc(id);
 
   docRef.get().then((doc) => {
     form.value = id;
-    form.name.value = doc.data().name;
-    form.teacher.value = doc.data().teacher;
+    form.classroom.value = doc.data().classroom;
+    form.day.value = doc.data().day;
+    form.start_time.value = doc.data().start_time;
+    form.end_time.value = doc.data().end_time;
 
-    document.querySelector("#addSubject").value = "edit";
+    document.querySelector("#addClass").value = "edit";
 
   });
 }
@@ -90,26 +112,24 @@ function forEdition(id) {
 // Submit button event
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  let button = document.querySelector("#addSubject");
-
-  console.log("submit")
+  let button = document.querySelector("#addClass");
 
   if (button.value == "new") {
-    addSubject();
+    addClass();
   } else {
-    editSubject(form.value);
-    document.querySelector("#addSubject").value = "new";
+    editClass(form.value);
+    document.querySelector("#addClass").value = "new";
   }
 
   // Refresh List
-  refreshSubjectList()
+  refreshClassList()
 
   form.reset();
 });
 
 
-// Refresh Subject List
-function refreshSubjectList() {
+// Refresh Class List
+function refreshClassList() {
 
   // Delete Previous List
   let menu = document.getElementById('list');
@@ -121,57 +141,61 @@ function refreshSubjectList() {
   db.collection("course")
   .doc(courseID)
   .collection("subject")
-    .orderBy("name")
+  .doc(subjectID)
+  .collection("class")
+    .orderBy("start_time")
     .get()
     .then((snap) => {
       snap.docs.forEach((doc) => {
-        document.querySelector("#list").innerHTML += addSubjectToList(doc);
+        document.querySelector("#list").innerHTML += addClassToList(doc);
       });
     });
 }
 
 
-// Add Subject
-function addSubject() {
+// Add Class
+function addClass() {
 
   db.collection("course")
   .doc(courseID)
   .collection("subject")
+  .doc(subjectID)
+  .collection("class")
     .add({
-      name: form.name.value,
-      teacher: form.teacher.value
+      classroom: form.classroom.value,
+      day: form.day.value,
+      start_time: form.start_time.value,
+      end_time: form.end_time.value
     })
     .then((docRef) => {
-      console.log("New Subject successfully added: ", docRef);
+      console.log("New Class successfully added: ", docRef);
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
     });
 
-    /*
-    
-      create oficial chat
-    
-    */
-
 }
 
 
-// Edit Subject
-function editSubject(id) {
+// Edit Class
+function editClass(id) {
   let docRef;
 
   docRef = db.collection("course")
   .doc(courseID)
   .collection("subject")
+  .doc(subjectID)
+  .collection("class")
   .doc(id);
 
   docRef.set({      
-      name: form.name.value,
-      teacher: form.teacher.value
+      classroom: form.classroom.value,
+      day: form.day.value,
+      start_time: form.start_time.value,
+      end_time: form.end_time.value
     })
     .then((docRef) => {
-      console.log("New Subject successfully edited: ", docRef);
+      console.log("New Class successfully edited: ", docRef);
     })
     .catch((error) => {
       console.error("Error saving document: ", error);
@@ -180,13 +204,15 @@ function editSubject(id) {
 }
 
 
-// Remove Subject
-function removeSubject(id) {
+// Remove Class
+function removeClass(id) {
   id = id.replace("Rem", "");
 
   docRef = db.collection("course")
   .doc(courseID)
   .collection("subject")
+  .doc(subjectID)
+  .collection("class")
   .doc(id);
 
   docRef
@@ -197,7 +223,7 @@ function removeSubject(id) {
       console.log("Document successfully deleted!");
 
       // Refresh List
-      refreshSubjectList()
+      refreshClassList()
     })
     .catch((error) => {
       console.error("Error removing document: ", error);

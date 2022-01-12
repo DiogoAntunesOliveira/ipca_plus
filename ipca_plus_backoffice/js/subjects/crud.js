@@ -50,7 +50,7 @@ function addSubjectToList(doc) {
   html += " </div> </div> </div>";
 
   
-  html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeCourse(this.id)"> <i class="fa fa-trash"></i> </div>';
+  html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeSubject(this.id)"> <i class="fa fa-trash"></i> </div>';
   html += " </div> </div> </div> </li>";
 
   form.reset();
@@ -61,10 +61,8 @@ function addSubjectToList(doc) {
 
 function forClassesPage(id) {
   console.log(id)
-  document.location.href = "classes.html?courseId=" + courseID + "?=subjectId=" + id;
+  document.location.href = "classes.html?courseId=" + courseID + "?subjectId=" + id;
 }
-
-
 
 
 // Put Subject data in text boxes

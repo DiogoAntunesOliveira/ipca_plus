@@ -65,17 +65,34 @@
                         <div class="formBoxes">
 
                             <div class="box a">
-                                <label for="name"><strong > Nome </strong></label>
-                                <input type="text" id="name" required placeholder="Inserir nome" />
+                                <label for="classroom"><strong > Sala </strong></label>
+                                <input type="text" id="classroom" required placeholder="Inserir sala" />
                             </div>
 
                             <div class="box c">
-                                <label for="teacher"><strong > Docente </strong></label>
-                                <input type="text" id="teacher" required placeholder="Inserir docente" />
+                                <label for="day"><strong > Dia </strong></label>
+                                <select id="day" required>
+                                    <option disabled selected value> Inserir dia </option>
+                                    <option value="seg"> Segunda-Feira </option>
+                                    <option value="ter"> Terça-Feira </option>
+                                    <option value="qua"> Quarta-Feira </option>
+                                    <option value="qui"> Quinta-Feira </option>
+                                    <option value="sex"> Sexta-Feira </option>
+                                </select>
                             </div>
 
                             <div class="box d">
-                                <button id="addSubject" type="submit" value="new"> <strong> Guardar </strong></button>
+                                <label for="start_time"><strong > Hora de inicio </strong></label>
+                                <input type="text" id="start_time" required placeholder="Inserir hora de inicio" />
+                            </div>
+
+                            <div class="box e">
+                                <label for="end_time"><strong > Hora de fim </strong></label>
+                                <input type="text" id="end_time" required placeholder="Inserir hora de fim" />
+                            </div>
+
+                            <div class="box d">
+                                <button id="addClass" type="submit" value="new"> <strong> Guardar </strong></button>
                             </div>
 
                         </div>
