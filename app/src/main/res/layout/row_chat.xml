@@ -42,7 +42,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="6dp"
         android:fontFamily="@font/poppins_semibold"
-        android:textColor="#242424"
+        android:textColor="@color/black"
 
         android:maxHeight="22sp"
         android:maxLength="30"

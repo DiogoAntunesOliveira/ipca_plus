@@ -24,7 +24,8 @@
         android:fitsSystemWindows="true"
         app:itemIconPadding="30dp"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_drawer">
+        app:menu="@menu/activity_drawer"
+        app:itemTextAppearance="@style/PoppinsFontViewStyle">
 
       <LinearLayout
           android:id="@+id/logout_layout"

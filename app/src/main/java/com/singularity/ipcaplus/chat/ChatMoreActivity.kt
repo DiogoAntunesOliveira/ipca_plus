@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.chat
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,6 +14,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -38,6 +41,7 @@ class ChatMoreActivity : ActivityImageHelper() {
     var is_admin: Boolean = false
     private lateinit var binding: ActivityChatMoreBinding
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_more)
@@ -52,6 +56,13 @@ class ChatMoreActivity : ActivityImageHelper() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Definições do grupo"
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+        findViewById<TextView>(R.id.AppBarTittle).text = "Definições de grupo"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Get previous data
         chat_id = intent.getStringExtra("chat_id").toString()
@@ -100,7 +111,10 @@ class ChatMoreActivity : ActivityImageHelper() {
         }
 
         binding.notifications.setOnClickListener {
-            println("-------------> 5")
+            val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+            val view = layoutInflater.inflate(R.layout.dialog_notifications_manager, null)
+            dialog.setContentView(view)
+            dialog.show()
         }
 
         binding.securityNumberVerification.setOnClickListener {

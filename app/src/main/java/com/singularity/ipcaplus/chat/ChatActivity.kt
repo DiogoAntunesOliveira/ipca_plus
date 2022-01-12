@@ -327,14 +327,14 @@ class ChatActivity : AppCompatActivity() {
 
             Log.d("json", registrationIds.toString())
 
-            //The url of the API i want to access (Firebase Cloud Messaging)
+            //Request
             val endPoint = URL("https://fcm.googleapis.com/fcm/notification")
 
-            //Establish a connection to fcm (Firebase Cloud Messaging) so i can send a push notification to a specific topic
+            //Establish a connection
             val httpsURLConnection: HttpsURLConnection =
                 endPoint.openConnection() as HttpsURLConnection
 
-            //Here i configure the connection to fcm
+            //Connection to fcm
             //The time available to read from the input stream when the connection is established
             httpsURLConnection.readTimeout = 10000
             //The time available to connect to the url
@@ -345,8 +345,7 @@ class ChatActivity : AppCompatActivity() {
             httpsURLConnection.doInput = true
             httpsURLConnection.doOutput = true
 
-            //Here i give my server key so i can make a request to fcm (Firebase Cloud Messaging) of my application (FirebaseDemo)
-            //and i define as well the type of content that i will be sending (json object)
+            // Build parameters for json
             httpsURLConnection.setRequestProperty("Content-Type", "application/json")
             val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
             val senderId = "209455028652"
@@ -355,39 +354,31 @@ class ChatActivity : AppCompatActivity() {
 
             val json = JSONObject()
 
-            //Here i need to verify if the chat has already been created
-            //----------------------------------------------------------
-
-            //Here i define the name of the group "chatName" and
-            //the fcm tokens of the users that are going to be in the group "registrationIds"
             json.put("operation", "create")
-            // GROUP NAME
             json.put("notification_key_name", notificationKeyName)
-            // TOKENS OF FCM PROFILES LIST
             json.put("registration_ids", registrationIds)
 
-            //json.put("notification_key_name", "AM_7")
 
+            // Writer
             val outputStream: OutputStream =
                 BufferedOutputStream(httpsURLConnection.outputStream)
             val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
 
-            //here i write the body of the post request and then i send the request (flush)
-            //then i close the post request
+            // POST
             writer.write(json.toString())
             writer.flush()
             writer.close()
 
             outputStream.close()
 
-            //The response code and message of the post requests
+            //The response code and message of the POST requests
             val responseCode: Int = httpsURLConnection.responseCode
             val responseMessage = httpsURLConnection.responseMessage
 
             Log.d(TAG, "$responseCode $responseMessage")
 
 
-            // Check if the connection is successful
+            // Check server STATUS
             if (responseCode in 400..499) {
                 httpsURLConnection.errorStream
             } else {
@@ -400,13 +391,11 @@ class ChatActivity : AppCompatActivity() {
                 val response = httpsURLConnection.inputStream.bufferedReader()
                     .use { it.readText() }  // defaults to UTF-8
                 withContext(Dispatchers.Main) {
-                    // Convert raw JSON to pretty JSON using GSON library
-
-                    //Here i get the notification_key that has been defined to the group that got created
+                    //notification_key
                     val jsonObject  = JSONObject(response)
-                    val notifKey = jsonObject.getString("notification_key")
-                    println("NotifKey:")
-                    println(notifKey)
+                    val notificationKey = jsonObject.getString("notification_key")
+                    println("NotifKey: $notificationKey")
+                    Log.d("NotifKey", notificationKey)
                 }
             } else {
                 Log.e(TAG, "Error it didn´t work")
@@ -428,14 +417,13 @@ class ChatActivity : AppCompatActivity() {
 
         try {
 
-            //The url of the API i want to access (Firebase Cloud Messaging)
+            //Request
             val url = URL("https://fcm.googleapis.com/fcm/send")
 
-            //Establish a connection to fcm (Firebase Cloud Messaging) so i can send a push notification to a specific topic
+            //Establish a connection
             val httpsURLConnection: HttpsURLConnection =
                 url.openConnection() as HttpsURLConnection
 
-            //Here i configure the connection to fcm
             //The time available to read from the input stream when the connection is established
             httpsURLConnection.readTimeout = 10000
             //The time available to connect to the url
@@ -446,42 +434,35 @@ class ChatActivity : AppCompatActivity() {
             httpsURLConnection.doInput = true
             httpsURLConnection.doOutput = true
 
-            //Here i give my server key so i can make a request to fcm (Firebase Cloud Messaging) of my application (FirebaseDemo)
-            //and i define as well the type of content that i will be sending (json)
+            // Config of FCM
             val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
             httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
             httpsURLConnection.setRequestProperty("Content-Type", "application/json")
 
-            val body = JSONObject()
+            val jsonObject = JSONObject()
             val data = JSONObject()
 
             data.put("title", title)
             data.put("content", message)
-            //Here i define the Activity in witch i want the user to navigate when they click the notification
+            //On Notification Click Activity
             data.put("click_action", ".LoginActivity")
-            //data.put("chat_id", "S77po7vNGjtKja2Rinyb")
 
-            //val condition = "'$TOPIC1' in topics && '$TOPIC2' in topics && '$TOPIC3' in topics"
-            //body.put("condition", condition)
-
-            //here i define the body of the post request
-            body.put("data", data)
-            //Here i define the group via notification key in which i want to send the notification/message
-            body.put("to", notificationKey)
+            //jsonObject for POST
+            jsonObject.put("data", data)
+            //
+            jsonObject.put("to", notificationKey)
 
             val outputStream: OutputStream =
                 BufferedOutputStream(httpsURLConnection.outputStream)
             val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
-
-            //here i write the body of the post request and then i send the request
-            //then i close the post request
-            writer.write(body.toString())
+            
+            writer.write(jsonObject.toString())
             writer.flush()
             writer.close()
 
             outputStream.close()
 
-            //The response code and message of the post requests
+            //The response code and message of the POST requests
             val responseCode: Int = httpsURLConnection.responseCode
             val responseMessage: String = httpsURLConnection.responseMessage
 
@@ -489,7 +470,7 @@ class ChatActivity : AppCompatActivity() {
             Log.d(TAG, "Response from sendMes: $responseCode $responseMessage")
 
 
-            // Check if the connection is successful or not
+            // Check server STATUS
             if (responseCode in 400..499) {
                 httpsURLConnection.errorStream
             } else {

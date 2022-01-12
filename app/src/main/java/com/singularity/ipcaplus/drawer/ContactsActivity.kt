@@ -1,7 +1,11 @@
 package com.singularity.ipcaplus.drawer
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import com.singularity.ipcaplus.utils.ExpandableListViewAdapter
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityContactsBinding
@@ -16,19 +20,26 @@ class ContactsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityContactsBinding
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts)
 
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+
+        findViewById<TextView>(R.id.AppBarTittle).text = "Contactos"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Create the layout for this fragment
         binding = ActivityContactsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Create Action Bar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Contactos"
 
         // Show List

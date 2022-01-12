@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.drawer
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -37,6 +39,7 @@ class CalendarActivity : AppCompatActivity() {
     // This property is only valid between onCreateView and
     // onDestroyView.
 
+    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,14 @@ class CalendarActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Calendario"
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+
+        findViewById<TextView>(R.id.AppBarTittle).text = "Calendario"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Set Current Date
         binding.monthTitle.text = Utilis.getMonthById(Utilis.getCurrentMonthId())

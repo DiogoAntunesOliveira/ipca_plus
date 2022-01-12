@@ -40,6 +40,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Nome do grupo"
         android:textColor="@color/black"
         android:textSize="22sp"
@@ -55,6 +56,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:fontFamily="@font/poppins_medium"
         android:text="Opções"
         android:textColor="@color/green_100"
         android:textSize="16sp"
@@ -85,6 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Ver membros do grupo"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -113,6 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Mudar nome do grupo"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -141,6 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Mudar icon do grupo"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -169,6 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Apagar Chat"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -197,6 +203,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Ficheiros"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -210,6 +217,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
+        android:fontFamily="@font/poppins_medium"
         android:text="Privacidade"
         android:textColor="@color/green_100"
         android:textSize="16sp"
@@ -240,6 +248,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Verificar número de segurança"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -264,10 +273,11 @@
             app:srcCompat="@drawable/ic_notification" />
 
         <TextView
-            android:id="@+id/textViewOp5"
+            android:id="@+id/notificationsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Notificações"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -297,6 +307,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
             android:text="Sair do grupo"
             android:textColor="@color/black"
             android:textSize="16sp" />

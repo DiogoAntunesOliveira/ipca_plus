@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.drawer
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -21,6 +23,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.ImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
@@ -33,19 +38,25 @@ class ProfileActivity : ActivityImageHelper() {
     lateinit var profileData: Profile
     lateinit var contextInfo : Context
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         contextInfo = applicationContext
 
+
         // Create the layout for this fragment
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         // Create Action Bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Perfil"
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+
 
         // Get profile
         Backend.getUserProfile(Firebase.auth.uid!!) {
@@ -67,6 +78,11 @@ class ProfileActivity : ActivityImageHelper() {
         // Change Profile Picture
         binding.imageViewProfile.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+        }
+
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
         }
 
     }

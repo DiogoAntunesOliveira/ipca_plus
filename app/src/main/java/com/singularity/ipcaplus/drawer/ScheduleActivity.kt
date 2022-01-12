@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.drawer
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +31,7 @@ class ScheduleActivity : AppCompatActivity() {
     private var scheduleLayoutManager: LinearLayoutManager? = null
     private lateinit var binding: ActivityScheduleBinding
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule)
@@ -40,6 +44,14 @@ class ScheduleActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
         supportActionBar?.title = "Horário"
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+
+        findViewById<TextView>(R.id.AppBarTittle).text = "Horário"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Add all Subjects To List based on the selected day and the User Course
         val prefs = PreferenceHelper.customPreference(this, "User_data")

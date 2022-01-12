@@ -34,6 +34,10 @@
         <item name="android:windowSharedElementExitTransition">@transition/shared_transaction</item>
     </style>
 
+    <style name="PoppinsFontViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+
 
 
 </resources>
