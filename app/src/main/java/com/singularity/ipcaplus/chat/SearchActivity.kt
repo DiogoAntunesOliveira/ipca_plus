@@ -97,7 +97,7 @@ class SearchActivity: AppCompatActivity() {
                 }else if (searchText.isNotEmpty()) {
                     tempArrayChats.clear()
                     for (chat in chats){
-                        if (chat.name.contains(searchText)  ){
+                        if (chat.name.toLowerCase().contains(searchText)  ){
 
                             tempArrayChats.add(chat)
 
