@@ -168,13 +168,18 @@ function refreshUserList() {
 // Add User
 function addUser() {
 
+  let e = userForm.courses;
+  let selected_tag = e.options[e.selectedIndex].value;
+  let selected_course = e.options[e.selectedIndex].text;
+  let selected_role = userForm.role.value;
+
   db.collection("ipca_data")
     .add({
       name: userForm.name.value,
       student_number: userForm.email.value.split('@')[0], 
       contact: userForm.contact.value,
       age: userForm.age.value,
-      role: userForm.role.value,
+      role: selected_role,
       email: userForm.email.value,
       gender: userForm.gender.value
     })
@@ -182,12 +187,12 @@ function addUser() {
 
       uniqueid = docRef.id;
 
+      console.log("role: " + selected_role);
+
       // Add course if its a student or course director
-      if (userForm.role.value == "Aluno") {
+      if (selected_role == "Aluno" || selected_role == "Diretor de Curso") {
         
-        let e = userForm.courses;
-        let selected_tag = e.options[e.selectedIndex].value;
-        let selected_course = e.options[e.selectedIndex].text;
+        console.log("tag: " + selected_tag);
 
         db.collection("ipca_data").doc(uniqueid).collection("course").add({
           name: selected_course,
@@ -195,11 +200,65 @@ function addUser() {
         })
         .then(() => {
           userForm.reset();
-        });
+
+          // Get course Id by course Tag
+          db.collection("course")
+          .where("tag", "==", selected_tag)
+          .get()
+            .then((snap3) => {
+              snap3.docs.forEach((doc4) => {
+
+                let courseID = doc4.id
+                console.log("courseID: " + courseID)
+
+                // Add user to user list in all subjects oficial chats
+                db.collection("course")
+                .doc(courseID)
+                .collection("subject")
+                .get()
+                .then((snap) => {
+                  snap.docs.forEach((doc) => {
+                    
+                    let subjectName = doc.data().name;
+                    console.log("subjectName: " + subjectName)
+
+                    db.collection("chat")
+                    .where("name", "==", subjectName)
+                    .get()
+                    .then((snap2) => {
+
+                      snap2.docs.forEach((doc2) => {
+
+                        let isAdmin = false;
+                        if (doc2.data().role == "Diretor de Curso") {
+                          isAdmin = true;
+                        }
+
+                        console.log("data: " + doc2.data())
+
+                        db.collection("chat")
+                        .doc(doc2.id)
+                        .collection("user")
+                        .doc(uniqueid)
+                        .set({
+                          admin: isAdmin
+                        })
+                        .then(() => {
+                          console.log("New user successfully added to oficial chat");
+                        });
+
+                      });
+                    });
+
+                  });
+                });
+                
+              });
+            });
+          });
 
       }
 
-      console.log("New user successfully added: ", docRef);
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
@@ -208,7 +267,7 @@ function addUser() {
 }
 
 
-// Edit User
+// Edit User <--- Missing change if user change student to teacher and vice versa
 function editUser(id) {
   let docRef;
 
@@ -259,9 +318,75 @@ function editUser(id) {
 // Remove User
 function removeUser(id) {
   id = id.replace("Rem", "");
-  docRef = db.collection("ipca_data").doc(id);
 
-  docRef
+  // get user course tag
+  db.collection("ipca_data")
+  .doc(id)
+  .collection("course")
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc) => {
+
+        let courseTag = doc.data().tag;
+
+        // remove user from course official chats
+        db.collection("course")
+        .where("tag", "==", courseTag)
+        .get()
+          .then((snap3) => {
+            snap3.docs.forEach((doc4) => {
+
+              let courseID = doc4.id
+              console.log("courseID: " + courseID)
+
+              // Remove user from user list in all subjects oficial chats
+              db.collection("course")
+              .doc(courseID)
+              .collection("subject")
+              .get()
+                .then((snap) => {
+                  snap.docs.forEach((doc) => {
+                    
+                    let subjectName = doc.data().name;
+                    console.log("subjectName: " + subjectName)
+
+                    db.collection("chat")
+                    .where("name", "==", subjectName)
+                    .get()
+                    .then((snap2) => {
+
+                      snap2.docs.forEach((doc2) => {
+
+                        console.log("data: " + doc2.data())
+
+                        db.collection("chat")
+                        .doc(doc2.id)
+                        .collection("user")
+                        .doc(id)
+                        .delete(() => {
+                          recursive: true;
+                        })
+                        .then(() => {
+                          console.log("New user successfully removed from oficial chat");
+                        })
+                        .catch((error) => {
+                          console.error("Error removing document: ", error);
+                        });
+
+                      });
+                    });
+                });
+
+              });
+
+            });
+            
+          });
+    });
+  });
+
+  // remove data from ipca_data
+  db.collection("ipca_data").doc(id)
     .delete(() => {
       recursive: true;
     })

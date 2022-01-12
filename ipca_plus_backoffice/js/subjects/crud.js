@@ -5,6 +5,8 @@
 let courseID = getParameterByName("id", window.location.href);
 let courseTag = "";
 let courseName = "";
+let previousTeacher = "";
+let previousSubjectName = "";
 
 // Get Course data
 db.collection("course")
@@ -77,7 +79,7 @@ function addSubjectToList(doc) {
   html += '<div class="edit-item" id="' + doc.id + 'Edit" type="button" onClick="forEdition(this.id)"> <i class="fa fa-edit"></i> </div>';
   html += " </div> </div> </div>";
 
-  html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeSubject(this.id)"> <i class="fa fa-trash"></i> </div>';
+  html += '<div class="delete-item" id="' + doc.id + '-' + doc.data().teacher + '-' + doc.data().name + 'Rem" type="button" onClick="removeSubject(this.id)"> <i class="fa fa-trash"></i> </div>';
   html += " </div> </div> </div> </li>";
 
   form.reset();
@@ -106,6 +108,8 @@ function forEdition(id) {
     form.value = id;
     form.name.value = doc.data().name;
     form.teacher.value = doc.data().teacher;
+    previousTeacher = doc.data().teacher;
+    previousSubjectName = doc.data().name;
 
     document.querySelector("#addSubject").value = "edit";
 
@@ -267,30 +271,135 @@ function addSubject() {
 // Edit Subject
 function editSubject(id) {
   let docRef;
+  let selectedTeacher = form.teacher.value;
+  let selectedName = form.name.value;
+
+  // get previous teacher
+  console.log(previousTeacher)
 
   docRef = db.collection("course")
   .doc(courseID)
   .collection("subject")
   .doc(id);
 
+  // Change data in course
   docRef.set({      
-      name: form.name.value,
-      teacher: form.teacher.value
+      name: selectedName,
+      teacher: selectedTeacher
     })
     .then((docRef) => {
 
-      // Edit teacher
+      // Change teacher
+      if (selectedTeacher != previousTeacher) {
 
-      // remover teacher antigo nos dados dele
+        // Get subject chat
+        db.collection("chat")
+        .where("name", "==", previousSubjectName)
+        .get()
+        .then((snap) => {
+          snap.docs.forEach((doc) => {
 
-      // remover teacher antigo como admin
+            // Remove previous teacher in his data
+            db.collection("ipca_data")
+            .doc(previousTeacher)
+            .collection("subject")
+            .where("id", "==", id)
+            .get()
+            .then((snap) => {
+              snap.docs.forEach((doc2) => {
 
-      // add teacher nos dados dele
+                db.collection("ipca_data")
+                .doc(previousTeacher)
+                .collection("subject")
+                .doc(doc2.id)
+                .delete(() => {
+                  recursive: true;
+                })
+                .then(() => {
+                  console.log("Document successfully deleted!");
+                })
+                .catch((error) => {
+                  console.error("Error removing document: ", error);
+                });
 
-      // add teacher no chat como admin
+              });
+            });
 
-      console.log("New Subject successfully edited: ", docRef);
-      
+            // Remove previous teacher in chat data
+            db.collection("chat")
+            .doc(doc.id) // <---- oficial subject chat
+            .collection("user")
+            .doc(previousTeacher)
+            .delete(() => {
+              recursive: true;
+            })
+            .then(() => {
+              console.log("Document successfully deleted!");
+            })
+            .catch((error) => {
+              console.error("Error removing document: ", error);
+            });
+
+            // add new teacher in his data
+            db.collection("ipca_data")
+            .doc(selectedTeacher)
+            .collection("subject")
+            .add({
+              id: id
+            })
+            .then(() => {
+              console.log("Document successfully added!");
+            })
+            .catch((error) => {
+              console.error("Error adding document: ", error);
+            });
+
+            // add new teacher in chat as admin
+            db.collection("chat")
+              .doc(doc.id)
+              .collection("user")
+              .doc(selectedTeacher)
+              .set({
+                admin: true
+              }).then((docRef4) => {
+                console.log("Document successfully added!");
+              });
+
+          });
+        });
+
+        console.log("New Subject successfully edited: ", docRef);
+
+      }
+
+      // Change name in chat as well
+      if (selectedName != previousSubjectName) {
+
+         // Get subject chat
+         db.collection("chat")
+         .where("name", "==", previousSubjectName)
+         .get()
+          .then((snap) => {
+            snap.docs.forEach((doc) => {
+
+              if (doc.data().type == "oficial") {
+                db.collection("chat")
+                .doc(doc.id)
+                .set({      
+                  name: selectedName,
+                  type: "oficial",
+                  ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP"
+                })
+                .then(() => {
+                  console.log("Document successfully added!");
+                });
+              }
+
+            });
+          });
+
+      }
+
       form.reset();
     })
     .catch((error) => {
@@ -303,26 +412,79 @@ function editSubject(id) {
 // Remove Subject
 function removeSubject(id) {
   id = id.replace("Rem", "");
+  let selectedTeacher = id.split('-')[1];
+  let selectedChatName = id.split('-')[2];
+  id = id.split('-')[0]
+
+  console.log(id)
 
   // Remove the subject in course
-  docRef = db.collection("course")
+  db.collection("course")
   .doc(courseID)
   .collection("subject")
-  .doc(id);
+  .doc(id)
+  .delete(() => {
+    recursive: true;
+  })
+  .then(() => {
+    console.log("Document successfully deleted!");
 
-  // Remove subject in every student and teacher
+    // Refresh List
+    refreshSubjectList()
+  })
+  .catch((error) => {
+    console.error("Error removing document: ", error);
+  });
 
-  docRef
-    .delete(() => {
-      recursive: true;
-    })
-    .then(() => {
-      console.log("Document successfully deleted!");
+  // Remove subject in every teacher
+  db.collection("ipca_data")
+  .doc(selectedTeacher)
+  .collection("subject")
+  .where("id", "==", id)
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc2) => {
 
-      // Refresh List
-      refreshSubjectList()
-    })
-    .catch((error) => {
-      console.error("Error removing document: ", error);
+      db.collection("ipca_data")
+      .doc(selectedTeacher)
+      .collection("subject")
+      .doc(doc2.id)
+      .delete(() => {
+        recursive: true;
+      })
+      .then(() => {
+        console.log("Document successfully deleted!");
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+
     });
+  });
+
+  // Remove oficial chat
+  db.collection("chat")
+  .where("name", "==", selectedChatName)
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc2) => {
+
+      if (doc2.data().type == "oficial") {
+
+        db.collection("chat")
+        .doc(doc2.id)
+        .delete(() => {
+          recursive: true;
+        })
+        .then(() => {
+          console.log("Document successfully deleted!");
+        })
+        .catch((error) => {
+          console.error("Error removing document: ", error);
+        });
+      }
+
+    });
+  });
+
 }
