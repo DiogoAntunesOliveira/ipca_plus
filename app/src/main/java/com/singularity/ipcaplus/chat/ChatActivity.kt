@@ -227,7 +227,7 @@ class ChatActivity : AppCompatActivity() {
                 intent.putExtra("chat_id", chat_id)
                 println("3------------------------------ " + currentUserIsAdmin)
                 intent.putExtra("is_admin", currentUserIsAdmin)
-                intent.putExtra("chat_name", supportActionBar?.title)
+                intent.putExtra("chat_name", findViewById<TextView>(R.id.AppBarTittle).text)
                 startActivity(intent)
                 return true
             }
