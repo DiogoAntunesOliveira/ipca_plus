@@ -45,8 +45,8 @@ h1 {
     /* Disable horizontal scroll */
     padding-top: 60px;
 
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
+    /*border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;*/
 }
 
 .sideBar a {
