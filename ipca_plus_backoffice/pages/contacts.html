@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Utilizadores</title>
+    <title>Contactos</title>
     <meta charset="utf-8">
     <meta name="description" content="IPCA + Backoffice">
     <meta name="keywords" content="HTML, WEB IPCA +, 2020/21">
@@ -48,12 +48,11 @@
 
             <div class="row">
 
-
                 <div class="col-12">
 
-                    <h1> <strong> Utilizadores </strong> </h1>
+                    <h1> <strong> Contactos </strong> </h1>
 
-                    <form id="userForm" class="wrapper">
+                    <form id="contactForm" class="wrapper">
 
                         <div class="box b">
 
@@ -71,56 +70,34 @@
                             </div>
 
                             <div class="box c">
-                                <label for="number"><strong > Número </strong></label>
-                                <input type="text" id="number" required placeholder="Inserir número" />
+                                <label for="desc"><strong > Descrição </strong></label>
+                                <input type="text" id="desc" required placeholder="Inserir descrição" />
                             </div>
 
                             <div class="box d">
-                                <label for="name"><strong > Contacto </strong></label>
-                                <input type="text" id="contact" required placeholder="Inserir contacto" />
+                                <label for="location"><strong > Localização </strong></label>
+                                <input type="text" id="location" required placeholder="Inserir localização" />
                             </div>
 
-                            <div class="box f">
-                                <label for="nomnumbere"><strong > Idade </strong></label>
-                                <input type="text" id="age" required placeholder="Inserir idade" />
-                            </div>
-
-                            <div class="box g">
-                                <label for="name"><strong > Curso </strong></label>
-                                <select id="courses" required>
-                                    <option disabled selected value> Inserir curso </option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="box h">
-                                <label for="name"><strong > Cargo </strong></label>
-                                <select id="role" required>
-                                    <option disabled selected value> Inserir cargo </option>
-                                    <option value="Aluno"> Aluno </option>
-                                    <option value="Professor"> Professor </option>
-                                </select>
-                            </div>
-
-                            <div class="box i">
+                            <div class="box e">
                                 <label for="name"><strong > Email </strong></label>
                                 <input type="text" id="email" required placeholder="Inserir email" />
                             </div>
 
-                            <div class="box j">
-                                <label for="name"><strong > Género </strong></label>
-                                <select id="gender" required>
-                                    <option disabled selected value> Inserir género </option>
-                                    <option value="M"> Masculino </option>
-                                    <option value="F"> Feminino </option>
-                                    <option value="I"> Indefinido </option>
-                                </select>
-
+                            <div class="box f">
+                                <label for="number"><strong > Número de Telefone </strong></label>
+                                <input type="text" id="number" required placeholder="Inserir número" />
                             </div>
 
-                            <div class="box k">
-                                <button id="addUser" type="submit" value="new"> <strong> Guardar </strong></button>
+                            <div class="box g">
+                                <label for="site"><strong > Site </strong></label>
+                                <input type="text" id="site" required placeholder="Inserir site" />
+                            </div>
+
+                            <div class="box h">
+                                <button id="addContact" type="submit" value="new"> <strong> Guardar </strong></button>
+                            </div>
+
                             </div>
 
                         </div>
@@ -139,7 +116,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
     <script src="../js/utilis.js" defer></script>
     <script src="../js/configDB.js" defer></script>
-    <script src="../js/users/crud.js" defer></script>
+    <script src="../js/contacts/crud.js" defer></script>
 
 </body>
 

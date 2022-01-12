@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Aulas </title>
+    <meta charset="utf-8">
+    <meta name="description" content="IPCA + Backoffice">
+    <meta name="keywords" content="HTML, WEB IPCA +, 2020/21">
+    <meta name="author" content="André Cerqueira, Nuno Fernandes, Vitor Silva, Diogo Antunês Oliveira">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../images/icon_v2.png" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+    <div class="row">
+
+        <div class="col">
+            <div class="sideBar">
+                <img src="../images/logo.png" alt="IPCA+">
+
+                <br><br><br>
+                <a class="active" href="../index.html">Painel de Controlo</a><br>
+                <a href="users.html">Utilizadores</a><br>
+                <a href="courses.html">Cursos</a><br>
+                <a href="contacts.html">Contactos</a><br>
+            </div>
+        </div>
+
+        <div class="col-10">
+
+            <div class="row searchList">
+
+                <div class="form-outline mb-4">
+                    <input type="search" id="myInput" onkeyup="myFunction()" class="form-control"
+                        id="datatable-search-input" placeholder="Pesquisar aqui">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <h1 id="titlePage"> Aulas </h1>
+
+                    <form id="form" class="wrapper">
+
+                        <div class="box b">
+
+                            <div class="list">
+                                <ul id="list"></ul>
+                            </div>
+
+                        </div>
+
+                        <div class="formBoxes">
+
+                            <div class="box a">
+                                <label for="classroom"><strong > Sala </strong></label>
+                                <input type="text" id="classroom" required placeholder="Inserir sala" />
+                            </div>
+
+                            <div class="box c">
+                                <label for="day"><strong > Dia </strong></label>
+                                <select id="day" required>
+                                    <option disabled selected value> Inserir dia </option>
+                                    <option value="seg"> Segunda-Feira </option>
+                                    <option value="ter"> Terça-Feira </option>
+                                    <option value="qua"> Quarta-Feira </option>
+                                    <option value="qui"> Quinta-Feira </option>
+                                    <option value="sex"> Sexta-Feira </option>
+                                </select>
+                            </div>
+
+                            <div class="box d">
+                                <label for="start_time"><strong > Hora de inicio </strong></label>
+                                <input type="text" id="start_time" required placeholder="Inserir hora de inicio" />
+                            </div>
+
+                            <div class="box e">
+                                <label for="end_time"><strong > Hora de fim </strong></label>
+                                <input type="text" id="end_time" required placeholder="Inserir hora de fim" />
+                            </div>
+
+                            <div class="box d">
+                                <button id="addClass" type="submit" value="new"> <strong> Guardar </strong></button>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="../js/utilis.js" defer></script>
+    <script src="../js/configDB.js" defer></script>
+    <script src="../js/classes/crud.js" defer></script>
+
+</body>
+
+
+
+<footer>
+
+</footer>
+
+</html>

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.SearchView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,13 +19,19 @@ import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivitySearchBinding
 import com.singularity.ipcaplus.models.Chat
+import java.util.*
+
+
 
 class SearchActivity: AppCompatActivity() {
 
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
+    var tempArrayChats = arrayListOf<Chat>()
+
 
     private lateinit var binding: ActivitySearchBinding
+
 
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
@@ -58,8 +65,43 @@ class SearchActivity: AppCompatActivity() {
                         }
                     }
                     mAdapter?.notifyDataSetChanged()
+                    tempArrayChats.addAll(chats)
                 }
             }
+
+        // SearchBar Find chat
+        val search = findViewById<SearchView>(R.id.searchView)
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                tempArrayChats.clear()
+                val searchText = newText!!.toLowerCase(Locale.getDefault())
+
+                if (searchText.isNotEmpty()) {
+                    chats.forEach {
+                        if (it.name.toLowerCase(Locale.getDefault()).contains(searchText)){
+                            tempArrayChats.add(it)
+                        }
+                    }
+
+                    mAdapter?.notifyDataSetChanged()
+                }else {
+                    tempArrayChats.clear()
+                    tempArrayChats.addAll(chats)
+                    mAdapter?.notifyDataSetChanged()
+                    println("-------------------------------------------------------" + "entrei aqui" )
+
+                }
+
+                return false
+            }
+
+
+        })
 
         // RecyclerView Chats
         mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -67,7 +109,9 @@ class SearchActivity: AppCompatActivity() {
         mAdapter = SearchAdapter()
         binding.recyclerViewProfile.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewProfile.adapter = mAdapter
-       
+
+
+
     }
 
 
@@ -83,9 +127,6 @@ class SearchActivity: AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-
-
-
             holder.v.apply {
 
 
@@ -94,14 +135,15 @@ class SearchActivity: AppCompatActivity() {
                 val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewProfileGroup)
                 val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
-                textViewMessage.text = chats[position].name
+                textViewMessage.text = tempArrayChats[position].name
+                /*
                 // Set Last Chat Message
                 Backend.getLastMessageByChatID(chatIds[position]) {
                     lastMessageText.text = it?.message
-                }
+                }*/
                 imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
 
-                textViewMessage.text = chats[position].name
+                textViewMessage.text = tempArrayChats[position].name
             }
             holder.v.setOnClickListener {
                 val intent = Intent(this@SearchActivity, ChatActivity::class.java)

@@ -1,3 +1,30 @@
+
+// Get data
+
+// Get Users
+db.collection("ipca_data")
+  .orderBy("student_number")
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc) => {
+
+      document.querySelector("#list").innerHTML += addUserToList(doc);
+
+    });
+  });
+
+// Get Courses
+db.collection("course")
+  .get()
+  .then((snap) => {
+    snap.docs.forEach((doc) => {
+
+      document.querySelector("#courses").innerHTML += addCoursesToSelect(doc);
+
+    });
+  });
+
+
 // Add all courses to select object
 function addCoursesToSelect(doc) {
   let course = doc.data();
@@ -16,19 +43,21 @@ function addUserToList(doc) {
   let user = doc.data();
   let html = "";
 
-  html += "<li> <a>";
-  html += user.student_number + " - " + user.name;
-  html +=
-    '<button id="' +
-    doc.id +
-    'Edit" class="edit" type="button" onClick="forEdition(this.id)"><i class="fa fa-edit"></i></button>';
-  html +=
-    '<button id="' +
-    doc.id +
-    'Rem" class="rem" type="button" onClick="removeUser(this.id)"><i class="fa fa-trash"></i></button>';
-  html += '<p> Curso: ' + user.course + "</p>";
+  html += "<li> <div class='item-list'>";
+  html += " <div class='row'>";
+  html += "  <div class='card-body'>";
+  html += " <div class='row'>";
+  html += " <div class='col-10'>";
+  html += " <div class='item-info'>";
+  html += " <strong>" + user.student_number + " - " + user.name + "</strong> <br><br> "+ user.course;
+  html += " </div> </div>";
+  html += " <div class='col' style='display: flex; justify-content: flex-end;'>";
 
-  html += "</a><hr></li>";
+  html += '<div class="edit-item" id="' + doc.id + 'Edit" type="button" onClick="forEdition(this.id)"><i class="fa fa-edit"></i>';
+
+  html += " </div> </div> </div> </div>";
+  html += '<div class="delete-item" id="' + doc.id + 'Rem" type="button" onClick="removeUser(this.id)"><i class="fa fa-trash"></i></div>';
+  html += " </div> </div> </div> </li>";
 
   userForm.reset();
   document.querySelector("#addUser").value = "new";
