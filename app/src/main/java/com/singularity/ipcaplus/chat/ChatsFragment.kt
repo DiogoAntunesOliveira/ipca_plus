@@ -58,7 +58,7 @@ class ChatsFragment : Fragment() {
                     chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
-                        if (chat.type == "chat") {
+                        if (chat.type == "chat" || chat.type == "group") {
                             chats.add(chat)
                             chatIds.add(document.id)
                         }

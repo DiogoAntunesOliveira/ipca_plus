@@ -19,6 +19,7 @@ import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.databinding.FragmentOfficialChatsBinding
 import com.singularity.ipcaplus.models.Chat
+import com.singularity.ipcaplus.utils.UserLoggedIn
 
 
 class OfficialChatsFragment : Fragment() {
@@ -50,7 +51,8 @@ class OfficialChatsFragment : Fragment() {
                     chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
-                        if (chat.type == "oficial") {
+                        var type = chat.type
+                        if (type.contains("oficial") ) {
                             chats.add(chat)
                             chatIds.add(document.id)
                         }

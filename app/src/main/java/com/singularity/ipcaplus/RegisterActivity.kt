@@ -12,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.utils.Backend.db
 import com.singularity.ipcaplus.databinding.ActivityRegisterBinding
+import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
@@ -54,7 +55,7 @@ class RegisterActivity : AppCompatActivity() {
 
                                 emailVerification()
 
-                                Backend.getIpcaData(email){
+                                Backend.getIpcaData(email) {
 
                                     val profile = it
 
@@ -68,7 +69,16 @@ class RegisterActivity : AppCompatActivity() {
                                     Backend.getUserCoursesIds(userID, profile.courseTag) { list ->
                                         for (courseID in list)
                                             Backend.setUserCourses(userID, courseID)
+
+                                        db.collection("profile")
+                                            .document(userID)
+                                            .set(profile!!.toHash())
+
+                                        Backend.getOficialChatByTag(profile.courseTag) { chats ->
+                                            Backend.setOficialChat(userID, chats)
+                                        }
                                     }
+
 
                                 }
 

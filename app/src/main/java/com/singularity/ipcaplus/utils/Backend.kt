@@ -12,6 +12,7 @@ import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.*
 import org.json.JSONArray
 import java.io.File
+import javax.security.auth.callback.Callback
 
 object Backend {
 
@@ -475,6 +476,7 @@ object Backend {
     }
 
 
+
     /*
        ------------------------------------------------ Chats ------------------------------------------------
     */
@@ -748,7 +750,7 @@ object Backend {
                 .addOnSuccessListener { documents ->
                     for(document in documents) {
                         if(document.id == userId){
-                            chatId = id
+                            chatId = document.id
                         }
                     }
                     callBack(chatId)
@@ -756,6 +758,39 @@ object Backend {
         }
 
     }
+
+    fun getOficialChatByTag(courseTag : String, callBack: (List<Chat>) -> Unit) {
+
+        var oficialChat = arrayListOf<Chat>()
+
+        db.collection("chat")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+                    // Get all Oficial Course Chats
+                    for (document in documents) {
+                        val chat = Chat.fromHash(document)
+                        if (chat.type == "oficial$courseTag") {
+                            oficialChat.add(chat)
+                        }
+                    }
+                    callBack(oficialChat)
+                }
+            }
+
+    }
+
+    fun setOficialChat (userId: String, chats: (List<Chat>)) {
+
+            // Insert chats into user profile
+            for (chat in chats) {
+                db.collection("profile")
+                    .document(userId)
+                    .collection("chat")
+                    .add(chat)
+            }
+        }
+
+
 
 
     /*
