@@ -24,6 +24,7 @@ import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.cryptography.saveKeygenOx
 import com.singularity.ipcaplus.databinding.FragmentChatsBinding
 import com.singularity.ipcaplus.models.Chat
+import com.singularity.ipcaplus.utils.Backend.getIv
 
 
 class ChatsFragment : Fragment() {
@@ -143,11 +144,16 @@ class ChatsFragment : Fragment() {
                     saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
                     // Set Last Chat Message
                     Backend.getLastMessageByChatID(chatIds[position]) {
+
                         val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                         lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+
                         val keygen = getMetaOx(context, chatIds[position])
-                        val message_decripted = decryptWithAESmeta(keygen.toString(), it.message)
-                        lastMessageText.text = message_decripted
+                        getIv(chatIds[position]){iv ->
+                            val message_decripted = decryptWithAESmeta(keygen.toString(), it.message, iv.toString())
+                            lastMessageText.text = message_decripted
+                        }
+
                     }
 
                     Utilis.getFile(this.context, "chats/${chatIds[position]}/icon.png", "png") { bitmap ->

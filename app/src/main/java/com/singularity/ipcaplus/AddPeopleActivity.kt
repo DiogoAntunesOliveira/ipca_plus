@@ -67,7 +67,9 @@ class AddPeopleActivity: AppCompatActivity() {
                         val chat = Chat(
                             document["name"] as String,
                             document["type"] as String,
-                            document["ox"] as String
+                            document["ox"] as String,
+                            document["iv"] as String,
+                            document["notificationKey"] as String
                         )
 
                         val selectedUsersIds = arrayListOf<String>()

@@ -2,6 +2,7 @@ package com.singularity.ipcaplus.utils
 
 import android.app.Activity
 import android.app.DownloadManager
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -21,8 +22,6 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.cryptography.encryptMeta
-import java.io.File
-import java.io.IOException
 import java.lang.Exception
 import java.net.URI
 import java.text.SimpleDateFormat
@@ -33,8 +32,15 @@ import java.util.regex.Pattern
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.google.firebase.auth.FirebaseAuth
-import java.io.ByteArrayOutputStream
 import com.singularity.ipcaplus.chat.ChatActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.*
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 
 object  Utilis {
@@ -310,10 +316,10 @@ object  Utilis {
        This function returns the encrypted system message
        @callBack = return the list
     */
-    fun buildSystemMessage(key: String) : String {
+    fun buildSystemMessage(key: String, iv : String) : String {
 
         // Build encryptation data of first message send by the system
-        var message = encryptMeta("This chat is being encripted with Singularity Encryption!", key)
+        var message = encryptMeta("This chat is being encripted with Singularity Encryption!", key, iv)
 
         return message.toString()
 
@@ -343,6 +349,183 @@ object  Utilis {
         }
 
         return inSampleSize
+    }
+
+    suspend fun  createNotificationGroup(notificationKeyName : String, registrationIds : JSONArray) : String {
+
+        var notificationKey = ""
+
+        try {
+
+            Log.d("json", registrationIds.toString())
+
+            //Request
+            val endPoint = URL("https://fcm.googleapis.com/fcm/notification")
+
+            //Establish a connection
+            val httpsURLConnection: HttpsURLConnection =
+                endPoint.openConnection() as HttpsURLConnection
+
+            //Connection to fcm
+            //The time available to read from the input stream when the connection is established
+            httpsURLConnection.readTimeout = 10000
+            //The time available to connect to the url
+            httpsURLConnection.connectTimeout = 15000
+            //Defining the type of request to be made to the fcm
+            httpsURLConnection.requestMethod = "POST"
+            //Defining that the url connection can be used to send and receive data
+            httpsURLConnection.doInput = true
+            httpsURLConnection.doOutput = true
+
+            // Build parameters for json
+            httpsURLConnection.setRequestProperty("Content-Type", "application/json")
+            val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
+            val senderId = "209455028652"
+            httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
+            httpsURLConnection.setRequestProperty("project_id", senderId)
+
+            val json = JSONObject()
+
+            json.put("operation", "create")
+            json.put("notification_key_name", notificationKeyName)
+            json.put("registration_ids", registrationIds)
+
+
+            // Writer
+            val outputStream: OutputStream =
+                BufferedOutputStream(httpsURLConnection.outputStream)
+            val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
+
+            // POST
+            writer.write(json.toString())
+            writer.flush()
+            writer.close()
+
+            outputStream.close()
+
+            //The response code and message of the POST requests
+            val responseCode: Int = httpsURLConnection.responseCode
+            val responseMessage = httpsURLConnection.responseMessage
+
+            Log.d(ContentValues.TAG, "$responseCode $responseMessage")
+
+
+            // Check server STATUS
+            if (responseCode in 400..499) {
+                httpsURLConnection.errorStream
+            } else {
+                httpsURLConnection.inputStream
+            }
+            println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU NAO CHEGOU SEU BURRO")
+            if (responseCode == 200) {
+                Log.e(ContentValues.TAG, "Group Created!!")
+
+                val response = httpsURLConnection.inputStream.bufferedReader()
+                    .use { it.readText() }  // defaults to UTF-8
+                withContext(Dispatchers.Main) {
+                    //notification_key
+                    val jsonObject  = JSONObject(response)
+                    notificationKey = jsonObject.getString("notification_key")
+                    println("NotifKey: $notificationKey")
+                    Log.d("NotifKey", notificationKey)
+                }
+                println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU $notificationKey")
+                return notificationKey
+            } else {
+                Log.e(ContentValues.TAG, "Error it didn´t work")
+            }
+
+            //Here i close the connection to the endPoint
+            httpsURLConnection.disconnect()
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return notificationKey
+    }
+
+    //This function sends push notifications to devices that are subscribed to a specific topic
+    suspend fun sendNotificationToGroup(title: String, message: String, notificationKey : String) {
+
+        delay(1500)
+
+        try {
+
+            //Request
+            val url = URL("https://fcm.googleapis.com/fcm/send")
+
+            //Establish a connection
+            val httpsURLConnection: HttpsURLConnection =
+                url.openConnection() as HttpsURLConnection
+
+            //The time available to read from the input stream when the connection is established
+            httpsURLConnection.readTimeout = 10000
+            //The time available to connect to the url
+            httpsURLConnection.connectTimeout = 15000
+            //Defining the type of request to be made to the fcm
+            httpsURLConnection.requestMethod = "POST"
+            //Defining that the url connection can be used to send and receive data
+            httpsURLConnection.doInput = true
+            httpsURLConnection.doOutput = true
+
+            // Config of FCM
+            val project_key =
+                "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
+            httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
+            httpsURLConnection.setRequestProperty("Content-Type", "application/json")
+
+            val jsonObject = JSONObject()
+            val data = JSONObject()
+
+            data.put("title", title)
+            data.put("content", message)
+            //On Notification Click Activity
+            data.put("click_action", ".LoginActivity")
+
+            //jsonObject for POST
+            jsonObject.put("data", data)
+            //
+            jsonObject.put("to", notificationKey)
+
+            val outputStream: OutputStream =
+                BufferedOutputStream(httpsURLConnection.outputStream)
+            val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
+
+            writer.write(jsonObject.toString())
+            writer.flush()
+            writer.close()
+
+            outputStream.close()
+
+            //The response code and message of the POST requests
+            val responseCode: Int = httpsURLConnection.responseCode
+            val responseMessage: String = httpsURLConnection.responseMessage
+
+
+            Log.d(ContentValues.TAG, "Response from sendMes: $responseCode $responseMessage")
+
+
+            // Check server STATUS
+            if (responseCode in 400..499) {
+                httpsURLConnection.errorStream
+            } else {
+                httpsURLConnection.inputStream
+            }
+            if (responseCode == 200) {
+                Log.e(
+                    ContentValues.TAG,
+                    "Notification Sent \n Title: $title \n Body: $message"
+                )
+            } else {
+                Log.e(ContentValues.TAG, "Notification Error")
+            }
+
+            httpsURLConnection.disconnect()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }

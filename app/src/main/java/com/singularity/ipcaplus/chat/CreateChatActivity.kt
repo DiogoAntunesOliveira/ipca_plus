@@ -9,11 +9,14 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.generateRandomIV
 import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityCreateChatBinding
 import com.singularity.ipcaplus.drawer.DrawerActivty
@@ -25,20 +28,33 @@ import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.utils.Utilis.buildSystemMessage
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreateChatActivity : ActivityImageHelper() {
 
     // Variables
     private lateinit var binding: ActivityCreateChatBinding
     var uri = Uri.EMPTY
-
     val db = Firebase.firestore
+    var noteKey : String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_chat)
 
         binding = ActivityCreateChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+        var tokens_adress = arrayListOf<String>()
+        findViewById<TextView>(R.id.AppBarTittle).text = "Novo Grupo"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Variables
         var chatName : String
@@ -48,6 +64,25 @@ class CreateChatActivity : ActivityImageHelper() {
 
         // Generate key for chats
         val keygen = metaGenrateKey()
+
+        for (memberId in memberIds){
+
+            // Getting all of tokens of  profile associated devices
+            Backend.getAllTokens(memberId) {
+                if (tokens_adress.isEmpty()){
+                    tokens_adress.clear()
+                }
+                tokens_adress.addAll(it)
+
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO){
+                        noteKey = Utilis.createNotificationGroup(generateRandomIV(), Backend.createJsonArrayString(tokens_adress))
+                    }
+                }
+
+            }
+
+        }
 
         binding.imageViewChatPhoto.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
@@ -59,18 +94,21 @@ class CreateChatActivity : ActivityImageHelper() {
 
 
                 chatName = binding.editTextChatName.text.toString()
+                val ivGenerated = generateRandomIV()
 
                 // Chat data
                 val chat = Chat(
                     chatName,
                     type.toString(),
-                    keygen
+                    keygen,
+                    ivGenerated,
+                    noteKey
                 )
 
                 // System message data
                 val message = Message(
                     "system",
-                    buildSystemMessage(keygen),
+                    buildSystemMessage(keygen, ivGenerated),
                     Timestamp.now(),
                     ""
 
@@ -143,18 +181,5 @@ class CreateChatActivity : ActivityImageHelper() {
 
             }
         }
-    }
-
-    /*
-       This function create the action bar above the activity
-    */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_chat, menu)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
-
-
-        return true
     }
 }

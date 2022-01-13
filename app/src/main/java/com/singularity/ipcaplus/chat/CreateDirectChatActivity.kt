@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,6 +14,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.generateRandomIV
 import com.singularity.ipcaplus.cryptography.metaGenrateKey
 import com.singularity.ipcaplus.databinding.ActivityCreateChatBinding
 import com.singularity.ipcaplus.drawer.DrawerActivty
@@ -20,15 +22,22 @@ import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.Backend.createJsonArrayString
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.utils.Utilis.buildSystemMessage
+import com.singularity.ipcaplus.utils.Utilis.createNotificationGroup
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreateDirectChatActivity : ActivityImageHelper() {
 
 
     val db = Firebase.firestore
+    var noteKey : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,7 +46,30 @@ class CreateDirectChatActivity : ActivityImageHelper() {
 
         var type = intent.getStringExtra("type")!!
         var memberIds = intent.getStringArrayListExtra("users")!!
+        var tokens_adress = arrayListOf<String>()
+
         println(memberIds)
+        val ivGenerated = generateRandomIV()
+
+        for (memberId in memberIds){
+
+            // Getting all of tokens of  profile associated devices
+            Backend.getAllTokens(memberId) {
+                if (tokens_adress.isEmpty()){
+                    tokens_adress.clear()
+                }
+                tokens_adress.addAll(it)
+
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO){
+                        Log.d("paaaaaa", tokens_adress.toString())
+                        noteKey = createNotificationGroup(generateRandomIV(), createJsonArrayString(tokens_adress))
+                    }
+                }
+
+            }
+
+        }
 
         // Generate key for chats
         val keygen = metaGenrateKey()
@@ -52,13 +84,15 @@ class CreateDirectChatActivity : ActivityImageHelper() {
                 var chat = Chat(
                     chatName,
                     type,
-                    keygen
+                    keygen,
+                    ivGenerated,
+                    noteKey
                 )
 
                 // System message data
                 val message = Message(
                     "system",
-                    buildSystemMessage(keygen),
+                    buildSystemMessage(keygen, ivGenerated),
                     Timestamp.now(),
                     ""
 
@@ -77,7 +111,6 @@ class CreateDirectChatActivity : ActivityImageHelper() {
                             .collection("message")
                             .add(message.toHash())
                         for (member in memberIds) {
-                            println("IDSDSDS" + memberIds)
                             Backend.getUserProfile(memberIds[0]) {
                                 if (member == Firebase.auth.currentUser!!.uid) {
                                     println("IF")
@@ -85,10 +118,11 @@ class CreateDirectChatActivity : ActivityImageHelper() {
                                     chat = Chat(
                                         it.name,
                                         type,
-                                        keygen
+                                        keygen,
+                                        ivGenerated,
+                                        noteKey
                                     )
                                 }
-                                println("NOMEEEEE" + it.name)
 
                                 db.collection("profile")
                                     .document(member)

@@ -24,12 +24,12 @@ import javax.crypto.spec.SecretKeySpec
 
 
 
-fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
+fun encryptMeta(strToEncrypt: String, secret_key: String, initVector : String): String? {
     Security.addProvider(BouncyCastleProvider())
     hash(strToEncrypt)
     var keyBytes: ByteArray
     //val initVector = generateRandomIV()
-    val initVector = "7c5afb00aaecb1a1"
+    //val initVector = "7c5afb00aaecb1a1"
     val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
     println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE $initVector")
 
@@ -72,10 +72,10 @@ fun encryptMeta(strToEncrypt: String, secret_key: String): String? {
     return null
 }
 
-fun decryptWithAESmeta(key: String, strToDecrypt: String?): String? {
+fun decryptWithAESmeta(key: String, strToDecrypt: String?, initVector : String): String? {
     Security.addProvider(BouncyCastleProvider())
     var keyBytes: ByteArray
-    val initVector = "7c5afb00aaecb1a1"
+    //val initVector = "7c5afb00aaecb1a1"
 
     try {
         val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
@@ -137,7 +137,7 @@ fun metaGenrateKey(): String {
     println(secretKey)
     return secretKey.toString()
 }
-
+/*
 fun metaBlock(message: String){
     //val secretKey: String = "662ede816988e58fb6d057d9d85605e0"
     val keygen = metaGenrateKey()
@@ -147,7 +147,7 @@ fun metaBlock(message: String){
 
     val message_decripted = decryptWithAESmeta(keygen, meta)
     println(message_decripted)
-}
+}*/
 
 @RequiresApi(Build.VERSION_CODES.M)
 fun saveKeygenOx(context : Context, chatUid : String, keygen: String){

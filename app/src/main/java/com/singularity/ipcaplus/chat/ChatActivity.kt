@@ -32,6 +32,9 @@ import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Backend.createJsonArrayString
+import com.singularity.ipcaplus.utils.Backend.getIv
+import com.singularity.ipcaplus.utils.Backend.getNotificationKey
+import com.singularity.ipcaplus.utils.Utilis.sendNotificationToGroup
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -89,30 +92,7 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-        // Get all members id of chat
-        Backend.getChatUsersUids(chat_id){
-            chat_user_uids.clear()
-            chat_user_uids.addAll(it)
 
-            for (userId in chat_user_uids){
-                // Getting all of tokens of  profile associated devices
-                Backend.getAllTokens(userId) {
-                    if (tokens_adress.isEmpty()){
-                        tokens_adress.clear()
-                    }
-                    tokens_adress.addAll(it)
-
-                    /*GlobalScope.launch {
-                        withContext(Dispatchers.IO){
-                            createNotificationGroup("grupotrablahotentativa", createJsonArrayString(tokens_adress))
-                        }
-                    }*/
-
-                }
-
-            }
-
-        }
         val profilePicfromTop = findViewById<ImageView>(R.id.ProfileImageView)
         Utilis.getFile(this, "chats/$chat_id/icon.png", "png") { bitmap ->
             profilePicfromTop.setImageBitmap(bitmap)
@@ -126,37 +106,48 @@ class ChatActivity : AppCompatActivity() {
                 // get data of ecripted shared preferences ("chatuid" -> "key")
                 val keygen = getMetaOx(this, chat_id)
                 // Build encryptation data of message send by the user
-                var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString())
-                val savedText = binding.editTextMessage.text.toString()
+                getIv(chat_id) {
 
-                val message = Message(
-                    Firebase.auth.currentUser!!.uid,
-                    meta.toString(),
-                    Timestamp.now(),
-                    ""
+                    var meta = encryptMeta( binding.editTextMessage.text.toString(), keygen.toString(), it.toString())
+                    val savedText = binding.editTextMessage.text.toString()
 
-                )
-                db.collection("chat").document("$chat_id").collection("message")
-                    .add(message.toHash())
-                    .addOnSuccessListener { documentReference ->
+                    val message = Message(
+                        Firebase.auth.currentUser!!.uid,
+                        meta.toString(),
+                        Timestamp.now(),
+                        ""
 
-                        GlobalScope.launch {
-                            withContext(Dispatchers.IO){
-                                //APA91bEKDInIYA242YofpahBmhB57pEI4gNT63DJJenWCccJGqeSYrWzj0BSruX49DhVp2vGSY5xJ2fEJk2vhtoraT3_bbjEKw4Nx3eJKj7tttVRPjQs0Uc_OPkrcj4twR70H5tAilnY
-                                println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"+ savedText)
-                                sendNotificationToGroup( chat_id, savedText, "APA91bGaOoMTjTD2s9MU63F1AvLqP6tkwdAFE0Mqs9jbghlSgcWlfe_38CboFiE2iiWFoKqNRwhF0G_TA5X9xegTL0_Tg0OGuFadJuBj1sGZqjqCcmF1EH2ZeRU7ySHosdNkmLmmOyFF")
+                    )
+                    db.collection("chat").document("$chat_id").collection("message")
+                        .add(message.toHash())
+                        .addOnSuccessListener { documentReference ->
+
+                            GlobalScope.launch {
+                                withContext(Dispatchers.IO){
+                                    //APA91bEKDInIYA242YofpahBmhB57pEI4gNT63DJJenWCccJGqeSYrWzj0BSruX49DhVp2vGSY5xJ2fEJk2vhtoraT3_bbjEKw4Nx3eJKj7tttVRPjQs0Uc_OPkrcj4twR70H5tAilnY
+                                    // APA91bGaOoMTjTD2s9MU63F1AvLqP6tkwdAFE0Mqs9jbghlSgcWlfe_38CboFiE2iiWFoKqNRwhF0G_TA5X9xegTL0_Tg0OGuFadJuBj1sGZqjqCcmF1EH2ZeRU7ySHosdNkmLmmOyFF
+                                    println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"+ savedText)
+                                    getNotificationKey(chat_id){
+                                        GlobalScope.launch {
+                                            withContext(Dispatchers.IO){
+                                                sendNotificationToGroup( chat_id, savedText, it.toString())
+                                            }
+                                        }
+                                    }
+                                }
                             }
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+
+
                         }
-                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding document", e)
+                        }
+                    binding.editTextMessage.text.clear()
 
-
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(TAG, "Error adding document", e)
-                    }
-                binding.editTextMessage.text.clear()
-
+                }
             }
+
         }
 
         // Show Messages
@@ -290,32 +281,34 @@ class ChatActivity : AppCompatActivity() {
 
                 timeLastMessage?.isVisible = false
                 val keygen = getMetaOx(context, chat_id)
-                val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message)
+                getIv(chat_id){
+                    val message_decripted = decryptWithAESmeta(keygen.toString(), messages[position].message, it.toString())
 
-               /* if (otherUser) {
-                        Backend.getUserProfile(messages[position].user) {
-                            val userName = Utilis.getFirstAndLastName(it.name)
-                            textViewUsername.text = userName
-                        }
+                    /* if (otherUser) {
+                             Backend.getUserProfile(messages[position].user) {
+                                 val userName = Utilis.getFirstAndLastName(it.name)
+                                 textViewUsername.text = userName
+                             }
+                         }
+                     */
+
+                    textViewMessage.text = message_decripted
+                    println(message_decripted)
+                    if(position == messages.size - 1) {
+                        val data = Utilis.getDate(
+                            messages[position].time.seconds * 1000,
+                            "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                        )
+                        timeLastMessage.isVisible = true
+                        timeLastMessage.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
                     }
-                */
 
-                textViewMessage.text = message_decripted
-                println(message_decripted)
-                if(position == messages.size - 1) {
-                    val data = Utilis.getDate(
-                        messages[position].time.seconds * 1000,
-                        "yyyy-MM-dd'T'HH:mm:ss.SSS"
-                    )
-                    timeLastMessage.isVisible = true
-                    timeLastMessage.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
-                }
-
-                if (otherUser) {
-                    val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
-                    if (imageViewUser != null) {
-                        Utilis.getFile(context, "profilePictures/${messages[position].user}.png", "png") { bitmap ->
-                            imageViewUser.setImageBitmap(bitmap)
+                    if (otherUser) {
+                        val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+                        if (imageViewUser != null) {
+                            Utilis.getFile(context, "profilePictures/${messages[position].user}.png", "png") { bitmap ->
+                                imageViewUser.setImageBitmap(bitmap)
+                            }
                         }
                     }
                 }
@@ -339,176 +332,5 @@ class ChatActivity : AppCompatActivity() {
 
 
 
-    }
-
-    private suspend fun  createNotificationGroup(notificationKeyName : String, registrationIds : JSONArray)  {
-
-        try {
-
-            Log.d("json", registrationIds.toString())
-
-            //Request
-            val endPoint = URL("https://fcm.googleapis.com/fcm/notification")
-
-            //Establish a connection
-            val httpsURLConnection: HttpsURLConnection =
-                endPoint.openConnection() as HttpsURLConnection
-
-            //Connection to fcm
-            //The time available to read from the input stream when the connection is established
-            httpsURLConnection.readTimeout = 10000
-            //The time available to connect to the url
-            httpsURLConnection.connectTimeout = 15000
-            //Defining the type of request to be made to the fcm
-            httpsURLConnection.requestMethod = "POST"
-            //Defining that the url connection can be used to send and receive data
-            httpsURLConnection.doInput = true
-            httpsURLConnection.doOutput = true
-
-            // Build parameters for json
-            httpsURLConnection.setRequestProperty("Content-Type", "application/json")
-            val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
-            val senderId = "209455028652"
-            httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
-            httpsURLConnection.setRequestProperty("project_id", senderId)
-
-            val json = JSONObject()
-
-            json.put("operation", "create")
-            json.put("notification_key_name", notificationKeyName)
-            json.put("registration_ids", registrationIds)
-
-
-            // Writer
-            val outputStream: OutputStream =
-                BufferedOutputStream(httpsURLConnection.outputStream)
-            val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
-
-            // POST
-            writer.write(json.toString())
-            writer.flush()
-            writer.close()
-
-            outputStream.close()
-
-            //The response code and message of the POST requests
-            val responseCode: Int = httpsURLConnection.responseCode
-            val responseMessage = httpsURLConnection.responseMessage
-
-            Log.d(TAG, "$responseCode $responseMessage")
-
-
-            // Check server STATUS
-            if (responseCode in 400..499) {
-                httpsURLConnection.errorStream
-            } else {
-                httpsURLConnection.inputStream
-            }
-
-            if (responseCode == 200) {
-                Log.e(TAG, "Group Created!!")
-
-                val response = httpsURLConnection.inputStream.bufferedReader()
-                    .use { it.readText() }  // defaults to UTF-8
-                withContext(Dispatchers.Main) {
-                    //notification_key
-                    val jsonObject  = JSONObject(response)
-                    val notificationKey = jsonObject.getString("notification_key")
-                    println("NotifKey: $notificationKey")
-                    Log.d("NotifKey", notificationKey)
-                }
-            } else {
-                Log.e(TAG, "Error it didn´t work")
-            }
-
-            //Here i close the connection to the endPoint
-            httpsURLConnection.disconnect()
-
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    //This function sends push notifications to devices that are subscribed to a specific topic
-    private suspend fun sendNotificationToGroup(title: String, message: String, notificationKey : String) {
-
-        delay(1500)
-
-        try {
-
-            //Request
-            val url = URL("https://fcm.googleapis.com/fcm/send")
-
-            //Establish a connection
-            val httpsURLConnection: HttpsURLConnection =
-                url.openConnection() as HttpsURLConnection
-
-            //The time available to read from the input stream when the connection is established
-            httpsURLConnection.readTimeout = 10000
-            //The time available to connect to the url
-            httpsURLConnection.connectTimeout = 15000
-            //Defining the type of request to be made to the fcm
-            httpsURLConnection.requestMethod = "POST"
-            //Defining that the url connection can be used to send and receive data
-            httpsURLConnection.doInput = true
-            httpsURLConnection.doOutput = true
-
-            // Config of FCM
-            val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
-            httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
-            httpsURLConnection.setRequestProperty("Content-Type", "application/json")
-
-            val jsonObject = JSONObject()
-            val data = JSONObject()
-
-            data.put("title", title)
-            data.put("content", message)
-            //On Notification Click Activity
-            data.put("click_action", ".LoginActivity")
-
-            //jsonObject for POST
-            jsonObject.put("data", data)
-            //
-            jsonObject.put("to", notificationKey)
-
-            val outputStream: OutputStream =
-                BufferedOutputStream(httpsURLConnection.outputStream)
-            val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
-            
-            writer.write(jsonObject.toString())
-            writer.flush()
-            writer.close()
-
-            outputStream.close()
-
-            //The response code and message of the POST requests
-            val responseCode: Int = httpsURLConnection.responseCode
-            val responseMessage: String = httpsURLConnection.responseMessage
-
-
-            Log.d(TAG, "Response from sendMes: $responseCode $responseMessage")
-
-
-            // Check server STATUS
-            if (responseCode in 400..499) {
-                httpsURLConnection.errorStream
-            } else {
-                httpsURLConnection.inputStream
-            }
-            if (responseCode == 200) {
-                Log.e(
-                    TAG,
-                    "Notification Sent \n Title: $title \n Body: $message"
-                )
-            } else {
-                Log.e(TAG, "Notification Error")
-            }
-
-            httpsURLConnection.disconnect()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 }

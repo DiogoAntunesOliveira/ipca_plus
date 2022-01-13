@@ -880,4 +880,39 @@ object Backend {
     fun createJsonArrayString(array: List<String>): JSONArray {
         return JSONArray(array)
     }
+
+    fun getIv(chat_id: String, callBack: (String?)->Unit) {
+
+        var iv : String? = null
+
+        db.collection("chat")
+            .get()
+            .addOnSuccessListener { documents ->
+                for(document in documents) {
+                    if (document.id == chat_id) {
+                        val chat = Chat.fromHash(document)
+                        iv = chat.iv.toString()
+                    }
+                }
+                callBack(iv)
+            }
+    }
+
+    fun getNotificationKey(chat_id: String, callBack: (String?)->Unit) {
+
+        var notificationKey : String? = null
+
+        db.collection("chat")
+            .get()
+            .addOnSuccessListener { documents ->
+                for(document in documents) {
+                    if (document.id == chat_id) {
+                        val chat = Chat.fromHash(document)
+                        notificationKey = chat.notificationKey.toString()
+                    }
+                }
+                callBack(notificationKey)
+            }
+    }
+
 }
