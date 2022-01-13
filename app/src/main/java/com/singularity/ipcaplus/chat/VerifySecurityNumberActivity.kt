@@ -1,5 +1,7 @@
 package com.singularity.ipcaplus.chat
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
@@ -24,10 +26,18 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
     private lateinit var verifySecurity: Button
     private lateinit var hexaHashKey: TextView
 
+    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify_security_number)
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.custom_bar_layout)
+        findViewById<TextView>(R.id.AppBarTittle).text = "Verificação de Segurança"
+        // Back button
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+            finish()
+        }
 
         // Get previous data
         val chat_id = intent.getStringExtra("chat_id").toString()
