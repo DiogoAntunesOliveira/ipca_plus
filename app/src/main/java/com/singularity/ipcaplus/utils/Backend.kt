@@ -332,6 +332,37 @@ object Backend {
     }
 
 
+    fun setUserCourseByIpcaData(userID: String, ipcaDataID: String, callBack:(String)->Unit) {
+
+        var courseTag = ""
+
+        db.collection("ipca_data")
+            .document(ipcaDataID)
+            .collection("course")
+            .get()
+            .addOnSuccessListener { documents ->
+                documents.let {
+
+                    for (document in documents) {
+
+                        val course = Course.fromHash(document)
+                        courseTag = course.tag
+
+                        db.collection("profile")
+                            .document(userID)
+                            .collection("course")
+                            .document(document.id)
+                            .set(course)
+                            .addOnCompleteListener {
+                                callBack(courseTag)
+                            }
+
+                    }
+                }
+            }
+    }
+
+
     /*
        ------------------------------------------------ Contacts ------------------------------------------------
     */
@@ -797,9 +828,10 @@ object Backend {
        ------------------------------------------------ Register Manipulation ------------------------------------------------
     */
 
-    fun getIpcaData(email: String, callBack: (Profile?)->Unit) {
+    fun getIpcaData(email: String, callBack: (Profile?, String)->Unit) {
 
         var profile : Profile? = null
+        var id = ""
 
         db.collection("ipca_data")
             .whereEqualTo("email", email)
@@ -808,12 +840,11 @@ object Backend {
 
                 for (document in documents) {
                     profile = Profile.fromHash(document)
+                    id = document.id
                 }
 
-                callBack(profile)
-
+                callBack(profile, id)
             }
-
     }
 
 

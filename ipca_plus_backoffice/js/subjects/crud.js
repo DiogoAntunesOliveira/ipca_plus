@@ -190,7 +190,9 @@ function addSubject() {
           .add({
             name: subjectName,
             type: "oficial" + courseTag,
-            ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP"
+            ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP",
+            iv: "7c5afb00aaecb1a1",
+            notificationKey: ""
           })
           .then((docRef2) => {
 

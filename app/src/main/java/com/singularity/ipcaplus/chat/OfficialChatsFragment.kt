@@ -100,11 +100,12 @@ class OfficialChatsFragment : Fragment() {
 
                     textViewMessage.text = chats[position].name
                     // Set Last Chat Message
+                    /*
                     Backend.getLastMessageByChatID(chatIds[position]) {
                         val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
                         lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
                         lastMessageText.text = it.message
-                    }
+                    }*/
                     imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
 
                 }
@@ -115,14 +116,6 @@ class OfficialChatsFragment : Fragment() {
                 }
 
         }
-
-          override fun getItemViewType(position: Int) : Int {
-              if (chats[position].type == "oficial") {
-                  return 1
-              } else {
-                  return 0
-              }
-          }
 
         override fun getItemCount(): Int {
             return chats.size
