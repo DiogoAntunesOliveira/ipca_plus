@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
+import android.widget.ImageView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -120,6 +121,13 @@ class CreateChatActivity : ActivityImageHelper() {
 
             }
 
+
+        // get back to activity
+        val back = findViewById<ImageView>(R.id.back_btn)
+
+        back.setOnClickListener(){
+            finish()
+        }
 
     }
     /*

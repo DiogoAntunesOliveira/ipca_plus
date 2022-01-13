@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.SearchView
+import androidx.core.view.size
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,6 +20,7 @@ import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivitySearchBinding
 import com.singularity.ipcaplus.models.Chat
+import com.singularity.ipcaplus.utils.Utilis
 import java.util.*
 
 
@@ -28,6 +30,7 @@ class SearchActivity: AppCompatActivity() {
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
     var tempArrayChats = arrayListOf<Chat>()
+    var tempArrayChatsIds = arrayListOf<String>()
 
 
     private lateinit var binding: ActivitySearchBinding
@@ -59,15 +62,20 @@ class SearchActivity: AppCompatActivity() {
                     chatIds.clear()
                     for (document in it) {
                         val chat = Chat.fromHash(document)
-                        if (chat.type == "chat") {
+                        if (chat.type == "chat" || chat.type == "group") {
                             chats.add(chat)
                             chatIds.add(document.id)
                         }
                     }
-                    mAdapter?.notifyDataSetChanged()
+
                     tempArrayChats.addAll(chats)
+                    tempArrayChatsIds.addAll(chatIds)
+
+                    mAdapter?.notifyDataSetChanged()
                 }
             }
+
+
 
         // SearchBar Find chat
         val search = findViewById<SearchView>(R.id.searchView)
@@ -79,23 +87,25 @@ class SearchActivity: AppCompatActivity() {
             override fun onQueryTextChange(newText: String?): Boolean {
 
                 tempArrayChats.clear()
+
                 val searchText = newText!!.toLowerCase(Locale.getDefault())
 
-                if (searchText.isNotEmpty()) {
-                    chats.forEach {
-                        if (it.name.toLowerCase(Locale.getDefault()).contains(searchText)){
-                            tempArrayChats.add(it)
-                        }
-                    }
-
-                    mAdapter?.notifyDataSetChanged()
-                }else {
+                if (searchText.isEmpty()) {
                     tempArrayChats.clear()
                     tempArrayChats.addAll(chats)
-                    mAdapter?.notifyDataSetChanged()
-                    println("-------------------------------------------------------" + "entrei aqui" )
 
+                }else if (searchText.isNotEmpty()) {
+                    tempArrayChats.clear()
+                    for (chat in chats){
+                        if (chat.name.toLowerCase().contains(searchText)  ){
+
+                            tempArrayChats.add(chat)
+
+                        }
+                    }
                 }
+
+                mAdapter?.notifyDataSetChanged()
 
                 return false
             }
@@ -132,16 +142,24 @@ class SearchActivity: AppCompatActivity() {
 
                 // Variables
                 val textViewMessage = findViewById<TextView>(R.id.textViewProfileName)
-                val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewProfileGroup)
+                val imageViewImage = findViewById<ImageView>(R.id.imageViewProfileGroup)
                 val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
+
                 textViewMessage.text = tempArrayChats[position].name
-                /*
+
+
                 // Set Last Chat Message
                 Backend.getLastMessageByChatID(chatIds[position]) {
                     lastMessageText.text = it?.message
-                }*/
-                imageViewChatGroup.setImageResource(R.drawable.common_full_open_on_phone)
+                }
+
+
+                Utilis.getFile(this.context, "chats/" + tempArrayChats[position].id + ".png", "png") { bitmap ->
+                    imageViewImage.setImageBitmap(bitmap)
+                }
+
+                imageViewImage.setImageResource(R.drawable.common_full_open_on_phone)
 
                 textViewMessage.text = tempArrayChats[position].name
             }
@@ -154,7 +172,7 @@ class SearchActivity: AppCompatActivity() {
         }
 
         override fun getItemCount(): Int {
-            return chats.size
+            return tempArrayChats.size
         }
     }
 
