@@ -194,13 +194,18 @@ class ChatActivity : AppCompatActivity() {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_chat, menu)
 
-        db.collection("chat")
+        db.collection("profile")
+            .document(Firebase.auth.currentUser!!.uid)
+            .collection("chat")
             .addSnapshotListener { documents, e ->
                 documents?.let {
                     for (document in it) {
                         if(document.id == chat_id) {
                             val chat = Chat.fromHash(document)
-                            val name = Utilis.getFirstAndLastName(chat.name)
+                            var name = chat.name
+                            if (chat.type == "chat") {
+                                name  = Utilis.getFirstAndLastName(chat.name)
+                            }
                             //supportActionBar?.title = chat.name
                             findViewById<TextView>(R.id.AppBarTittle).text = name
                         }
@@ -232,7 +237,7 @@ class ChatActivity : AppCompatActivity() {
                 intent.putExtra("chat_id", chat_id)
                 println("3------------------------------ " + currentUserIsAdmin)
                 intent.putExtra("is_admin", currentUserIsAdmin)
-                intent.putExtra("chat_name",  Utilis.getFirstAndLastName(findViewById<TextView>(R.id.AppBarTittle).text.toString()))
+                intent.putExtra("chat_name",  findViewById<TextView>(R.id.AppBarTittle).text.toString())
                 startActivity(intent)
                 return true
             }

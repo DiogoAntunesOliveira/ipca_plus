@@ -554,9 +554,23 @@ object Backend {
 
     fun changeChatName(chatID: String, newName: String) {
 
+        var userIds = arrayListOf<String>()
+
         db.collection("chat")
             .document(chatID)
             .update("name", newName)
+
+        getChatUsersUids(chatID) {
+            userIds.addAll(it)
+
+            for (userId in userIds) {
+                db.collection("profile")
+                    .document(userId)
+                    .collection("chat")
+                    .document(chatID)
+                    .update("name", newName)
+            }
+        }
     }
 
 
