@@ -121,14 +121,6 @@ class CreateChatActivity : ActivityImageHelper() {
 
             }
 
-
-        // get back to activity
-        val back = findViewById<ImageView>(R.id.back_btn)
-
-        back.setOnClickListener(){
-            finish()
-        }
-
     }
     /*
        This function happen after picking photo, and make changes in the activity

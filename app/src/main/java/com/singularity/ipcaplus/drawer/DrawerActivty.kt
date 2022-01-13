@@ -70,6 +70,7 @@ class DrawerActivty : AppCompatActivity() {
         binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
 
             val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("userId", Firebase.auth.currentUser!!.uid)
             startActivity(intent)
         }
 

@@ -19,6 +19,7 @@ import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.databinding.ActivityCalendarBinding
 import com.singularity.ipcaplus.databinding.ActivityChatMembersBinding
 import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
+import com.singularity.ipcaplus.drawer.ProfileActivity
 import com.singularity.ipcaplus.models.EventCalendar
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
@@ -202,6 +203,12 @@ class ChatMembersActivity : AppCompatActivity() {
                     imageViewThreePoints.visibility = View.GONE
                 }
 
+            }
+
+            holder.v.setOnClickListener {
+                val intent = Intent(this@ChatMembersActivity, ProfileActivity::class.java)
+                intent.putExtra("userId", members[position].id)
+                startActivity(intent)
             }
         }
 
