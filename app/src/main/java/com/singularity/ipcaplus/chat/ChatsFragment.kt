@@ -132,7 +132,12 @@ class ChatsFragment : Fragment() {
                     val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
 
-                    textViewMessage.text = chats[position].name
+                    if (chats[position].type == "chat") {
+                        textViewMessage.text = Utilis.getFirstAndLastName(chats[position].name)
+                    } else {
+                        textViewMessage.text = chats[position].name
+                    }
+
 
                     // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
                     saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
