@@ -36,7 +36,7 @@ function draw() {
   
   // number of infected people (noised gaussian curved)
   c = sin(f*0.008);
-  infected = (exp(-c*c/2.0) / sqrt(TWO_PI) / 0.2)  + map(noise(f*0.02), 0, 1, -1, 1);
+  infected = (exp(-c*c/2.0) / sqrt(TWO_PI) / 0.2)  + map(noise(f*0.03), 0, 1, -1, 1);
   
   
   // store that number at each step (the x-axis tick values)
@@ -69,11 +69,13 @@ function draw() {
   if (count > 1) {
     ellipse(posx[l], fy(data[l]), 4, 4);
   }
-  
+
+  /*
   // reset data and count
   if (count%time===0) {
     data = [];
     count = 0;
   }
+*/
 
 }
