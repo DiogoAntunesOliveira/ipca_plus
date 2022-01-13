@@ -30,3 +30,23 @@ function getParameterByName(name, url) {
 function login() {
   document.location.href = "pages/dashboard.html";
 }
+
+// Get the modal
+var modal;
+
+// When the user clicks the button, open the modal 
+function openModal(id){
+    modal = document.getElementById(id);
+    modal.style.display = "block";
+
+    setTimeout(function(){
+        document.location.href = "pages/dashboard.html";
+  }, 2000);
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+    modal.style.display = "none";
+    }
+}

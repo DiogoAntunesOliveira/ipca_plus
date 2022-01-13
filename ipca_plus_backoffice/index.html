@@ -17,36 +17,50 @@
 
     <link rel="stylesheet" href="css/style.css">
 
+    
+    <script type="text/javascript" src="../processing/p5.min.js"></script>
+    <script type="text/javascript" src="processing/loading/loading.js"></script>
+
 </head>
 
-<body style="background-image: url('images/background_login.gif'); background-repeat: no-repeat; background-size: cover;">
+<body style="background-color: #209D6A;"> 
+    <!-- background-image: url('images/background.jpg'); background-repeat: no-repeat; background-size: cover; -->
 
     <div class="cardLogin">
 
         <h2> <strong> Autenticação </strong> </h2>
 
-        <div>
-            <form id="form">
+        <div style="padding-bottom: 3%;">
 
-                <div style="margin-top: 2%; margin-left: 4%; margin-right: 4%;">
-                    <label for="name"><strong > Email </strong></label>
-                    <input type="text" id="name" required placeholder="Inserir nome" />
-                </div>
+            <div style="margin-top: 2%; margin-left: 4%; margin-right: 4%;">
+                <label for="name"><strong > Email </strong></label>
+                <input type="text" id="name" required placeholder="Inserir nome" />
+            </div>
 
-                <div style="margin-top: 6%; margin-left: 4%; margin-right: 4%;">
-                    <label for="name"><strong > Palavra-passe </strong></label>
-                    <input type="text" id="name" required placeholder="Inserir nome" />
-                </div>
+            <div style="margin-top: 6%; margin-left: 4%; margin-right: 4%;">
+                <label for="name"><strong > Palavra-passe </strong></label>
+                <input type="text" id="name" required placeholder="Inserir nome" />
+            </div>
 
-                <div style="margin-top: 10%; margin-left: 4%; margin-right: 4%; margin-bottom: 4%;">
-                    <button id="addCourse" type="submit" value="new" onclick="login()"> <strong> Entrar </strong></button>
-                </div>
+            <div style="margin-top: 10%; margin-left: 4%; margin-right: 4%; margin-bottom: 4%;">
+                <button type="button" value="new" onclick="openModal('modal-loading')"> <strong> Entrar </strong></button>
+            </div>
 
-            </form>
         </div>
     </div>
+    
 
-    <script src="../js/utilis.js" defer></script>
+    <div id="modal-loading" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div id="myContainer"> </div>
+        </div>
+
+    </div>
+
+    <script src="js/utilis.js" defer></script>
+
 </body>
 
 </html>
