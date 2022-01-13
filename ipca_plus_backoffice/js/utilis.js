@@ -27,8 +27,25 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-function login() {
-  document.location.href = "pages/dashboard.html";
+function login(id) {
+
+    modal = document.getElementById(id);
+    pass = document.getElementById("pass");
+    email = document.getElementById("email");
+    modal.style.display = "block";
+
+    setTimeout(function(){
+
+        if (pass.value == "!Root1793" && email.value == "admin@ipca.pt") 
+            document.location.href = "pages/dashboard.html";
+        else {
+            pass.value = "none";
+            email.value = "none";
+            modal.style.display = "none";
+        }
+
+    }, 2000);
+
 }
 
 // Get the modal
@@ -38,10 +55,6 @@ var modal;
 function openModal(id){
     modal = document.getElementById(id);
     modal.style.display = "block";
-
-    setTimeout(function(){
-        document.location.href = "pages/dashboard.html";
-  }, 2000);
 }
 
 // When the user clicks anywhere outside of the modal, close it
