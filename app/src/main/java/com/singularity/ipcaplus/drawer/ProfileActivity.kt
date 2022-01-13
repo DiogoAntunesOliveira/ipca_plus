@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream
 
 class ProfileActivity : ActivityImageHelper() {
 
+    // Variables
     private var imageUri: Uri? = null
     private lateinit var binding: ActivityProfileBinding
     lateinit var profileData: Profile
@@ -43,6 +44,9 @@ class ProfileActivity : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         contextInfo = applicationContext
+
+        // Variables
+        var userId = intent.getStringExtra("userId").toString()
 
 
         // Create the layout for this fragment
@@ -59,7 +63,7 @@ class ProfileActivity : ActivityImageHelper() {
 
 
         // Get profile
-        Backend.getUserProfile(Firebase.auth.uid!!) {
+        Backend.getUserProfile(userId) {
             profileData = it
 
             // Set data
@@ -70,14 +74,16 @@ class ProfileActivity : ActivityImageHelper() {
             binding.textViewAge.text = profileData.age
             binding.textViewCourse.text = profileData.course
 
-            Utilis.getFile(this, "profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
+            Utilis.getFile(this, "profilePictures/" + userId + ".png", "png") { bitmap ->
                 binding.imageViewProfile.setImageBitmap(bitmap)
             }
         }
 
-        // Change Profile Picture
-        binding.imageViewProfile.setOnClickListener {
-            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+        if (userId == Firebase.auth.currentUser!!.uid) {
+            // Change Profile Picture
+            binding.imageViewProfile.setOnClickListener {
+                checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+            }
         }
 
         // Back button
