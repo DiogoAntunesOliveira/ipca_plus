@@ -200,8 +200,9 @@ class ChatActivity : AppCompatActivity() {
                     for (document in it) {
                         if(document.id == chat_id) {
                             val chat = Chat.fromHash(document)
-                            supportActionBar?.title = chat.name
-                            findViewById<TextView>(R.id.AppBarTittle).text = chat.name
+                            val name = Utilis.getFirstAndLastName(chat.name)
+                            //supportActionBar?.title = chat.name
+                            findViewById<TextView>(R.id.AppBarTittle).text = name
                         }
                     }
                 }
@@ -231,7 +232,7 @@ class ChatActivity : AppCompatActivity() {
                 intent.putExtra("chat_id", chat_id)
                 println("3------------------------------ " + currentUserIsAdmin)
                 intent.putExtra("is_admin", currentUserIsAdmin)
-                intent.putExtra("chat_name", findViewById<TextView>(R.id.AppBarTittle).text)
+                intent.putExtra("chat_name",  Utilis.getFirstAndLastName(findViewById<TextView>(R.id.AppBarTittle).text.toString()))
                 startActivity(intent)
                 return true
             }
