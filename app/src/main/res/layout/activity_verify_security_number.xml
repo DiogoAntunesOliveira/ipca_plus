@@ -11,7 +11,7 @@
         android:id="@+id/cardView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:elevation="10dp"
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,19 +22,19 @@
             android:id="@+id/qrImageView"
             android:layout_width="189dp"
             android:layout_height="191dp"
+            android:layout_margin="20dp"
             app:srcCompat="@mipmap/ic_launcher_round"
             tools:layout_editor_absoluteX="94dp"
-            tools:layout_editor_absoluteY="81dp"
-            android:layout_margin="20dp"/>
+            tools:layout_editor_absoluteY="81dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="200dp"
             android:text="@string/toque_para_ler"
             android:textAlignment="center"
-            android:textColor="@color/black"
-            android:layout_marginTop="200dp"
-            android:layout_marginStart="70dp"/>
+            android:textColor="@color/black" />
 
     </androidx.cardview.widget.CardView>
 
@@ -43,7 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="100dp"
         android:fontFamily="@font/poppins"
         android:text="@string/info_key"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="77dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/button_register"

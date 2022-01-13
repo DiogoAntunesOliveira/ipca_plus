@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.singularity.ipcaplus">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -8,6 +9,7 @@
 
     <application
         android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -15,8 +17,7 @@
         android:theme="@style/Theme.IPCA">
         <activity
             android:name=".chat.SplashScreenActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".chat.CreateChatActivity"
             android:exported="true" />
@@ -34,7 +35,10 @@
             android:exported="false" />
         <activity
             android:name=".chat.VerifySecurityNumberActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            tools:replace="screenOrientation" />
         <activity
             android:name=".chat.ChatMoreActivity"
             android:exported="false" />

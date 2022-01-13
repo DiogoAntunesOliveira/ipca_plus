@@ -74,7 +74,7 @@
             app:backgroundTint="@null"
             android:translationZ="20dp"
             android:elevation="10dp"
-            android:text="Register"
+            android:text="Registo"
             android:textColor="@color/black"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
