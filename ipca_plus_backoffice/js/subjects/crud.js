@@ -189,7 +189,7 @@ function addSubject() {
           db.collection("chat")
           .add({
             name: subjectName,
-            type: "oficial",
+            type: "oficial" + courseTag,
             ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP"
           })
           .then((docRef2) => {
@@ -382,12 +382,12 @@ function editSubject(id) {
           .then((snap) => {
             snap.docs.forEach((doc) => {
 
-              if (doc.data().type == "oficial") {
+              if (doc.data().type == "oficial" + courseTag) {
                 db.collection("chat")
                 .doc(doc.id)
                 .set({      
                   name: selectedName,
-                  type: "oficial",
+                  type: "oficial" + courseTag,
                   ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP"
                 })
                 .then(() => {
@@ -469,7 +469,7 @@ function removeSubject(id) {
   .then((snap) => {
     snap.docs.forEach((doc2) => {
 
-      if (doc2.data().type == "oficial") {
+      if (doc2.data().type == "oficial" + courseTag) {
 
         db.collection("chat")
         .doc(doc2.id)
