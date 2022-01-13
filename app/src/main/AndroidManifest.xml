@@ -35,10 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".chat.VerifySecurityNumberActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            tools:replace="screenOrientation" />
+            android:exported="true" />
         <activity
             android:name=".chat.ChatMoreActivity"
             android:exported="false" />
