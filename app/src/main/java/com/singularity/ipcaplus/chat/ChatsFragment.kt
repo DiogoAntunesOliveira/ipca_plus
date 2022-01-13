@@ -141,7 +141,13 @@ class ChatsFragment : Fragment() {
 
 
                     // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
-                    saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
+                    if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()){
+                        chats[position].ox = getMetaOx(context, chatIds[position])
+                    }
+                    else{
+                        saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
+                    }
+
                     // Set Last Chat Message
                     Backend.getLastMessageByChatID(chatIds[position]) {
 
@@ -149,6 +155,7 @@ class ChatsFragment : Fragment() {
                         lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
 
                         val keygen = getMetaOx(context, chatIds[position])
+                        println("BLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK $keygen")
                         getIv(chatIds[position]){iv ->
                             val message_decripted = decryptWithAESmeta(keygen.toString(), it.message, iv.toString())
                             lastMessageText.text = message_decripted

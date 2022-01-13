@@ -2,6 +2,8 @@ package com.singularity.ipcaplus.chat
 
 import android.annotation.SuppressLint
 import android.app.ActionBar
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Build
@@ -10,14 +12,21 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
+import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.encoder.QRCode
+import com.singularity.ipcaplus.LoginActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.cryptography.getMetaOx
+import com.singularity.ipcaplus.utils.Backend.put0xBlank
+import com.singularity.ipcaplus.utils.Backend.put0xBlankProfile
 
 class VerifySecurityNumberActivity : AppCompatActivity() {
 
@@ -25,6 +34,8 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
     private lateinit var keygenHash: String
     private lateinit var verifySecurity: Button
     private lateinit var hexaHashKey: TextView
+    private lateinit var mQrResultLauncher : ActivityResultLauncher<Intent>
+
 
     @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.M)
@@ -38,6 +49,7 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
             finish()
         }
+
 
         // Get previous data
         val chat_id = intent.getStringExtra("chat_id").toString()
@@ -91,7 +103,35 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
             }
         }
 
+        vQRCode.setOnClickListener{
+            // Starts scanner on Create of Overlay (you can also call this function using a button click)
+            initScanner()
+        }
+        findViewById<Button>(R.id.verifySecurityButton).setOnClickListener{
+            put0xBlank(chat_id)
+            put0xBlankProfile(chat_id){
+                finish()
+            }
+        }
 
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelado", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Secreat Key " + result.contents, Toast.LENGTH_LONG).show()
+            }
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun blankSpaces(key : String): String {
@@ -101,6 +141,18 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
             result += if (i % 4 == 0) " ${key[i]}" else key[i]
 
         return result
+    }
+
+    // Start the QR Scanner
+    private fun initScanner(){
+        IntentIntegrator(this).initiateScan()
+        val integrator = IntentIntegrator(this)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+        integrator.setPrompt("Ipca plus security in Blockchain")
+        integrator.setCameraId(0)
+        integrator.setOrientationLocked(true)
+        integrator.setBeepEnabled(true)
+        integrator.initiateScan()
     }
 
 }

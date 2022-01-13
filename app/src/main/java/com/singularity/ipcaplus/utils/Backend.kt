@@ -731,8 +731,6 @@ object Backend {
                 for (document in documents) {
                     chatIds.add(document.id)
                 }
-
-                println("DEntroooo" + chatIds)
                 callBack(chatIds)
             }
 
@@ -753,8 +751,6 @@ object Backend {
                             chatId = id
                         }
                     }
-
-                    println("ACABOU2---------------------------------------")
                     callBack(chatId)
                 }
         }
@@ -912,6 +908,44 @@ object Backend {
                     }
                 }
                 callBack(notificationKey)
+            }
+    }
+
+    fun put0xBlank(chatId: String){
+
+        db.collection("chat")
+            .document(chatId)
+            .update(mapOf(
+                "ox" to ""
+            ))
+    }
+    fun put0xBlankProfile(chatId: String, callback: () -> Unit){
+
+        val userIds = arrayListOf<String>()
+
+        // get all chat members ids
+        db.collection("chat")
+            .document(chatId)
+            .collection("user")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+                    for (document in documents) {
+                        userIds.add(document.id)
+                    }
+
+                    for (i in 0 until userIds.size) {
+
+                        db.collection("profile")
+                            .document(userIds[i])
+                            .collection("chat")
+                            .document(chatId)
+                            .update(mapOf(
+                                "ox" to ""
+                            ))
+
+                    }
+                }
             }
     }
 
