@@ -212,6 +212,7 @@ function addSubject() {
               console.log("teacher id: " + teacherID)
 
               /* ----------------- Add teacher admin ----------------- */
+              /*
               db.collection("chat")
               .doc(docRef2.id)
               .collection("user")
@@ -220,10 +221,10 @@ function addSubject() {
                 admin: true
               }).then((docRef4) => {
                 form.reset();
-              });
+              });*/
 
               /* ----------------- Add all users in the course ----------------- */
-
+              /*
               db.collection("ipca_data")
                 .get()
                 .then((snap) => {
@@ -250,7 +251,7 @@ function addSubject() {
                       });
                     });
                   });
-                });
+                });*/
 
               /* The users are added durind the user creation or edition */
 
@@ -295,12 +296,13 @@ function editSubject(id) {
       if (selectedTeacher != previousTeacher) {
 
         // Get subject chat
+        /*
         db.collection("chat")
         .where("name", "==", previousSubjectName)
         .get()
         .then((snap) => {
           snap.docs.forEach((doc) => {
-
+*/
             // Remove previous teacher in his data
             db.collection("ipca_data")
             .doc(previousTeacher)
@@ -324,10 +326,12 @@ function editSubject(id) {
                   console.error("Error removing document: ", error);
                 });
 
-              });
-            });
+              /*});
+              
+            }); */
 
             // Remove previous teacher in chat data
+            /*
             db.collection("chat")
             .doc(doc.id) // <---- oficial subject chat
             .collection("user")
@@ -340,7 +344,7 @@ function editSubject(id) {
             })
             .catch((error) => {
               console.error("Error removing document: ", error);
-            });
+            }); */
 
             // add new teacher in his data
             db.collection("ipca_data")
@@ -357,6 +361,7 @@ function editSubject(id) {
             });
 
             // add new teacher in chat as admin
+            /*
             db.collection("chat")
               .doc(doc.id)
               .collection("user")
@@ -365,9 +370,9 @@ function editSubject(id) {
                 admin: true
               }).then((docRef4) => {
                 console.log("Document successfully added!");
-              });
+              });*/
 
-          });
+          }); 
         });
 
         console.log("New Subject successfully edited: ", docRef);

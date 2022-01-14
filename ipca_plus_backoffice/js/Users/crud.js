@@ -212,6 +212,7 @@ function addUser() {
                 console.log("courseID: " + courseID)
 
                 // Add user to user list in all subjects oficial chats
+                /*
                 db.collection("course")
                 .doc(courseID)
                 .collection("subject")
@@ -251,7 +252,7 @@ function addUser() {
                     });
 
                   });
-                });
+                }); */
                 
               });
             });
@@ -281,8 +282,6 @@ function editUser(id) {
       student_number: userForm.email.value.split('@')[0],
       contact: userForm.contact.value,
       age: userForm.age.value,
-      course: selected_course,
-      course_tag: selected_tag,
       role: userForm.role.value,
       email: userForm.email.value,
       gender: userForm.gender.value
@@ -291,12 +290,8 @@ function editUser(id) {
 
       // Add course if its a student or course director
       if (userForm.role.value == "Aluno") {
-        
-        let e = userForm.courses;
-        let selected_tag = e.options[e.selectedIndex].value;
-        let selected_course = e.options[e.selectedIndex].text;
 
-        db.collection("ipca_data").doc(id).collection("course").set({
+        db.collection("ipca_data").doc(id).collection("course").add({
           name: selected_course,
           tag: selected_tag
         })
@@ -340,6 +335,7 @@ function removeUser(id) {
               console.log("courseID: " + courseID)
 
               // Remove user from user list in all subjects oficial chats
+              /*
               db.collection("course")
               .doc(courseID)
               .collection("subject")
@@ -375,9 +371,9 @@ function removeUser(id) {
 
                       });
                     });
-                });
+                }); 
 
-              });
+              });*/
 
             });
             

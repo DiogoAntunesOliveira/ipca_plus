@@ -299,37 +299,24 @@ object Backend {
        This function returns the user course by callback
        @id = user uid
     */
-    fun getUserCoursesIds(uid: String, courseTag: String, callBack:(List<String>)->Unit) {
+    fun getUserSubjects(uid: String, callBack:(String)->Unit) {
 
-        val courseIds = arrayListOf<String>()
-
-        db.collection("course")
-            .whereEqualTo("tag", courseTag)
-            .get()
-            .addOnSuccessListener { documents ->
+        db.collection("profile")
+            .document(uid)
+            .collection("course")
+            .addSnapshotListener { documents, _ ->
 
                 documents?.let {
 
+                    var courseId = ""
                     for (document in documents)
-                        courseIds.add(document.id)
+                        courseId = document.id
 
-                    callBack(courseIds)
+                    callBack(courseId)
                 }
-
             }
-
     }
 
-
-    fun setUserCourses(userID: String, courseID: String) {
-
-        val profile = HashMap<String, Any>()
-        db.collection("profile")
-            .document(userID)
-            .collection("course")
-            .document(courseID)
-            .set(profile)
-    }
 
 
     fun setUserCourseByIpcaData(userID: String, ipcaDataID: String, callBack:(String)->Unit) {

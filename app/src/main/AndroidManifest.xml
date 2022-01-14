@@ -32,6 +32,10 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
+            android:name=".chat.FilePreviewActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name=".TermsAndCondictionsActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
