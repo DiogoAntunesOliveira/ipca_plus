@@ -40,6 +40,7 @@ class SearchActivity: AppCompatActivity() {
     private var mLayoutManager: LinearLayoutManager? = null
 
 
+
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,7 @@ class SearchActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val back = findViewById<ImageView>(R.id.back_btn)
+        overridePendingTransition(0,0)
 
         back.setOnClickListener(){
             finish()

@@ -50,7 +50,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:background="@drawable/rounded_shape"
-        android:backgroundTint="#E9E9E9"
+        android:backgroundTint="@color/grey_200"
         android:maxWidth="280dp"
         android:padding="10dp"
         android:textAlignment="textStart"
