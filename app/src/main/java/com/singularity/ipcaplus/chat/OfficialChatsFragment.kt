@@ -1,6 +1,7 @@
 package com.singularity.ipcaplus.chat
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.getMetaOx
+import com.singularity.ipcaplus.cryptography.saveKeygenOx
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.databinding.FragmentOfficialChatsBinding
 import com.singularity.ipcaplus.models.Chat
@@ -87,6 +91,7 @@ class OfficialChatsFragment : Fragment() {
             )
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
@@ -99,6 +104,15 @@ class OfficialChatsFragment : Fragment() {
                     val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
                     textViewMessage.text = chats[position].name
+
+                    // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
+                    if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()){
+                        chats[position].ox = getMetaOx(context, chatIds[position])
+                    }
+                    else{
+                        saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
+                    }
+
                     // Set Last Chat Message
                     /*
                     Backend.getLastMessageByChatID(chatIds[position]) {

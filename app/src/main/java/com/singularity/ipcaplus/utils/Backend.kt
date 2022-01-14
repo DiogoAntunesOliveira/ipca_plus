@@ -807,6 +807,14 @@ object Backend {
                     .collection("chat")
                     .document(chat.id.toString())
                         .set(chat)
+                db.collection("chat")
+                    .document(chat.id.toString())
+                    .collection("user")
+                    .document(userId)
+                    .set(mapOf(
+                        "admin" to null
+                    ))
+
 
             }
         }
