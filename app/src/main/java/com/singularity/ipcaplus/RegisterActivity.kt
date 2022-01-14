@@ -55,29 +55,28 @@ class RegisterActivity : AppCompatActivity() {
 
                                 emailVerification()
 
-                                Backend.getIpcaData(email) {
-
-                                    val profile = it
+                                Backend.getIpcaData(email) { profile, ipcaDataId ->
 
                                     val userID = auth.currentUser!!.uid
 
+                                    // Create profile with ipca data
                                     db.collection("profile")
                                         .document(userID)
                                         .set(profile!!.toHash())
+                                        .addOnCompleteListener {
 
-                                    // Find Course Based on course_tag and create a collection with that document
-                                    Backend.getUserCoursesIds(userID, profile.courseTag) { list ->
-                                        for (courseID in list)
-                                            Backend.setUserCourses(userID, courseID)
+                                            // Get user course in ipca data and create a collection with that document
+                                            Backend.setUserCourseByIpcaData(userID, ipcaDataId) {
 
-                                        db.collection("profile")
-                                            .document(userID)
-                                            .set(profile!!.toHash())
+                                                // Create official chats for each subject
+                                                Backend.getOficialChatByTag(it) { chats ->
+                                                    Backend.setOficialChat(userID, chats)
+                                                }
 
-                                        Backend.getOficialChatByTag(profile.courseTag) { chats ->
-                                            Backend.setOficialChat(userID, chats)
+                                            }
+
                                         }
-                                    }
+
 
 
                                 }

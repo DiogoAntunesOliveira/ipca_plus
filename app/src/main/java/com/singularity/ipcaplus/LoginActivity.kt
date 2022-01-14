@@ -73,7 +73,6 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
-                        updateUI(user, email)
                         prefs.password = binding.editTextTextPassword.text.toString()
                         prefs.email = binding.editTextEmail.text.toString()
                         prefs.userId = auth.currentUser?.uid
@@ -82,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
                             prefs.name = it.name
 
                             // Sign in success, update UI with the signed-in user's information
-                            startActivity(Intent(this@LoginActivity, DrawerActivty::class.java ))
+                            updateUI(user, email)
                         }
 
 

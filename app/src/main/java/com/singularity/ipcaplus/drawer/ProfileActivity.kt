@@ -72,7 +72,7 @@ class ProfileActivity : ActivityImageHelper() {
             binding.textViewFullName.text = profileData.name
             binding.textViewRole.text = profileData.role
             binding.textViewAge.text = profileData.age
-            binding.textViewCourse.text = profileData.course
+            //binding.textViewCourse.text = profileData.course
 
             Utilis.getFile(this, "profilePictures/" + userId + ".png", "png") { bitmap ->
                 binding.imageViewProfile.setImageBitmap(bitmap)
