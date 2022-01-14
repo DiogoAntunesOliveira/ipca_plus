@@ -203,7 +203,7 @@ function addSubject() {
             .add({
               user: "system",
               message: "AcNj1olXt82HULKQ8Wlgi6cQJ1+mIyZX31zXjTvkY0+n/WJtN5kZp1qccicLsC3YNNyVCQFd1xn/urlBcZuM/g==",
-              time: Date.now(),
+              time: firebase.firestore.Timestamp.fromDate(new Date()),
               files: ""
 
             }).then((docRef3) => {
