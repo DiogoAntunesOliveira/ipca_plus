@@ -218,53 +218,88 @@ object Backend {
        This function returns all events in the firebase to an list
        @callBack = return the list
     */
-    fun getDayCourseSubjects(day: String, courseId: String, callBack: (List<Subject>)->Unit) {
+    fun getDayCourseClasses(day: String, courseId: String, callBack: (List<SubjectClass>)->Unit) {
 
-        val subjects = arrayListOf<Subject>()
-        val subjectsWithBreaks = arrayListOf<Subject>()
+        val subjectClasses = arrayListOf<SubjectClass>()
+        val subjectClassesWithBreaks = arrayListOf<SubjectClass>()
 
+        // Get all subjects in course
         db.collection("course").document(courseId).collection("subject")
-            .addSnapshotListener { documents, _ ->
-                documents?.let {
+            .addSnapshotListener { documents1, _ ->
+                documents1?.let {
 
                     // Add every subject to the list
-                    for (document in documents) {
-                        val subject = Subject.fromHash(document)
-                        if (day == subject.day) {
-                            subjects.add(subject)
-                        }
-                    }
+                    for (_document1 in documents1) {
 
-                    // Order the subjects by time
-                    for (i in 0 until subjects.size) {
-                        for (j in 0 until subjects.size - 1) {
+                        // get current subject
+                        val subject = Subject.fromHash(_document1)
 
-                            if (Utilis.convertHoursStringToInt(subjects[j].start_time) > Utilis.convertHoursStringToInt(
-                                    subjects[j + 1].start_time
-                                )
-                            ) {
-                                val temp = subjects[j]
-                                subjects[j] = subjects[j + 1]
-                                subjects[j + 1] = temp
+                        // Get all classes of all subjects of the course
+                        db.collection("course")
+                            .document(courseId)
+                            .collection("subject")
+                            .document(_document1.id)
+                            .collection("class")
+                            .addSnapshotListener { documents2, _ ->
+
+                                // Get teacher name
+                                db.collection("ipca_data")
+                                    .document(subject.teacher)
+                                    .get()
+                                    .addOnSuccessListener { documents3 ->
+                                        val teacherName = documents3.data!!["name"].toString()
+                                        println("---------------------------------> teacher: " + teacherName)
+
+                                    documents2?.let {
+
+                                        for (_document2 in documents2) {
+
+                                            val subjectClass = SubjectClass.fromHash(_document2)
+                                            if (day == subjectClass.day) {
+                                                subjectClass.name = subject.name
+                                                subjectClass.teacher = teacherName
+                                                subjectClasses.add(subjectClass)
+                                            }
+                                        }
+
+                                    }
+
+                                    // Order the subjects by time
+                                    for (i in 0 until subjectClasses.size) {
+                                        for (j in 0 until subjectClasses.size - 1) {
+
+                                            if (Utilis.convertHoursStringToInt(subjectClasses[j].start_time) > Utilis.convertHoursStringToInt(
+                                                    subjectClasses[j + 1].start_time
+                                                )
+                                            ) {
+                                                val temp = subjectClasses[j]
+                                                subjectClasses[j] = subjectClasses[j + 1]
+                                                subjectClasses[j + 1] = temp
+                                            }
+                                        }
+                                    }
+
+                                    // Add Break Times Between Classes
+                                    for (i in 0 until subjectClasses.size) {
+                                        if (i % 2 == 0) {
+                                            subjectClassesWithBreaks.add(subjectClasses[i])
+                                        }
+                                        else {
+                                            val diff = Utilis.convertHoursStringToInt(subjectClasses[i].start_time) - Utilis.convertHoursStringToInt(
+                                                subjectClasses[i - 1].end_time
+                                            )
+                                            subjectClassesWithBreaks.add(SubjectClass("breaktime", diff.toString()))
+                                            subjectClassesWithBreaks.add(subjectClasses[i])
+                                        }
+                                    }
+
+                                    callBack(subjectClassesWithBreaks)
+                                }
                             }
-                        }
+
                     }
 
-                    // Add Break Times Between Classes
-                    for (i in 0 until subjects.size) {
-                        if (i % 2 == 0) {
-                            subjectsWithBreaks.add(subjects[i])
-                        }
-                        else {
-                            val diff = Utilis.convertHoursStringToInt(subjects[i].start_time) - Utilis.convertHoursStringToInt(
-                                subjects[i - 1].end_time
-                            )
-                            subjectsWithBreaks.add(Subject("breaktime", diff.toString()))
-                            subjectsWithBreaks.add(subjects[i])
-                        }
-                    }
 
-                    callBack(subjectsWithBreaks)
                 }
 
             }
@@ -276,7 +311,7 @@ object Backend {
        This function returns the user course by callback
        @id = user uid
     */
-    fun getUserCourses(uid: String, callBack:(String)->Unit) {
+    fun getUserCourseId(uid: String, callBack:(String)->Unit) {
 
         db.collection("profile")
             .document(uid)
@@ -285,38 +320,31 @@ object Backend {
 
                 documents?.let {
 
-                    var courseId = ""
-                    for (document in documents)
-                        courseId = document.id
+                    var courseTag = ""
+                    for (document in documents) {
+                        val course = Course.fromHash(document)
+                        courseTag = course.tag
+                    }
 
-                    callBack(courseId)
+                    db.collection("course")
+                        .whereEqualTo("tag", courseTag)
+                        .addSnapshotListener { documents, _ ->
+
+                            documents?.let {
+
+                                var courseId = ""
+                                for (document in documents) {
+                                    courseId = document.id
+                                }
+
+                                callBack(courseId)
+                            }
+
+                        }
+
                 }
             }
     }
-
-
-    /*
-       This function returns the user course by callback
-       @id = user uid
-    */
-    fun getUserSubjects(uid: String, callBack:(String)->Unit) {
-
-        db.collection("profile")
-            .document(uid)
-            .collection("course")
-            .addSnapshotListener { documents, _ ->
-
-                documents?.let {
-
-                    var courseId = ""
-                    for (document in documents)
-                        courseId = document.id
-
-                    callBack(courseId)
-                }
-            }
-    }
-
 
 
     fun setUserCourseByIpcaData(userID: String, ipcaDataID: String, callBack:(String)->Unit) {

@@ -18,6 +18,7 @@ import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.utils.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityScheduleBinding
 import com.singularity.ipcaplus.models.Subject
+import com.singularity.ipcaplus.models.SubjectClass
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.PreferenceHelper
 
@@ -26,7 +27,7 @@ class ScheduleActivity : AppCompatActivity() {
     // Variables
     var day = "seg"
     var weekButtons = arrayListOf<Button>()
-    var subjects = arrayListOf<Subject>()
+    var subjects = arrayListOf<SubjectClass>()
     private var scheduleAdapter: RecyclerView.Adapter<*>? = null
     private var scheduleLayoutManager: LinearLayoutManager? = null
     private lateinit var binding: ActivityScheduleBinding
@@ -55,7 +56,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         // Add all Subjects To List based on the selected day and the User Course
         val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourses(prefs.userId!!) {
+        Backend.getUserCourseId(prefs.userId!!) {
             addSubjectsToList(it)
         }
 
@@ -95,7 +96,7 @@ class ScheduleActivity : AppCompatActivity() {
         // Reset Schedule and get the new Subjects
         day = button.text.toString().lowercase()
         val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourses(prefs.userId!!) {
+        Backend.getUserCourseId(prefs.userId!!) {
             addSubjectsToList(it)
         }
 
@@ -106,7 +107,7 @@ class ScheduleActivity : AppCompatActivity() {
 
     // Get All Subjects during the day
     fun addSubjectsToList(courseId: String) {
-        Backend.getDayCourseSubjects(day, courseId){
+        Backend.getDayCourseClasses(day, courseId){
             subjects.clear()
             subjects.addAll(it)
             currentIndex = 0
