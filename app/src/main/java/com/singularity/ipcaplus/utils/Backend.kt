@@ -800,6 +800,7 @@ object Backend {
                     // Get all Oficial Course Chats
                     for (document in documents) {
                         val chat = Chat.fromHash(document)
+                        chat.id = document.id
                         if (chat.type == "oficial$courseTag") {
                             oficialChat.add(chat)
                         }
@@ -817,7 +818,9 @@ object Backend {
                 db.collection("profile")
                     .document(userId)
                     .collection("chat")
-                    .add(chat)
+                    .document(chat.id.toString())
+                        .set(chat)
+
             }
         }
 

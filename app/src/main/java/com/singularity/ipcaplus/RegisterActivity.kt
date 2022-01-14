@@ -70,6 +70,7 @@ class RegisterActivity : AppCompatActivity() {
 
                                                 // Create official chats for each subject
                                                 Backend.getOficialChatByTag(it) { chats ->
+
                                                     Backend.setOficialChat(userID, chats)
                                                 }
 
