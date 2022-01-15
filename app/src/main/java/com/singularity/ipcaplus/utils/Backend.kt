@@ -930,6 +930,7 @@ object Backend {
                     for (document in documents) {
                         val name = document["name"] as String
                         val id = document["id"] as String
+                        val course = document["course"] as String
 
                         // add every one in the profile
                         db.collection("profile")
@@ -937,7 +938,8 @@ object Backend {
                             .collection("subject")
                             .add(mapOf(
                                 "name" to name,
-                                "id" to id
+                                "id" to id,
+                                "course" to course
                             ))
                             .addOnCompleteListener {
 

@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.google.firebase.auth.FirebaseAuth
@@ -72,6 +73,28 @@ class ProfileActivity : ActivityImageHelper() {
             binding.textViewFullName.text = profileData.name
             binding.textViewRole.text = profileData.role
             binding.textViewAge.text = profileData.age
+
+            if (profileData.role != "Professor") {
+
+                Backend.db.collection("profile")
+                    .document(profileData.id!!)
+                    .collection("course")
+                    .addSnapshotListener { documents, _ ->
+
+                        documents?.let {
+
+                            for (document in documents) {
+                                binding.textViewCourse.text = document.data["name"] as String
+                            }
+                        }
+                    }
+
+            }
+            else {
+                binding.textViewCourse.visibility = View.GONE
+                binding.textViewCourseTitle.visibility = View.GONE
+            }
+
             //binding.textViewCourse.text = profileData.course
 
             Utilis.getFile(this, "profilePictures/" + userId + ".png", "png") { bitmap ->
