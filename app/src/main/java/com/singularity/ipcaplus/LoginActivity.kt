@@ -21,6 +21,7 @@ import com.singularity.ipcaplus.utils.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityLoginBinding
 import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.PreferenceHelper.role
 import com.singularity.ipcaplus.utils.UserLoggedIn
 import com.singularity.ipcaplus.utils.UserLoggedIn.email
 
@@ -58,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
         UserLoggedIn.id = prefs.getString("USER_ID", null)
         UserLoggedIn.name = prefs.getString("USER_NAME", null)
         UserLoggedIn.email = prefs.getString("USER_EMAIL", null)
+        UserLoggedIn.role = prefs.getString("USER_ROLE", null)
         UserLoggedIn.password = prefs.getString("USER_PASSWORD", null)
 
         if (UserLoggedIn.id != null){
@@ -79,6 +81,7 @@ class LoginActivity : AppCompatActivity() {
 
                         Backend.getUserProfile(Firebase.auth.uid!!) {
                             prefs.name = it.name
+                            prefs.role = it.role
 
                             // Sign in success, update UI with the signed-in user's information
                             updateUI(user, email)

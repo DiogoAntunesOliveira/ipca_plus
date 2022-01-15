@@ -306,6 +306,10 @@ object Backend {
 
     }
 
+    fun getDayTeacherClasses() {
+
+    }
+
 
     /*
        This function returns the user course by callback
@@ -821,6 +825,61 @@ object Backend {
                         }
                     }
                     callBack(oficialChat)
+                }
+            }
+
+    }
+
+    fun setTeacherSubjectsByIpcaData(userId: String, userIpcaDataId: String) {
+
+        // Get all subject ids in user ipca data id
+        db.collection("ipca_data")
+            .document(userIpcaDataId)
+            .collection("subject")
+            .addSnapshotListener { documents, _ ->
+                documents?.let {
+
+                    // Get all subjects names
+                    for (document in documents) {
+                        val name = document["name"] as String
+                        val id = document["id"] as String
+
+                        // add every one in the profile
+                        db.collection("profile")
+                            .document(userId)
+                            .collection("subject")
+                            .add(mapOf(
+                                "name" to name,
+                                "id" to id
+                            ))
+                            .addOnCompleteListener {
+
+                                // Get current oficial chat
+                                db.collection("chat")
+                                    .whereEqualTo("name", name)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        for (chat in documents) {
+
+                                            // Create oficial chat references
+                                            db.collection("profile")
+                                                .document(userId)
+                                                .collection("chat")
+                                                .document(chat.id)
+                                                .set(chat.data)
+                                            db.collection("chat")
+                                                .document(chat.id)
+                                                .collection("user")
+                                                .document(userId)
+                                                .set(mapOf(
+                                                    "admin" to true
+                                                ))
+
+                                        }
+                                    }
+                            }
+                    }
+
                 }
             }
 

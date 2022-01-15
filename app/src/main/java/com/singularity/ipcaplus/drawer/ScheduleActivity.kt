@@ -21,6 +21,7 @@ import com.singularity.ipcaplus.models.Subject
 import com.singularity.ipcaplus.models.SubjectClass
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.PreferenceHelper
+import com.singularity.ipcaplus.utils.UserLoggedIn
 
 class ScheduleActivity : AppCompatActivity() {
 
@@ -55,9 +56,11 @@ class ScheduleActivity : AppCompatActivity() {
         }
 
         // Add all Subjects To List based on the selected day and the User Course
-        val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourseId(prefs.userId!!) {
-            addSubjectsToList(it)
+        if (UserLoggedIn.role != "Professor") {
+            val prefs = PreferenceHelper.customPreference(this, "User_data")
+            Backend.getUserCourseId(prefs.userId!!) {
+                addStudentSubjectsToList(it)
+            }
         }
 
         // Button Events
@@ -95,9 +98,11 @@ class ScheduleActivity : AppCompatActivity() {
 
         // Reset Schedule and get the new Subjects
         day = button.text.toString().lowercase()
-        val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourseId(prefs.userId!!) {
-            addSubjectsToList(it)
+        if (UserLoggedIn.role != "Professor") {
+            val prefs = PreferenceHelper.customPreference(this, "User_data")
+            Backend.getUserCourseId(prefs.userId!!) {
+                addStudentSubjectsToList(it)
+            }
         }
 
         // if (button.currentTextColor == Color.BLACK) {
@@ -105,8 +110,18 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
 
-    // Get All Subjects during the day
-    fun addSubjectsToList(courseId: String) {
+    // Get All student Subjects during the day
+    fun addStudentSubjectsToList(courseId: String) {
+        Backend.getDayCourseClasses(day, courseId){
+            subjects.clear()
+            subjects.addAll(it)
+            currentIndex = 0
+            scheduleAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    // Get All teacher Subjects during the day
+    fun addTeacherSubjectsToList(courseId: String) {
         Backend.getDayCourseClasses(day, courseId){
             subjects.clear()
             subjects.addAll(it)

@@ -65,15 +65,22 @@ class RegisterActivity : AppCompatActivity() {
                                         .set(profile!!.toHash())
                                         .addOnCompleteListener {
 
-                                            // Get user course in ipca data and create a collection with that document
-                                            Backend.setUserCourseByIpcaData(userID, ipcaDataId) {
+                                            if (profile.role != "Professor") {
 
-                                                // Create official chats for each subject
-                                                Backend.getOficialChatByTag(it) { chats ->
+                                                // Get user course in ipca data and create a collection with that document
+                                                Backend.setUserCourseByIpcaData(userID, ipcaDataId) {
 
-                                                    Backend.setOficialChat(userID, chats)
+                                                    // Create official chats for each subject
+                                                    Backend.getOficialChatByTag(it) { chats ->
+
+                                                        Backend.setOficialChat(userID, chats)
+                                                    }
+
                                                 }
 
+                                            }
+                                            else {
+                                                Backend.setTeacherSubjectsByIpcaData(userID, ipcaDataId)
                                             }
 
                                         }
