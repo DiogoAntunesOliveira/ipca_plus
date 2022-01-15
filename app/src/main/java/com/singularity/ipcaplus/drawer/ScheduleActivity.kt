@@ -56,11 +56,14 @@ class ScheduleActivity : AppCompatActivity() {
         }
 
         // Add all Subjects To List based on the selected day and the User Course
+        val prefs = PreferenceHelper.customPreference(this, "User_data")
         if (UserLoggedIn.role != "Professor") {
-            val prefs = PreferenceHelper.customPreference(this, "User_data")
             Backend.getUserCourseId(prefs.userId!!) {
                 addStudentSubjectsToList(it)
             }
+        }
+        else {
+            addTeacherSubjectsToList(prefs.userId!!)
         }
 
         // Button Events
@@ -98,11 +101,14 @@ class ScheduleActivity : AppCompatActivity() {
 
         // Reset Schedule and get the new Subjects
         day = button.text.toString().lowercase()
+        val prefs = PreferenceHelper.customPreference(this, "User_data")
         if (UserLoggedIn.role != "Professor") {
-            val prefs = PreferenceHelper.customPreference(this, "User_data")
             Backend.getUserCourseId(prefs.userId!!) {
                 addStudentSubjectsToList(it)
             }
+        }
+        else {
+            addTeacherSubjectsToList(prefs.userId!!)
         }
 
         // if (button.currentTextColor == Color.BLACK) {
@@ -122,7 +128,7 @@ class ScheduleActivity : AppCompatActivity() {
 
     // Get All teacher Subjects during the day
     fun addTeacherSubjectsToList(courseId: String) {
-        Backend.getDayCourseClasses(day, courseId){
+        Backend.getDayTeacherClasses(day, courseId) {
             subjects.clear()
             subjects.addAll(it)
             currentIndex = 0

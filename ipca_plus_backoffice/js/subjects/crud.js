@@ -182,7 +182,8 @@ function addSubject() {
         .doc(docRef.id)
         .set({
           id: docRef.id,
-          name: subjectName
+          name: subjectName,
+          course: courseID
         })
         .then(() => {
 
@@ -211,50 +212,6 @@ function addSubject() {
 
                   console.log("chat id: " + docRef2.id)
                   console.log("teacher id: " + teacherID)
-
-                  /* ----------------- Add teacher admin ----------------- */
-                  /*
-                  db.collection("chat")
-                  .doc(docRef2.id)
-                  .collection("user")
-                  .doc(teacherID)
-                  .set({
-                    admin: true
-                  }).then((docRef4) => {
-                    form.reset();
-                  });*/
-
-                  /* ----------------- Add all users in the course ----------------- */
-                  /*
-                  db.collection("ipca_data")
-                    .get()
-                    .then((snap) => {
-                      snap.docs.forEach((doc) => {
-
-                        db.collection("ipca_data")
-                        .doc(doc.id)
-                        .collection("course")
-                        .where("tag", "==", courseTag)
-                        .get()
-                        .then((snap2) => {
-                          snap2.docs.forEach(() => {
-                            
-                            db.collection("chat")
-                            .doc(docRef2.id)
-                            .collection("user")
-                            .doc(doc.id)
-                            .set({
-                              admin: false
-                            }).then(() => {
-                              console.log("user adicionado: " + doc.data());
-                            });
-
-                          });
-                        });
-                      });
-                    });*/
-
-                  /* The users are added durind the user creation or edition */
 
                 });
 
@@ -331,7 +288,8 @@ function editSubject(id) {
                   .collection("subject")
                   .add({
                     id: id,
-                    name: selectedName
+                    name: selectedName,
+                    course: courseID
                   })
                   .then(() => {
                     console.log("Document successfully added!");

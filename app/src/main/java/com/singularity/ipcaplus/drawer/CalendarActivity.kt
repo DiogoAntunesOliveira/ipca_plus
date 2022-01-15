@@ -185,7 +185,7 @@ class CalendarActivity : AppCompatActivity() {
         Backend.getAllMonthEvents (binding.monthTitle.text.toString()) { allEvents ->
             binding.compactcalendarView.removeAllEvents()
             for (event in allEvents) {
-                val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+                val ev1 = Event(Color.parseColor("#037B4A"),event.datetime.seconds * 1000)
                 binding.compactcalendarView.addEvent(ev1)
             }
         }
@@ -196,7 +196,7 @@ class CalendarActivity : AppCompatActivity() {
         Backend.getAllChatMonthEvents (binding.monthTitle.text.toString(), chat_id) { allEvents ->
             binding.compactcalendarView.removeAllEvents()
             for (event in allEvents) {
-                val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+                val ev1 = Event(Color.parseColor("#037B4A"),event.datetime.seconds * 1000)
                 binding.compactcalendarView.addEvent(ev1)
             }
         }

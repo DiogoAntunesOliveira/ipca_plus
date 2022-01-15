@@ -164,7 +164,14 @@ object  Utilis {
 
     fun convertHoursStringToInt(strVal: String): Int {
         val strArray = Pattern.compile(":").split(strVal)
-        val result = strArray[0] + strArray[1]
+
+        var lastNumber = ((strArray[1].toInt() * 100) / 60).toString()
+
+        if (lastNumber == "0")
+            lastNumber = "00"
+
+        val result = strArray[0] + lastNumber
+
         return result.toInt()
     }
 

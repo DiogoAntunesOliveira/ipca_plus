@@ -242,17 +242,24 @@ object Backend {
                             .collection("class")
                             .addSnapshotListener { documents2, _ ->
 
+                                if (documents2!!.size() != 0) {
+
+                                    println("subject ---- " + documents2!!.size())
+
+
                                 // Get teacher name
                                 db.collection("ipca_data")
                                     .document(subject.teacher)
                                     .get()
                                     .addOnSuccessListener { documents3 ->
                                         val teacherName = documents3.data!!["name"].toString()
-                                        println("---------------------------------> teacher: " + teacherName)
 
                                     documents2?.let {
 
                                         for (_document2 in documents2) {
+
+
+                                            println("---------------------------------> teacher: " + teacherName)
 
                                             val subjectClass = SubjectClass.fromHash(_document2)
                                             if (day == subjectClass.day) {
@@ -281,19 +288,21 @@ object Backend {
 
                                     // Add Break Times Between Classes
                                     for (i in 0 until subjectClasses.size) {
-                                        if (i % 2 == 0) {
+                                        if (i == 0) {
                                             subjectClassesWithBreaks.add(subjectClasses[i])
                                         }
                                         else {
-                                            val diff = Utilis.convertHoursStringToInt(subjectClasses[i].start_time) - Utilis.convertHoursStringToInt(
-                                                subjectClasses[i - 1].end_time
-                                            )
+                                            val num1 = Utilis.convertHoursStringToInt(subjectClasses[i].start_time) * 0.6
+                                            val num2 = Utilis.convertHoursStringToInt(subjectClasses[i - 1].end_time) * 0.6
+                                            val diff = (num1 - num2).toInt()
+
                                             subjectClassesWithBreaks.add(SubjectClass("breaktime", diff.toString()))
                                             subjectClassesWithBreaks.add(subjectClasses[i])
                                         }
                                     }
 
                                     callBack(subjectClassesWithBreaks)
+                                }
                                 }
                             }
 
@@ -306,8 +315,86 @@ object Backend {
 
     }
 
-    fun getDayTeacherClasses() {
 
+    fun getDayTeacherClasses(day: String, uid: String, callBack: (List<SubjectClass>)->Unit) {
+
+        val subjectClasses = arrayListOf<SubjectClass>()
+        val subjectClassesWithBreaks = arrayListOf<SubjectClass>()
+
+        // Get all class references
+        db.collection("profile")
+            .document(uid)
+            .collection("subject")
+            .addSnapshotListener { documents, _ ->
+
+                documents?.let {
+
+                    for (document in documents) {
+                        val courseId = document.data["course"] as String
+                        val subjectId = document.data["id"] as String
+                        val name = document.data["name"] as String
+
+                        db.collection("course")
+                            .document(courseId)
+                            .collection("subject")
+                            .document(subjectId)
+                            .collection("class")
+                            .addSnapshotListener { documents2, _ ->
+
+                                if (documents2!!.size() != 0) {
+
+                                documents2?.let {
+
+                                    for (_document2 in documents2) {
+
+                                        val subjectClass = SubjectClass.fromHash(_document2)
+                                        if (day == subjectClass.day) {
+                                            subjectClass.name = name
+                                            subjectClass.teacher = UserLoggedIn.name.toString()
+                                            subjectClasses.add(subjectClass)
+                                        }
+
+                                    }
+
+                                }
+
+                                // Order the subjects by time
+                                for (i in 0 until subjectClasses.size) {
+                                    for (j in 0 until subjectClasses.size - 1) {
+
+                                        if (Utilis.convertHoursStringToInt(subjectClasses[j].start_time) > Utilis.convertHoursStringToInt(
+                                                subjectClasses[j + 1].start_time
+                                            )
+                                        ) {
+                                            val temp = subjectClasses[j]
+                                            subjectClasses[j] = subjectClasses[j + 1]
+                                            subjectClasses[j + 1] = temp
+                                        }
+                                    }
+                                }
+
+                                // Add Break Times Between Classes
+                                for (i in 0 until subjectClasses.size) {
+                                    if (i == 0) {
+                                        subjectClassesWithBreaks.add(subjectClasses[i])
+                                    }
+                                    else {
+                                        val num1 = Utilis.convertHoursStringToInt(subjectClasses[i].start_time) * 0.6
+                                        val num2 = Utilis.convertHoursStringToInt(subjectClasses[i - 1].end_time) * 0.6
+                                        val diff = (num1 - num2).toInt()
+
+                                        subjectClassesWithBreaks.add(SubjectClass("breaktime", diff.toString()))
+                                        subjectClassesWithBreaks.add(subjectClasses[i])
+                                    }
+                                }
+
+                                callBack(subjectClassesWithBreaks)
+                            }
+                        }
+                }
+            }
+
+        }
     }
 
 
