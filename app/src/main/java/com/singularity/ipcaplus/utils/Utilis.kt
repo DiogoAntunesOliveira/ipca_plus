@@ -353,7 +353,7 @@ object  Utilis {
 
         for(x in 0 until 15){
             val random = (characters.indices).random()
-            sb.append(characters[random])
+            sb.append("msg" + characters[random])
         }
 
         return sb.toString()
