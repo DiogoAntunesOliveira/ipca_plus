@@ -5,18 +5,23 @@ import android.app.ActionBar
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +33,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 import com.singularity.ipcaplus.drawer.CalendarActivity
@@ -182,6 +188,11 @@ class ChatActivity : ActivityImageHelper() {
         }
 
 
+        // send file
+        binding.buttonSendAnexo.setOnClickListener {
+            chooseFile()
+        }
+
         // Show Messages
         db.collection("chat").document("$chat_id").collection("message")
             .orderBy("time", Query.Direction.DESCENDING)
@@ -271,6 +282,73 @@ class ChatActivity : ActivityImageHelper() {
         return false
     }
 
+
+    /*
+        Open Select a file window
+    */
+    private fun chooseFile() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_OPEN_DOCUMENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "*/*"
+        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+            "text/plain",
+            "application/pdf",
+            "application/zip",
+            "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
+            "application/json",
+            "text/json",
+            "text/javascript"
+        )
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
+        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, 1)
+    }
+
+
+    /*
+        Request confirmation before download the file, then download and store the file in the download folder in the mobile device
+    */
+    fun downloadFileRequest(path: String, name: String) {
+
+        confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+
+            val fileRef = Firebase.storage.reference.child("$path/${name}")
+            val strArray = Pattern.compile("[.]").split(name)
+            val fileName = strArray[0]
+            val fileExtension = strArray[strArray.size - 1]
+
+            fileRef.downloadUrl.addOnSuccessListener {
+                Utilis.downloadFile(this, fileName, ".$fileExtension",
+                    Environment.DIRECTORY_DOWNLOADS, it)
+            }
+        }
+    }
+
+
+    /*
+        Confirmation Dialog Display Yes / No Options
+    */
+    private fun confirmationDialog(title: String, description: String, callBack: ()->Unit) {
+        val alertDialog = AlertDialog.Builder(this)
+
+        alertDialog.setTitle(title)
+        alertDialog.setMessage(description)
+
+        alertDialog.setPositiveButton("Sim") { _, _ ->
+            callBack()
+        }
+
+        alertDialog.setNegativeButton("Não") { _, _ ->
+            alertDialog.show().dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+
     /*
       This function happen after picking photo, and make changes in the activity
    */
@@ -290,14 +368,14 @@ class ChatActivity : ActivityImageHelper() {
                 //binding.imageViewProfile.setImageURI(result.uri)
                 imageUri = result.uri
 
-
                 val extensionArray = Pattern.compile("[.]").split(result.uri!!.toString())
                 val extension = extensionArray[extensionArray.size - 1]
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                    val filePath = "chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}"
                     val storageRef = FirebaseStorage.getInstance()
-                        .getReference("chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}")
+                        .getReference(filePath)
 
                     println("----------------------------------------------------------------------" + storageRef)
                     // compressing image
@@ -312,10 +390,7 @@ class ChatActivity : ActivityImageHelper() {
 
                                 println("--------------------------------------- Entrou aqui")
                                 //uploading image url
-                                val filePath =
-                                    "chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}"
-                                Utilis.uploadFile(result.uri,
-                                    filePath)
+                                Utilis.uploadFile(result.uri, filePath)
 
 
                                 getIv(chat_id) { iv ->
@@ -363,6 +438,97 @@ class ChatActivity : ActivityImageHelper() {
                 }
             }
         }
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            var path = ""
+            var fileName = ""
+
+            val clipData = data?.clipData
+            if (clipData == null) {
+
+                var cursor: Cursor? = null
+                try {
+                    contentResolver.query(data?.data!!, null, null, null, null).use {
+
+                        cursor = it
+
+                        if (cursor != null && cursor!!.moveToFirst()) {
+
+                            fileName = cursor!!.getString(cursor!!.getColumnIndex(
+                                OpenableColumns.DISPLAY_NAME).toInt())
+
+                        }
+
+                    }
+                } finally {
+                    cursor?.close()
+
+                }
+
+                path += data?.data.toString()
+            }
+            else {
+                for (i in 0 until clipData.itemCount) {
+                    val item = clipData.getItemAt(i)
+                    val uri: Uri = item.uri
+                    path += uri.toString() + "\n"
+                }
+            }
+
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val filePath = "chats/$chat_id/messages/$fileName"
+                val storageRef = FirebaseStorage.getInstance().getReference(filePath)
+
+                //uploading image url
+                Utilis.uploadFile(path.toUri(), filePath)
+
+                getIv(chat_id) { iv ->
+
+                    var meta = encryptMeta(filePath,
+                        keygen,
+                        iv.toString())
+
+                    val message = Message(
+                        Firebase.auth.currentUser!!.uid,
+                        meta.toString(),
+                        Timestamp.now(),
+                        "file"
+                    )
+
+                    db.collection("chat").document("$chat_id").collection("message")
+                        .add(message.toHash())
+                        .addOnSuccessListener { documentReference ->
+
+                            GlobalScope.launch {
+                                withContext(Dispatchers.IO) {
+
+                                    getNotificationKey(chat_id) {
+                                        GlobalScope.launch {
+                                            withContext(Dispatchers.IO) {
+                                                sendNotificationToGroup(chat_id,
+                                                    Utilis.getFirstAndLastName(
+                                                        UserLoggedIn.name.toString()) + " enviou um ficheiro.",
+                                                    it.toString())
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            Log.d(TAG,
+                                "DocumentSnapshot added with ID: ${documentReference.id}")
+
+
+                        }
+
+
+                }
+
+
+            }
+
+        }
+
     }
 
     // When the support action bar back button is pressed, the app will go back to the previous activity
@@ -433,7 +599,10 @@ class ChatActivity : ActivityImageHelper() {
 
             holder.v.apply {
 
+                messageType = messages[position].files
+
                 if (messageType == "") {
+
                     val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
                     val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
                     val textViewUsername = findViewById<TextView?>(R.id.textViewUsername)
@@ -507,6 +676,40 @@ class ChatActivity : ActivityImageHelper() {
 
                 } else if (messageType == "file") {
 
+                    val timeLastMessage = findViewById<TextView>(R.id.timeLastMessage2)
+                    val downloadButton = findViewById<ImageView>(R.id.imageViewSend2)
+
+                    getIv(chat_id) {
+
+                        val message_decripted = decryptWithAESmeta(keygen.toString(),
+                            messages[position].message,
+                            it.toString())
+
+                        val strArray = Pattern.compile("[/]").split(message_decripted)
+                        val str = strArray[strArray.size - 1]
+                        timeLastMessage.text = str
+
+                        if (position == messages.size - 1) {
+                            val data = Utilis.getDate(
+                                messages[position].time.seconds * 1000,
+                                "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                            )
+                            timeLastMessage.isVisible = true
+                            timeLastMessage.text =
+                                Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+                        }
+
+                        downloadButton.setOnClickListener {
+
+                            val strArray = Pattern.compile("[/]").split(message_decripted)
+                            val str = strArray[strArray.size - 1]
+
+                            downloadFileRequest("chats/$chat_id/messages/", str)
+                        }
+
+                    }
+
+                    println("entrou aqui ---------------------------dwasfdada")
                 }
 
                 currentIndex = position + 1
