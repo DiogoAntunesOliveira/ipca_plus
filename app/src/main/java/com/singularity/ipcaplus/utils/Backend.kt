@@ -1,6 +1,8 @@
 package com.singularity.ipcaplus.utils
 
+import android.content.Intent
 import android.net.Uri
+import androidx.core.app.ActivityCompat.startActivityForResult
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
@@ -8,6 +10,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.*
 import org.json.JSONArray
@@ -1188,5 +1191,11 @@ object Backend {
                 }
             }
     }
+
+    /*
+         -------------------------------------------- IMAGES ---------------------------------------
+     */
+
+
 
 }

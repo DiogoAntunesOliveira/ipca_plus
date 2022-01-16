@@ -347,7 +347,7 @@ object  Utilis {
 
 
     fun uniqueImageNameGen(): String {
-        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&/()=@[]{}"
+        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&()=@[]{}"
 
         val sb = StringBuilder(15)
 
