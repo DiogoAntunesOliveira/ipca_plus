@@ -23,11 +23,15 @@
             android:id="@+id/timeLastMessage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="39dp"
+            android:layout_marginBottom="39dp"
             android:text="Name File"
-            android:textSize="16sp"
             android:textColor="@color/white"
-            tools:layout_editor_absoluteX="85dp"
-            tools:layout_editor_absoluteY="39dp" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageViewSend"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageViewSend"
