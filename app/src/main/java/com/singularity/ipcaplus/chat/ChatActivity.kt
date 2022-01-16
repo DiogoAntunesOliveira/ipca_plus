@@ -44,6 +44,7 @@ import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Backend.createJsonArrayString
 import com.singularity.ipcaplus.utils.Backend.getIv
 import com.singularity.ipcaplus.utils.Backend.getNotificationKey
+import com.singularity.ipcaplus.utils.UserLoggedIn
 import com.singularity.ipcaplus.utils.Utilis.sendNotificationToGroup
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -68,8 +69,11 @@ class ChatActivity : ActivityImageHelper() {
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
 
+    lateinit var keygen: String
+
     // receive img from gallery
     private var imageUri: Uri? = null
+    //lateinit var storageRef: FirebaseStorage? = null
 
     val db = Firebase.firestore
 
@@ -97,6 +101,8 @@ class ChatActivity : ActivityImageHelper() {
         val formatter = DateTimeFormatter.BASIC_ISO_DATE
         val formatted = current.format(formatter)
 
+        keygen = getMetaOx(this, chat_id).toString()
+
         // Check if user is admin
         Backend.getChatAdminIds(chat_id) {
             val currentUser = Firebase.auth.currentUser!!.uid
@@ -117,9 +123,9 @@ class ChatActivity : ActivityImageHelper() {
         // Send Message
 
         binding.fabSend.setOnClickListener {
+
             if (!binding.editTextMessage.text.isNullOrBlank()) {
                 // get data of ecripted shared preferences ("chatuid" -> "key")
-                val keygen = getMetaOx(this, chat_id)
                 // Build encryptation data of message send by the user
                 getIv(chat_id) {
 
@@ -293,6 +299,7 @@ class ChatActivity : ActivityImageHelper() {
                     val storageRef = FirebaseStorage.getInstance()
                         .getReference("chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}")
 
+                    println("----------------------------------------------------------------------" + storageRef)
                     // compressing image
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                     val byteArrayOutputStream = ByteArrayOutputStream()
@@ -305,9 +312,52 @@ class ChatActivity : ActivityImageHelper() {
 
                                 println("--------------------------------------- Entrou aqui")
                                 //uploading image url
+                                val filePath =
+                                    "chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}"
                                 Utilis.uploadFile(result.uri,
-                                    "chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}")
+                                    filePath)
 
+
+                                getIv(chat_id) { iv ->
+
+                                    var meta = encryptMeta(filePath,
+                                        keygen,
+                                        iv.toString())
+
+                                    val message = Message(
+                                        Firebase.auth.currentUser!!.uid,
+                                        meta.toString(),
+                                        Timestamp.now(),
+                                        "img"
+                                    )
+
+                                    db.collection("chat").document("$chat_id").collection("message")
+                                        .add(message.toHash())
+                                        .addOnSuccessListener { documentReference ->
+
+                                            GlobalScope.launch {
+                                                withContext(Dispatchers.IO) {
+
+                                                    getNotificationKey(chat_id) {
+                                                        GlobalScope.launch {
+                                                            withContext(Dispatchers.IO) {
+                                                                sendNotificationToGroup(chat_id,
+                                                                    Utilis.getFirstAndLastName(
+                                                                        UserLoggedIn.name.toString()) + " enviou uma imagem.",
+                                                                    it.toString())
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            Log.d(TAG,
+                                                "DocumentSnapshot added with ID: ${documentReference.id}")
+
+
+                                        }
+
+
+                                }
                             }
                         }
                 }
@@ -327,12 +377,16 @@ class ChatActivity : ActivityImageHelper() {
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
 
         var otherUser = false
+        var currentIndex = 0
         var messageType = ""
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+            messageType = messages[currentIndex].files
+            println("----------------------------------------------------" + messageType)
+
             if (viewType == 1) {
                 otherUser = false
-
 
                 if (messageType == "img") {
                     return ViewHolder(
@@ -385,19 +439,11 @@ class ChatActivity : ActivityImageHelper() {
                     val textViewUsername = findViewById<TextView?>(R.id.textViewUsername)
 
                     timeLastMessage?.isVisible = false
-                    val keygen = getMetaOx(context, chat_id)
+                    keygen = getMetaOx(context, chat_id).toString()
                     getIv(chat_id) {
                         val message_decripted = decryptWithAESmeta(keygen.toString(),
                             messages[position].message,
                             it.toString())
-
-                        /* if (otherUser) {
-                                 Backend.getUserProfile(messages[position].user) {
-                                     val userName = Utilis.getFirstAndLastName(it.name)
-                                     textViewUsername.text = userName
-                                 }
-                             }
-                         */
 
                         textViewMessage.text = message_decripted
                         println(message_decripted)
@@ -424,10 +470,46 @@ class ChatActivity : ActivityImageHelper() {
                     }
                 } else if (messageType == "img") {
 
+                    val imageView: ImageView = findViewById(R.id.imageViewSend)
+                    val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
+
+                    getIv(chat_id) {
+                        val message_decripted = decryptWithAESmeta(keygen.toString(),
+                            messages[position].message,
+                            it.toString())
+
+
+                        if (position == messages.size - 1) {
+                            val data = Utilis.getDate(
+                                messages[position].time.seconds * 1000,
+                                "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                            )
+                            timeLastMessage.isVisible = true
+                            timeLastMessage.text =
+                                Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+                        }
+
+                        if (imageView != null) {
+                            val extensionArray =
+                                Pattern.compile("[.]").split(message_decripted.toString())
+                            val extension = extensionArray[extensionArray.size - 1]
+                            println("--------------------------------------------------------------------------------")
+                            println(extension)
+                            println(message_decripted)
+                            Utilis.getFile(context,
+                                message_decripted.toString(),
+                                extension) { bitmap ->
+                                imageView.setImageBitmap(bitmap)
+                            }
+                        }
+
+                    }
+
                 } else if (messageType == "file") {
 
                 }
 
+                currentIndex = position + 1
             }
         }
 
