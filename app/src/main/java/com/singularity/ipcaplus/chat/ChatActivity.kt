@@ -201,7 +201,6 @@ class ChatActivity : ActivityImageHelper() {
                 documents?.let {
                     messages.clear()
                     for (document in it) {
-                        Log.d(TAG, "${document.id} => ${document.data}")
                         val message = Message.fromHash(document)
                         messages.add(message)
 
@@ -221,6 +220,15 @@ class ChatActivity : ActivityImageHelper() {
         mLayoutManager!!.reverseLayout = true
 
     }
+
+
+    fun refreshList() {
+
+        finish()
+        startActivity(intent)
+
+    }
+
 
     /*
        This function create the action bar above the activity
@@ -425,9 +433,15 @@ class ChatActivity : ActivityImageHelper() {
                                                     }
                                                 }
                                             }
+
                                             Log.d(TAG,
                                                 "DocumentSnapshot added with ID: ${documentReference.id}")
 
+
+                                        }
+                                        .addOnCompleteListener {
+
+                                            refreshList()
 
                                         }
 
@@ -518,6 +532,10 @@ class ChatActivity : ActivityImageHelper() {
                             Log.d(TAG,
                                 "DocumentSnapshot added with ID: ${documentReference.id}")
 
+                        }
+                        .addOnCompleteListener {
+
+                            refreshList()
 
                         }
 
@@ -676,10 +694,11 @@ class ChatActivity : ActivityImageHelper() {
 
                 } else if (messageType == "file") {
 
-                    val timeLastMessage = findViewById<TextView>(R.id.timeLastMessage2)
-                    val downloadButton = findViewById<ImageView>(R.id.imageViewSend2)
-
                     getIv(chat_id) {
+
+
+                        val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage2)
+                        val downloadButton = findViewById<ImageView?>(R.id.imageViewSend2)
 
                         val message_decripted = decryptWithAESmeta(keygen.toString(),
                             messages[position].message,
@@ -687,19 +706,10 @@ class ChatActivity : ActivityImageHelper() {
 
                         val strArray = Pattern.compile("[/]").split(message_decripted)
                         val str = strArray[strArray.size - 1]
-                        timeLastMessage.text = str
+                        if (timeLastMessage != null)
+                            timeLastMessage.text = str
 
-                        if (position == messages.size - 1) {
-                            val data = Utilis.getDate(
-                                messages[position].time.seconds * 1000,
-                                "yyyy-MM-dd'T'HH:mm:ss.SSS"
-                            )
-                            timeLastMessage.isVisible = true
-                            timeLastMessage.text =
-                                Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
-                        }
-
-                        downloadButton.setOnClickListener {
+                        downloadButton?.setOnClickListener {
 
                             val strArray = Pattern.compile("[/]").split(message_decripted)
                             val str = strArray[strArray.size - 1]
