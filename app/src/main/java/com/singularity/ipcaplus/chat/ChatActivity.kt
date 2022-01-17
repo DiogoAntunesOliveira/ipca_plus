@@ -174,6 +174,7 @@ class ChatActivity : ActivityImageHelper() {
                         .addOnFailureListener { e ->
                             Log.w(TAG, "Error adding document", e)
                         }
+
                     binding.editTextMessage.text.clear()
 
                 }
@@ -218,14 +219,6 @@ class ChatActivity : ActivityImageHelper() {
         binding.recycleViewChat.adapter = mAdapter
 
         mLayoutManager!!.reverseLayout = true
-
-    }
-
-
-    fun refreshList() {
-
-        finish()
-        startActivity(intent)
 
     }
 
@@ -439,12 +432,6 @@ class ChatActivity : ActivityImageHelper() {
 
 
                                         }
-                                        .addOnCompleteListener {
-
-                                            refreshList()
-
-                                        }
-
 
                                 }
                             }
@@ -533,11 +520,6 @@ class ChatActivity : ActivityImageHelper() {
                                 "DocumentSnapshot added with ID: ${documentReference.id}")
 
                         }
-                        .addOnCompleteListener {
-
-                            refreshList()
-
-                        }
 
 
                 }
@@ -562,21 +544,25 @@ class ChatActivity : ActivityImageHelper() {
 
         var otherUser = false
         var currentIndex = 0
-        var messageType = ""
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-            messageType = messages[currentIndex].files
-            println("----------------------------------------------------" + messageType)
+            if (viewType == 0) {
+                otherUser = false
+                return ViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.row_message_system, parent, false))
 
-            if (viewType == 1) {
+
+
+            } else if (viewType <= 3) {
                 otherUser = false
 
-                if (messageType == "img") {
+                if (viewType == 2) {
                     return ViewHolder(
                         LayoutInflater.from(parent.context)
                             .inflate(R.layout.row_message_self_image, parent, false))
-                } else if (messageType == "file") {
+                } else if (viewType == 3) {
                     return ViewHolder(
                         LayoutInflater.from(parent.context)
                             .inflate(R.layout.row_message_self_file, parent, false))
@@ -586,18 +572,13 @@ class ChatActivity : ActivityImageHelper() {
                             .inflate(R.layout.row_message_self, parent, false))
                 }
 
-            } else if (viewType == 2) {
-                otherUser = false
-                return ViewHolder(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.row_message_system, parent, false))
             } else {
                 otherUser = true
-                if (messageType == "img") {
+                if (viewType == 5) {
                     return ViewHolder(
                         LayoutInflater.from(parent.context)
                             .inflate(R.layout.row_message_others_image, parent, false))
-                } else if (messageType == "file") {
+                } else if ((viewType == 6)) {
                     return ViewHolder(
                         LayoutInflater.from(parent.context)
                             .inflate(R.layout.row_message_others_file, parent, false))
@@ -617,11 +598,12 @@ class ChatActivity : ActivityImageHelper() {
 
             holder.v.apply {
 
-                messageType = messages[position].files
+                val messageType = messages[position].files
+                currentIndex = position + 1
 
                 if (messageType == "") {
 
-                    val textViewMessage = findViewById<TextView>(R.id.textViewMessage)
+                    val textViewMessage = findViewById<TextView?>(R.id.textViewMessage)
                     val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
                     val textViewUsername = findViewById<TextView?>(R.id.textViewUsername)
 
@@ -632,7 +614,7 @@ class ChatActivity : ActivityImageHelper() {
                             messages[position].message,
                             it.toString())
 
-                        textViewMessage.text = message_decripted
+                        textViewMessage?.text = message_decripted
                         println(message_decripted)
                         if (position == messages.size - 1) {
                             val data = Utilis.getDate(
@@ -657,7 +639,7 @@ class ChatActivity : ActivityImageHelper() {
                     }
                 } else if (messageType == "img") {
 
-                    val imageView: ImageView = findViewById(R.id.imageViewSend)
+                    val imageView = findViewById<ImageView?>(R.id.imageViewSend)
                     val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
 
                     getIv(chat_id) {
@@ -719,21 +701,40 @@ class ChatActivity : ActivityImageHelper() {
 
                     }
 
-                    println("entrou aqui ---------------------------dwasfdada")
                 }
 
-                currentIndex = position + 1
             }
         }
 
         override fun getItemViewType(position: Int): Int {
+
+            // Self Message
             if (messages[position].user == Firebase.auth.currentUser!!.uid) {
-                return 1
-            } else if (messages[position].user == "system") {
-                return 2
-            } else {
+
+                if (messages[position].files == "img")
+                    return 2
+                else if (messages[position].files == "file")
+                    return 3
+                else
+                    return 1
+
+            }
+            // System Message Text
+            else if (messages[position].user == "system") {
                 return 0
             }
+            // Other User Message
+            else {
+
+                if (messages[position].files == "img")
+                    return 5
+                else if (messages[position].files == "file")
+                    return 6
+                else
+                    return 4
+
+            }
+
         }
 
         override fun getItemCount(): Int {
