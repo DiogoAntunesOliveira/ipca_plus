@@ -8,6 +8,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -275,6 +276,12 @@ object  Utilis {
         return nameArray[0] + " " + nameArray[nameArray.size-1]
     }
 
+
+    fun limitString(name: String, size: Int): String {
+        return name.dropLast(size)
+    }
+
+
     /*
        ------------------------------------------------ Images ------------------------------------------------
     */
@@ -297,9 +304,9 @@ object  Utilis {
         }.addOnFailureListener {
             val bitmap = (ResourcesCompat.getDrawable(
                 context.resources,
-                R.drawable.circle,
+                R.drawable.ic_defaultimage,
                 null
-            ) as GradientDrawable?)!!.toBitmap()
+            ) as Drawable?)!!.toBitmap()
             callback(bitmap)
         }
 
