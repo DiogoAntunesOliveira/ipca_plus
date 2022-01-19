@@ -76,6 +76,7 @@ class ChatActivity : ActivityImageHelper() {
     private var mLayoutManager: LinearLayoutManager? = null
 
     lateinit var keygen: String
+    var userName = ""
 
     // receive img from gallery
     private var imageUri: Uri? = null
@@ -147,6 +148,10 @@ class ChatActivity : ActivityImageHelper() {
                         ""
                     )
 
+                    Backend.getUserProfile(Firebase.auth.currentUser!!.uid){ user ->
+                        userName = Utilis.getFirstAndLastName(user.name)
+                    }
+
                     db.collection("chat").document("$chat_id").collection("message")
                         .add(message.toHash())
                         .addOnSuccessListener { documentReference ->
@@ -157,13 +162,18 @@ class ChatActivity : ActivityImageHelper() {
                                     // APA91bGaOoMTjTD2s9MU63F1AvLqP6tkwdAFE0Mqs9jbghlSgcWlfe_38CboFiE2iiWFoKqNRwhF0G_TA5X9xegTL0_Tg0OGuFadJuBj1sGZqjqCcmF1EH2ZeRU7ySHosdNkmLmmOyFF
                                     println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + savedText)
                                     getNotificationKey(chat_id) {
-                                        GlobalScope.launch {
-                                            withContext(Dispatchers.IO) {
-                                                sendNotificationToGroup(chat_id,
-                                                    savedText,
-                                                    it.toString())
+
+                                        Backend.getGroupChatById(chat_id){ chat->
+                                            GlobalScope.launch {
+                                                withContext(Dispatchers.IO) {
+                                                    sendNotificationToGroup(chat!!.name,
+                                                        "$userName: $savedText",
+                                                        it.toString())
+
+                                                }
                                             }
                                         }
+
                                     }
                                 }
                             }

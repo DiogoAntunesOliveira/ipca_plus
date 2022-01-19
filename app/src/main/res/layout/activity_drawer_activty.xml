@@ -23,6 +23,7 @@
         android:background="@drawable/round_corner_drawer"
         android:fitsSystemWindows="true"
         app:itemIconPadding="30dp"
+        android:layout_marginTop="0dp"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_drawer"
         app:itemTextAppearance="@style/PoppinsFontViewStyle">

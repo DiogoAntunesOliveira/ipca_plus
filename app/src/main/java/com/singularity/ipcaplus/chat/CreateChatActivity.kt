@@ -24,14 +24,12 @@ import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.Backend.updateNotificationKeyCamp
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.utils.Utilis.buildSystemMessage
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class CreateChatActivity : ActivityImageHelper() {
 
@@ -40,6 +38,7 @@ class CreateChatActivity : ActivityImageHelper() {
     var uri = Uri.EMPTY
     val db = Firebase.firestore
     var noteKey : String = ""
+    lateinit var docId : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,25 +63,6 @@ class CreateChatActivity : ActivityImageHelper() {
 
         // Generate key for chats
         val keygen = metaGenrateKey()
-
-        for (memberId in memberIds){
-
-            // Getting all of tokens of  profile associated devices
-            Backend.getAllTokens(memberId) {
-                if (tokens_adress.isEmpty()){
-                    tokens_adress.clear()
-                }
-                tokens_adress.addAll(it)
-
-                GlobalScope.launch {
-                    withContext(Dispatchers.IO){
-                        noteKey = Utilis.createNotificationGroup(generateRandomIV(), Backend.createJsonArrayString(tokens_adress))
-                    }
-                }
-
-            }
-
-        }
 
         binding.imageViewChatPhoto.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
@@ -122,6 +102,7 @@ class CreateChatActivity : ActivityImageHelper() {
                 db.collection("chat")
                     .add(chat.toHash())
                     .addOnSuccessListener { documentReference ->
+                        docId = documentReference.id
                         db.collection("chat")
                             .document(documentReference.id)
                             .collection("message")
@@ -137,6 +118,12 @@ class CreateChatActivity : ActivityImageHelper() {
                                 .collection("user")
                                 .document(member)
                                 .set(user)
+                            // Getting all of tokens of  profile associated devices
+                            Backend.getAllTokens(member) {
+                                tokens_adress.addAll(it)
+                                println("TOUUUUUUUUU $tokens_adress")
+                                docId = documentReference.id
+                            }
                             if (member == Firebase.auth.currentUser!!.uid) {
                                 db.collection("chat")
                                     .document(documentReference.id)
@@ -149,14 +136,21 @@ class CreateChatActivity : ActivityImageHelper() {
 
                         }
 
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error adding document", e)
-                    }
+                    }.addOnCompleteListener {
+                        val intent = Intent(this, DrawerActivty::class.java)
+                        GlobalScope.launch {
+                            withContext(Dispatchers.IO){
+                                delay(1000)
+                                noteKey = Utilis.createNotificationGroup(docId, Backend.createJsonArrayString(tokens_adress))
+                                updateNotificationKeyCamp(docId, noteKey)
 
-                val intent = Intent(this, DrawerActivty::class.java)
-                startActivity(intent)
-
+                                println(docId)
+                                println("TOUUUUUUUUU FINALLL $tokens_adress")
+                                println("este $noteKey")
+                                startActivity(intent)
+                            }
+                        }
+                    }
             }
 
     }

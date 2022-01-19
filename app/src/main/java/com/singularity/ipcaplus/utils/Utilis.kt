@@ -599,4 +599,100 @@ object  Utilis {
         }
     }
 
+
+
+    suspend fun  removeKeyFromNotificationGroup(notificationKeyName : String, registrationIds : JSONArray) : String {
+
+        var notificationKey = ""
+
+        try {
+
+            Log.d("json", registrationIds.toString())
+
+            //Request
+            val endPoint = URL("https://fcm.googleapis.com/fcm/notification")
+
+            //Establish a connection
+            val httpsURLConnection: HttpsURLConnection =
+                endPoint.openConnection() as HttpsURLConnection
+
+            //Connection to fcm
+            //The time available to read from the input stream when the connection is established
+            httpsURLConnection.readTimeout = 10000
+            //The time available to connect to the url
+            httpsURLConnection.connectTimeout = 15000
+            //Defining the type of request to be made to the fcm
+            httpsURLConnection.requestMethod = "POST"
+            //Defining that the url connection can be used to send and receive data
+            httpsURLConnection.doInput = true
+            httpsURLConnection.doOutput = true
+
+            // Build parameters for json
+            httpsURLConnection.setRequestProperty("Content-Type", "application/json")
+            val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
+            val senderId = "209455028652"
+            httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
+            httpsURLConnection.setRequestProperty("project_id", senderId)
+
+            val json = JSONObject()
+
+            json.put("operation", "remove")
+            json.put("notification_key_name", notificationKeyName)
+            json.put("registration_ids", registrationIds)
+
+
+            // Writer
+            val outputStream: OutputStream =
+                BufferedOutputStream(httpsURLConnection.outputStream)
+            val writer = BufferedWriter(OutputStreamWriter(outputStream, "utf-8"))
+
+            // POST
+            writer.write(json.toString())
+            writer.flush()
+            writer.close()
+
+            outputStream.close()
+
+            //The response code and message of the POST requests
+            val responseCode: Int = httpsURLConnection.responseCode
+            val responseMessage = httpsURLConnection.responseMessage
+
+            Log.d(ContentValues.TAG, "$responseCode $responseMessage")
+
+
+            // Check server STATUS
+            if (responseCode in 400..499) {
+                httpsURLConnection.errorStream
+            } else {
+                httpsURLConnection.inputStream
+            }
+            println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU NAO CHEGOU SEU BURRO")
+            if (responseCode == 200) {
+                Log.e(ContentValues.TAG, "Group Created!!")
+
+                val response = httpsURLConnection.inputStream.bufferedReader()
+                    .use { it.readText() }  // defaults to UTF-8
+                withContext(Dispatchers.Main) {
+                    //notification_key
+                    val jsonObject  = JSONObject(response)
+                    notificationKey = jsonObject.getString("notification_key")
+                    println("NotifKey: $notificationKey")
+                    Log.d("NotifKey", notificationKey)
+                }
+                println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU $notificationKey")
+                return notificationKey
+            } else {
+                Log.e(ContentValues.TAG, "Error it didn´t work")
+            }
+
+            //Here i close the connection to the endPoint
+            httpsURLConnection.disconnect()
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return notificationKey
+    }
+
 }

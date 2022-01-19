@@ -11,10 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -27,10 +24,20 @@ import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
 import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.Backend.clearNotificationKeyCamp
+import com.singularity.ipcaplus.utils.Backend.createJsonArrayString
+import com.singularity.ipcaplus.utils.Backend.getChatUsersUids
+import com.singularity.ipcaplus.utils.Backend.updateNotificationKeyCamp
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.utils.Utilis.calculateInSampleSize
+import com.singularity.ipcaplus.utils.Utilis.createNotificationGroup
+import com.singularity.ipcaplus.utils.Utilis.removeKeyFromNotificationGroup
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 class ChatMoreActivity : ActivityImageHelper() {
@@ -40,11 +47,15 @@ class ChatMoreActivity : ActivityImageHelper() {
     lateinit var chat_id: String
     var is_admin: Boolean = false
     private lateinit var binding: ActivityChatMoreBinding
+    var noteKey : String = ""
+    var docId : String = ""
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_more)
+        var tokens_adress = arrayListOf<String>()
+        var tokens_adress_user = arrayListOf<String>()
 
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
 
@@ -111,10 +122,12 @@ class ChatMoreActivity : ActivityImageHelper() {
         }
 
         binding.notifications.setOnClickListener {
-            val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
-            val view = layoutInflater.inflate(R.layout.dialog_notifications_manager, null)
-            dialog.setContentView(view)
-            dialog.show()
+            openNotificationsDialog(tokens_adress, tokens_adress_user)
+
+
+            //removeKeyFromNotificationGroup(chat_id,)
+            //dialog.setContentView(view)
+            //dialog.show()
         }
 
         binding.securityNumberVerification.setOnClickListener {
@@ -187,6 +200,54 @@ class ChatMoreActivity : ActivityImageHelper() {
             binding.textViewGroupName.text = newName
         }
 
+    }
+    private fun openNotificationsDialog(tokens_adress : ArrayList<String>, tokens_adress_user: ArrayList<String>) {
+
+        // Variables
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        val row = layoutInflater.inflate(R.layout.dialog_notifications_manager, null)
+        dialog.setContentView(row)
+        dialog.show()
+
+        row.findViewById<Switch>(R.id.notificationsSwitch).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                Toast.makeText(this, "olaaaaa", Toast.LENGTH_SHORT).show()
+                //clearNotificationKeyCamp(chat_id)
+                getChatUsersUids(chat_id) { memberIds ->
+                    val allMemberIds = arrayListOf<String>()
+
+                    for (id in memberIds){
+                        if (id != Firebase.auth.currentUser!!.uid){
+                            allMemberIds.add(id)
+                        }else{
+                            tokens_adress_user.add(id)
+                        }
+                    }
+
+                    for (memberId in allMemberIds) {
+                        // Getting all of tokens of  profile associated devices
+                        Backend.getAllTokens(memberId) {
+
+                            tokens_adress.addAll(it)
+                            println(tokens_adress.toString())
+
+                            GlobalScope.launch {
+                                withContext(Dispatchers.IO) {
+                                    //noteKey = createNotificationGroup(docId, Backend.createJsonArrayString(tokens_adress))
+                                    var newNoteKey = removeKeyFromNotificationGroup(docId, createJsonArrayString(tokens_adress_user))
+                                    /*clearNotificationKeyCamp(docId)
+                                    updateNotificationKeyCamp(docId, newNoteKey)*/
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }else{
+                Toast.makeText(this, "As tuas notificaçoes foram ativadas", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 

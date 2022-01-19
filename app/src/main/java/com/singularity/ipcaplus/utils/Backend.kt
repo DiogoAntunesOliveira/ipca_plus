@@ -899,6 +899,23 @@ object Backend {
 
     }
 
+    fun getGroupChatById(chatId: String, callBack: (Chat?)-> Unit) {
+
+        var chat : Chat? = null
+
+        db.collection("chat")
+            .get()
+            .addOnSuccessListener { documents ->
+                for(document in documents) {
+                    if (document.id == chatId){
+                        chat = Chat.fromHash(document)
+                    }
+                }
+                callBack(chat)
+            }
+
+    }
+
     fun getOficialChatByTag(courseTag : String, callBack: (List<Chat>) -> Unit) {
 
         var oficialChat = arrayListOf<Chat>()
@@ -1195,6 +1212,34 @@ object Backend {
     /*
          -------------------------------------------- IMAGES ---------------------------------------
      */
+
+    /*
+         -------------------------------------------- Notifications ---------------------------------------
+     */
+
+    fun clearNotificationKeyCamp(chatId: String){
+
+        db.collection("chat")
+            .document(chatId)
+            .update(mapOf(
+                "notificationKey" to ""
+            ))
+    }
+
+    fun updateNotificationKeyCamp(chatId: String, value : String){
+
+        db.collection("chat")
+            .document(chatId)
+            .update(mapOf(
+                "notificationKey" to value
+            ))
+    }
+
+
+
+
+
+
 
 
 

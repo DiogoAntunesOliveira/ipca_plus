@@ -6,12 +6,17 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.Image
 import android.media.RingtoneManager
 import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.singularity.ipcaplus.R
@@ -125,12 +130,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
     @SuppressLint("RemoteViewLayout")
-    fun getRemoteView(messageTitle : String, messageBody: String) : RemoteViews {
+    fun getRemoteView(messageTitle : String, messageBody: String, image: Bitmap) : RemoteViews {
         val remoteView = RemoteViews("com.singularity.ipcaplus", R.layout.notification)
 
         remoteView.setTextViewText(R.id.title, messageTitle)
         remoteView.setTextViewText(R.id.message, messageBody)
         remoteView.setImageViewResource(R.id.app_logo, R.mipmap.ic_launcher_foreground)
+        //remoteView.setImageViewResource(R.id.senderImageView, R.mipmap.ic_launcher_foreground)
+        remoteView.setImageViewBitmap(R.id.senderImageView, image)
 
         return remoteView
     }
@@ -140,6 +147,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         //val intent = Intent(this, MainActivity::class.java)
 
         val intent = Intent(clickAction)
+        lateinit var bitmap : Bitmap
 
         //I will implement this in the future
         //intent.putExtra("chat_id", chatId)
@@ -161,8 +169,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
-        notificationBuilder.setContent(getRemoteView(messageTitle, messageBody))
-
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
@@ -174,7 +180,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        Utilis.getFile(this, "profilePictures/${Firebase.auth.currentUser!!.uid}.png", ".png"){
+            bitmap = it
+            notificationBuilder.setContent(getRemoteView(messageTitle, messageBody, bitmap))
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        }
     }
 
     companion object {
