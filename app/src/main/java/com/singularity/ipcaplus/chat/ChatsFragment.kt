@@ -74,6 +74,11 @@ class ChatsFragment : Fragment() {
         binding.recyclerViewGroups.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewGroups.adapter = mAdapter
 
+
+        binding.recyclerViewGroups.setItemViewCacheSize(20)
+        binding.recyclerViewGroups.isDrawingCacheEnabled = true
+        binding.recyclerViewGroups.drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH;
+
         return root
     }
 

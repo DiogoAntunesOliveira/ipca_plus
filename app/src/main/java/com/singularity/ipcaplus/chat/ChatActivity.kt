@@ -238,6 +238,10 @@ class ChatActivity : ActivityImageHelper() {
         binding.recycleViewChat.itemAnimator = DefaultItemAnimator()
         binding.recycleViewChat.adapter = mAdapter
 
+        binding.recycleViewChat.setItemViewCacheSize(20)
+        binding.recycleViewChat.isDrawingCacheEnabled = true
+        binding.recycleViewChat.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
         mLayoutManager!!.reverseLayout = true
 
     }
