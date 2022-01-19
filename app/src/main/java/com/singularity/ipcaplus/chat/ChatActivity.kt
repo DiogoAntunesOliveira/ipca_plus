@@ -3,7 +3,10 @@ package com.singularity.ipcaplus.chat
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -15,8 +18,7 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -36,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
+import com.singularity.ipcaplus.AddButtonActivity
 import com.singularity.ipcaplus.drawer.CalendarActivity
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.utils.Utilis
@@ -43,14 +47,19 @@ import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
 import com.singularity.ipcaplus.cryptography.encryptMeta
 import com.singularity.ipcaplus.cryptography.getMetaOx
 import com.singularity.ipcaplus.databinding.ActivityChatBinding
+import com.singularity.ipcaplus.drawer.DrawerActivty
+import com.singularity.ipcaplus.drawer.ProfileActivity
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Message
+import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Backend.createJsonArrayString
+import com.singularity.ipcaplus.utils.Backend.getChatUsers
 import com.singularity.ipcaplus.utils.Backend.getIv
 import com.singularity.ipcaplus.utils.Backend.getNotificationKey
 import com.singularity.ipcaplus.utils.UserLoggedIn
+import com.singularity.ipcaplus.utils.Utilis.getFirstAndLastName
 import com.singularity.ipcaplus.utils.Utilis.sendNotificationToGroup
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -72,6 +81,7 @@ class ChatActivity : ActivityImageHelper() {
     private lateinit var chat_id: String
     var tokens_adress = arrayListOf<String>()
     var chat_user_uids = arrayListOf<String>()
+    var chat_users= arrayListOf<Profile>()
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
 
@@ -611,13 +621,26 @@ class ChatActivity : ActivityImageHelper() {
                 val messageType = messages[position].files
                 currentIndex = position + 1
 
+
                 if (messageType == "") {
 
                     val textViewMessage = findViewById<TextView?>(R.id.textViewMessage)
                     val timeLastMessage = findViewById<TextView?>(R.id.timeLastMessage)
                     val textViewUsername = findViewById<TextView?>(R.id.textViewUsername)
 
-                    timeLastMessage?.isVisible = false
+
+                    timeLastMessage.visibility = View.INVISIBLE
+
+                    textViewMessage.setOnLongClickListener{
+                        copyTextToClipboard(textViewMessage)
+                        true
+                    }
+
+                    textViewMessage.setOnClickListener{
+                        timeLastMessage.visibility = View.VISIBLE
+                    }
+
+
                     keygen = getMetaOx(context, chat_id).toString()
                     getIv(chat_id) {
                         val message_decripted = decryptWithAESmeta(keygen.toString(),
@@ -643,6 +666,12 @@ class ChatActivity : ActivityImageHelper() {
                                     "profilePictures/${messages[position].user}.png",
                                     "png") { bitmap ->
                                     imageViewUser.setImageBitmap(bitmap)
+
+                                    imageViewUser.setOnLongClickListener{
+                                        //messages[position].user
+                                        openShortcut(bitmap, textViewUsername.text.toString(), messages[position].user)
+                                        true
+                                    }
                                 }
                             }
                         }
@@ -750,6 +779,43 @@ class ChatActivity : ActivityImageHelper() {
         override fun getItemCount(): Int {
             return messages.size
         }
+    }
+
+    private fun copyTextToClipboard(textCopy : TextView) {
+        val textToCopy = textCopy.text
+        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", textToCopy)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
+    }
+
+    private fun openShortcut(image: Bitmap, name: String, userId : String) {
+
+        // Variables
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        val row = layoutInflater.inflate(R.layout.shortcut_manager_dialog, null)
+
+        row.findViewById<ImageView>(R.id.imageViewProfileShorcut).setImageBitmap(image)
+
+        Backend.getUserProfile(userId){
+            row.findViewById<TextView>(R.id.UserNameTextView).text = getFirstAndLastName(it.name)
+        }
+
+
+        row.findViewById<LinearLayout>(R.id.seeProfile).setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
+
+        row.findViewById<LinearLayout>(R.id.SendMessage).setOnClickListener {
+            val intent = Intent(this, AddButtonActivity::class.java)
+            startActivity(intent)
+        }
+
+        dialog.setContentView(row)
+        dialog.show()
+
     }
 
 
