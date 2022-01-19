@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.drawer.DrawerActivty
 import java.lang.Exception
 
 const val channelId = ""
@@ -146,7 +147,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageTitle: String, messageBody: String, clickAction : String) {
         //val intent = Intent(this, MainActivity::class.java)
 
-        val intent = Intent(clickAction)
+        val intent = Intent(this, DrawerActivty::class.java)
         lateinit var bitmap : Bitmap
 
         //I will implement this in the future
