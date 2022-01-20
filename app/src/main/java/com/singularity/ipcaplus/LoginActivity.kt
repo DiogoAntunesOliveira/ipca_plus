@@ -32,9 +32,8 @@ class LoginActivity : AppCompatActivity() {
 
     val VALID_DATA = "User_data"
 
-    private lateinit var email_save : EditText
-    private lateinit var password_save : EditText
-
+    private lateinit var email_save: EditText
+    private lateinit var password_save: EditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,14 +61,14 @@ class LoginActivity : AppCompatActivity() {
         UserLoggedIn.role = prefs.getString("USER_ROLE", null)
         UserLoggedIn.password = prefs.getString("USER_PASSWORD", null)
 
-        if (UserLoggedIn.id != null){
-            startActivity(Intent(this@LoginActivity, DrawerActivty::class.java ))
+        if (UserLoggedIn.id != null) {
+            startActivity(Intent(this@LoginActivity, DrawerActivty::class.java))
         }
 
         binding.buttonLogin.setOnClickListener {
 
-            var email : String = binding.editTextEmail.text.toString()
-            var password : String = binding.editTextTextPassword.text.toString()
+            var email: String = binding.editTextEmail.text.toString()
+            var password: String = binding.editTextTextPassword.text.toString()
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -97,12 +96,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.textViewForgotPassword.setOnClickListener {
-            println("-----------> forgot password")
             openResetPasswordDialog()
         }
 
         binding.registerLinearLayout.setOnClickListener {
-            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java ))
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
     }
 
@@ -139,20 +137,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(currentUser: FirebaseUser?, emailAdd: String) {
-        if(currentUser !=null){
+        if (currentUser != null) {
 
             // Below  if statement is added to check if email is verified
-            if(currentUser.isEmailVerified){
+            if (currentUser.isEmailVerified) {
                 val intent = Intent(this, DrawerActivty::class.java)
                 intent.putExtra("emailAddress", emailAdd);
                 startActivity(intent)
 
-            // add finish() function to terminate the Sign In activity
-            finish()
+                // add finish() function to terminate the Sign In activity
+                finish()
 
-            //adding else with toast to display the message if email is not verified
-            }else
-                Toast.makeText(this,"Email Address Is not Verified. Please verify your email address",Toast.LENGTH_LONG).show()
+                //adding else with toast to display the message if email is not verified
+            } else
+                Toast.makeText(this,
+                    "Email Address Is not Verified. Please verify your email address",
+                    Toast.LENGTH_LONG).show()
 
         }
     }

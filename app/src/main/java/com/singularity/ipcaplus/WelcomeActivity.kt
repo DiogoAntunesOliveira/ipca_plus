@@ -28,15 +28,15 @@ class WelcomeActivity : AppCompatActivity() {
         var loginButton = findViewById<Button>(R.id.LoginButton)
         var registerButton = findViewById<Button>(R.id.RegisterButton)
 
-        loginButton.setOnClickListener{
+        loginButton.setOnClickListener {
 
-            var intent = Intent(this, LoginActivity::class.java )
+            var intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
-        registerButton.setOnClickListener{
+        registerButton.setOnClickListener {
 
-            var intent = Intent(this, RegisterActivity::class.java )
+            var intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
@@ -54,8 +54,6 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
     }
-
-
 
 
 }

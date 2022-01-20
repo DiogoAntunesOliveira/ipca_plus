@@ -24,13 +24,13 @@ import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
 
-class AddButtonActivity: AppCompatActivity() {
+class AddButtonActivity : AppCompatActivity() {
 
     var users = arrayListOf<Profile>()
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String?>()
     val userIds = arrayListOf<String>()
-    var directChat : String? = null
+    var directChat: String? = null
     val currentUser = Firebase.auth.currentUser!!.uid
 
     var currentUserchats = arrayListOf<String>()
@@ -51,7 +51,7 @@ class AddButtonActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         // finish de activity
-        binding.backBtn.setOnClickListener(){
+        binding.backBtn.setOnClickListener() {
             finish()
         }
 
@@ -90,7 +90,7 @@ class AddButtonActivity: AppCompatActivity() {
                         }
                     }
                 }
-        }
+            }
 
         // Set data for RecyclerView Users
 
@@ -99,7 +99,7 @@ class AddButtonActivity: AppCompatActivity() {
         userAdapter = SearchAdapter()
         binding.recyclerViewProfile.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewProfile.adapter = userAdapter
-       
+
     }
 
 
@@ -122,7 +122,9 @@ class AddButtonActivity: AppCompatActivity() {
 
                 // give data
                 textViewName.text = users[position].name
-                Utilis.getFile(this.context, "profilePictures/" + users[position].id + ".png", "png") { bitmap ->
+                Utilis.getFile(this.context,
+                    "profilePictures/" + users[position].id + ".png",
+                    "png") { bitmap ->
                     imageViewImage.setImageBitmap(bitmap)
                 }
 
@@ -130,25 +132,25 @@ class AddButtonActivity: AppCompatActivity() {
             holder.v.setOnClickListener {
                 Backend.getAllDirectChatIdsByUser(currentUser) {
                     chatIds.addAll(it)
-                    println("ITTTTTTT" + it)
 
                     if (chatIds.isNotEmpty()) {
                         Backend.getDirectChatById(it, users[position].id.toString()) {
                             directChat = it
-                            println("Directttttttt" + directChat)
 
-                            if(directChat.isNullOrEmpty()) {
+                            if (directChat.isNullOrEmpty()) {
                                 userIds.add(users[position].id.toString())
                                 userIds.add(currentUser)
 
-                                val intent = Intent(this@AddButtonActivity, CreateDirectChatActivity::class.java)
+                                val intent = Intent(this@AddButtonActivity,
+                                    CreateDirectChatActivity::class.java)
                                 intent.putExtra("type", "chat")
                                 intent.putExtra("users", userIds)
                                 startActivity(intent)
 
                             } else {
                                 // Abrir chat ja criado
-                                val intent = Intent(this@AddButtonActivity, ChatActivity::class.java)
+                                val intent =
+                                    Intent(this@AddButtonActivity, ChatActivity::class.java)
                                 intent.putExtra("chat_id", directChat)
                                 startActivity(intent)
                             }
@@ -157,7 +159,8 @@ class AddButtonActivity: AppCompatActivity() {
                         userIds.add(users[position].id.toString())
                         userIds.add(currentUser)
 
-                        val intent = Intent(this@AddButtonActivity, CreateDirectChatActivity::class.java)
+                        val intent =
+                            Intent(this@AddButtonActivity, CreateDirectChatActivity::class.java)
                         intent.putExtra("users", userIds)
                         intent.putExtra("type", "chat")
                         startActivity(intent)

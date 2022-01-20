@@ -43,7 +43,7 @@ class ChatsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
 
@@ -119,67 +119,69 @@ class ChatsFragment : Fragment() {
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                return ViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.row_chat, parent, false)
-                )
+            return ViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.row_chat, parent, false)
+            )
 
         }
 
         @RequiresApi(Build.VERSION_CODES.M)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-                holder.v.apply {
+            holder.v.apply {
 
-                    // Variables
-                    val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
-                    val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
-                    val lastMessageTime = findViewById<TextView>(R.id.lastMessageTime)
-                    val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
-
-
-                    if (chats[position].type == "chat") {
-                        textViewMessage.text = Utilis.getFirstAndLastName(chats[position].name)
-                    } else {
-                        textViewMessage.text = chats[position].name
-                    }
+                // Variables
+                val textViewMessage = findViewById<TextView>(R.id.textViewChatName)
+                val imageViewChatGroup = findViewById<ImageView>(R.id.imageViewChatGroup)
+                val lastMessageTime = findViewById<TextView>(R.id.lastMessageTime)
+                val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
 
-                    // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
-                    if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()){
-                        chats[position].ox = getMetaOx(context, chatIds[position])
-                    }
-                    else{
-                        saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
-                    }
+                if (chats[position].type == "chat") {
+                    textViewMessage.text = Utilis.getFirstAndLastName(chats[position].name)
+                } else {
+                    textViewMessage.text = chats[position].name
+                }
 
-                    // Set Last Chat Message
-                    Backend.getLastMessageByChatID(chatIds[position]) {
 
-                        val data = Utilis.getDate(it!!.time.seconds *1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                        lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
+                // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
+                if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()) {
+                    chats[position].ox = getMetaOx(context, chatIds[position])
+                } else {
+                    saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
+                }
 
-                        val keygen = getMetaOx(context, chatIds[position])
-                        getIv(chatIds[position]){iv ->
-                            val message_decripted = decryptWithAESmeta(keygen.toString(), it.message, iv.toString())
-                            lastMessageText.text = message_decripted
-                        }
+                // Set Last Chat Message
+                Backend.getLastMessageByChatID(chatIds[position]) {
 
-                    }
+                    val data = Utilis.getDate(it!!.time.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
 
-                    Utilis.getFile(this.context, "chats/${chatIds[position]}/icon.png", "png") { bitmap ->
-                        imageViewChatGroup.setImageBitmap(bitmap)
+                    val keygen = getMetaOx(context, chatIds[position])
+                    getIv(chatIds[position]) { iv ->
+                        val message_decripted =
+                            decryptWithAESmeta(keygen.toString(), it.message, iv.toString())
+                        lastMessageText.text = message_decripted
                     }
 
                 }
-                holder.v.setOnClickListener {
-                    val intent = Intent(activity, ChatActivity::class.java)
-                    intent.putExtra("chat_id", chatIds[position])
-                    activity?.startActivity(intent)
+
+                Utilis.getFile(this.context,
+                    "chats/${chatIds[position]}/icon.png",
+                    "png") { bitmap ->
+                    imageViewChatGroup.setImageBitmap(bitmap)
                 }
+
+            }
+            holder.v.setOnClickListener {
+                val intent = Intent(activity, ChatActivity::class.java)
+                intent.putExtra("chat_id", chatIds[position])
+                activity?.startActivity(intent)
+            }
 
         }
 
-        override fun getItemViewType(position: Int) : Int {
+        override fun getItemViewType(position: Int): Int {
             if (chats[position].type == "group") {
                 return 1
             } else {

@@ -37,8 +37,8 @@ class CreateChatActivity : ActivityImageHelper() {
     private lateinit var binding: ActivityCreateChatBinding
     var uri = Uri.EMPTY
     val db = Firebase.firestore
-    var noteKey : String = ""
-    lateinit var docId : String
+    var noteKey: String = ""
+    lateinit var docId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +51,12 @@ class CreateChatActivity : ActivityImageHelper() {
         var tokens_adress = arrayListOf<String>()
         findViewById<TextView>(R.id.AppBarTittle).text = "Novo Grupo"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
         // Variables
-        var chatName : String
+        var chatName: String
 
         var type = intent.getStringExtra("type")!!
         var memberIds = intent.getStringArrayListExtra("users")!!
@@ -65,105 +65,108 @@ class CreateChatActivity : ActivityImageHelper() {
         val keygen = metaGenrateKey()
 
         binding.imageViewChatPhoto.setOnClickListener {
-            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                STORAGE_PERMISSION_CODE)
         }
 
 
-            // Create Chat
-            binding.fabCreateChat.setOnClickListener {
+        // Create Chat
+        binding.fabCreateChat.setOnClickListener {
 
 
-                chatName = binding.editTextChatName.text.toString()
-                val ivGenerated = generateRandomIV()
+            chatName = binding.editTextChatName.text.toString()
+            val ivGenerated = generateRandomIV()
 
-                // Chat data
-                val chat = Chat(
-                    chatName,
-                    type.toString(),
-                    keygen,
-                    ivGenerated,
-                    noteKey
-                )
+            // Chat data
+            val chat = Chat(
+                chatName,
+                type.toString(),
+                keygen,
+                ivGenerated,
+                noteKey
+            )
 
-                // System message data
-                val message = Message(
-                    "system",
-                    buildSystemMessage(keygen, ivGenerated),
-                    Timestamp.now(),
-                    ""
+            // System message data
+            val message = Message(
+                "system",
+                buildSystemMessage(keygen, ivGenerated),
+                Timestamp.now(),
+                ""
 
-                )
+            )
 
-                val user = HashMap<String, Any>()
-                val admin = hashMapOf<String?, Any>(
-                    "admin" to true
-                )
+            val user = HashMap<String, Any>()
+            val admin = hashMapOf<String?, Any>(
+                "admin" to true
+            )
 
-                db.collection("chat")
-                    .add(chat.toHash())
-                    .addOnSuccessListener { documentReference ->
-                        docId = documentReference.id
+            db.collection("chat")
+                .add(chat.toHash())
+                .addOnSuccessListener { documentReference ->
+                    docId = documentReference.id
+                    db.collection("chat")
+                        .document(documentReference.id)
+                        .collection("message")
+                        .add(message.toHash())
+                    for (member in memberIds) {
+                        db.collection("profile")
+                            .document(member)
+                            .collection("chat")
+                            .document(documentReference.id)
+                            .set(chat)
                         db.collection("chat")
                             .document(documentReference.id)
-                            .collection("message")
-                            .add(message.toHash())
-                        for (member in memberIds) {
-                            db.collection("profile")
-                                .document(member)
-                                .collection("chat")
-                                .document(documentReference.id)
-                                .set(chat)
+                            .collection("user")
+                            .document(member)
+                            .set(user)
+                        // Getting all of tokens of  profile associated devices
+                        Backend.getAllTokens(member) {
+                            tokens_adress.addAll(it)
+                            println("TOUUUUUUUUU $tokens_adress")
+                            docId = documentReference.id
+                        }
+                        if (member == Firebase.auth.currentUser!!.uid) {
                             db.collection("chat")
                                 .document(documentReference.id)
                                 .collection("user")
                                 .document(member)
-                                .set(user)
-                            // Getting all of tokens of  profile associated devices
-                            Backend.getAllTokens(member) {
-                                tokens_adress.addAll(it)
-                                println("TOUUUUUUUUU $tokens_adress")
-                                docId = documentReference.id
-                            }
-                            if (member == Firebase.auth.currentUser!!.uid) {
-                                db.collection("chat")
-                                    .document(documentReference.id)
-                                    .collection("user")
-                                    .document(member)
-                                    .update(admin)
-                            }
-                            if (uri != Uri.EMPTY)
-                                Utilis.uploadFile(uri, "chats/${documentReference.id}/icon.png")
-
+                                .update(admin)
                         }
+                        if (uri != Uri.EMPTY)
+                            Utilis.uploadFile(uri, "chats/${documentReference.id}/icon.png")
 
-                    }.addOnCompleteListener {
-                        val intent = Intent(this, DrawerActivty::class.java)
-                        GlobalScope.launch {
-                            withContext(Dispatchers.IO){
-                                delay(1000)
-                                noteKey = Utilis.createNotificationGroup(docId, Backend.createJsonArrayString(tokens_adress))
-                                updateNotificationKeyCamp(docId, noteKey)
+                    }
 
-                                println(docId)
-                                println("TOUUUUUUUUU FINALLL $tokens_adress")
-                                println("este $noteKey")
-                                startActivity(intent)
-                            }
+                }.addOnCompleteListener {
+                    val intent = Intent(this, DrawerActivty::class.java)
+                    GlobalScope.launch {
+                        withContext(Dispatchers.IO) {
+                            delay(1000)
+                            noteKey = Utilis.createNotificationGroup(docId,
+                                Backend.createJsonArrayString(tokens_adress))
+                            updateNotificationKeyCamp(docId, noteKey)
+
+                            println(docId)
+                            println("TOUUUUUUUUU FINALLL $tokens_adress")
+                            println("este $noteKey")
+                            startActivity(intent)
                         }
                     }
-            }
+                }
+        }
 
     }
+
     /*
        This function happen after picking photo, and make changes in the activity
     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
             CropImage.activity(data?.data)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1,1)
+                .setAspectRatio(1, 1)
                 .start(this)
         }
 

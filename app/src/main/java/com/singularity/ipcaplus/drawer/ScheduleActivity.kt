@@ -51,7 +51,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.AppBarTittle).text = "Horário"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
@@ -61,8 +61,7 @@ class ScheduleActivity : AppCompatActivity() {
             Backend.getUserCourseId(prefs.userId!!) {
                 addStudentSubjectsToList(it)
             }
-        }
-        else {
+        } else {
             addTeacherSubjectsToList(prefs.userId!!)
         }
 
@@ -85,7 +84,7 @@ class ScheduleActivity : AppCompatActivity() {
 
 
     // This function is for select an section by clicking on the section image
-    private var onClickWeekDay: (view: View)->Unit = {
+    private var onClickWeekDay: (view: View) -> Unit = {
 
         val button = it as Button
 
@@ -106,8 +105,7 @@ class ScheduleActivity : AppCompatActivity() {
             Backend.getUserCourseId(prefs.userId!!) {
                 addStudentSubjectsToList(it)
             }
-        }
-        else {
+        } else {
             addTeacherSubjectsToList(prefs.userId!!)
         }
 
@@ -118,7 +116,7 @@ class ScheduleActivity : AppCompatActivity() {
 
     // Get All student Subjects during the day
     fun addStudentSubjectsToList(courseId: String) {
-        Backend.getDayCourseClasses(day, courseId){
+        Backend.getDayCourseClasses(day, courseId) {
             subjects.clear()
             subjects.addAll(it)
             currentIndex = 0
@@ -145,6 +143,7 @@ class ScheduleActivity : AppCompatActivity() {
 
 
     var currentIndex: Int = 0
+
     inner class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
@@ -154,10 +153,10 @@ class ScheduleActivity : AppCompatActivity() {
             if (subjects[currentIndex].name == "breaktime") {
 
                 return ViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.row_breaktime, parent, false)
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.row_breaktime, parent, false)
                 )
-            }
-            else {
+            } else {
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_subject, parent, false)
                 )
@@ -174,8 +173,7 @@ class ScheduleActivity : AppCompatActivity() {
                     val textViewBreakTimeTime = findViewById<TextView>(R.id.textViewBreakTimeTime)
                     textViewBreakTimeTime.text = "${subjects[currentIndex].start_time} min"
                     currentIndex++
-                }
-                else {
+                } else {
 
                     // Get data
                     val textViewSubject = findViewById<TextView>(R.id.textViewSubject)
@@ -186,7 +184,8 @@ class ScheduleActivity : AppCompatActivity() {
                     // Set data
                     textViewSubject.text = subjects[position].name
                     textViewTitleTeacher.text = subjects[position].teacher
-                    textViewHours.text = subjects[position].start_time + " - " + subjects[position].end_time
+                    textViewHours.text =
+                        subjects[position].start_time + " - " + subjects[position].end_time
                     textViewClassRoom.text = "Sala " + subjects[position].classroom
 
                     currentIndex++

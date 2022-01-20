@@ -44,7 +44,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 
-object  Utilis {
+object Utilis {
 
     /*
         This function create a Date picker
@@ -58,7 +58,7 @@ object  Utilis {
             DatePickerDialog.OnDateSetListener { _, year, month, day ->
 
                 // Add the date to the button
-                val date = "$day/${month+1}/$year"
+                val date = "$day/${month + 1}/$year"
                 dateTextView.text = date
 
                 // Call the time pop up window
@@ -87,7 +87,7 @@ object  Utilis {
 
         // After the user finish selecting a time, join the time in the previous string
         val timeSetListener =
-            TimePickerDialog.OnTimeSetListener {_, hour, minute ->
+            TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                 val time = "$hour:$minute"
                 "${dateTextView.text} - $time".also { dateTextView.text = it }
             }
@@ -135,7 +135,7 @@ object  Utilis {
 
         while (count > 0) {
             count -= 1
-            result ++
+            result++
         }
 
         return result
@@ -273,7 +273,7 @@ object  Utilis {
 
         val nameArray = Pattern.compile(" ").split(fullName)
 
-        return nameArray[0] + " " + nameArray[nameArray.size-1]
+        return nameArray[0] + " " + nameArray[nameArray.size - 1]
     }
 
 
@@ -291,7 +291,7 @@ object  Utilis {
     }
 
 
-    fun getFile(context: Context, path: String, suffix: String, callback:(Bitmap)->Unit) {
+    fun getFile(context: Context, path: String, suffix: String, callback: (Bitmap) -> Unit) {
 
         // Retrieve image from firebase
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
@@ -312,7 +312,13 @@ object  Utilis {
 
     }
 
-    fun downloadFile(context: Context, fileName: String, fileExtension: String, destinationDirectory: String, uri: Uri) {
+    fun downloadFile(
+        context: Context,
+        fileName: String,
+        fileExtension: String,
+        destinationDirectory: String,
+        uri: Uri,
+    ) {
 
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val request = DownloadManager.Request(uri)
@@ -336,11 +342,11 @@ object  Utilis {
     }
 
 
-    fun getFileIcon(fileName:String): Int {
+    fun getFileIcon(fileName: String): Int {
         return if (fileName.contains(".")) {
 
             val extensionArray = Pattern.compile("[.]").split(fileName)
-            val extension = extensionArray[extensionArray.size-1]
+            val extension = extensionArray[extensionArray.size - 1]
 
             when (extension) {
                 "png", "jpg", "jpeg", "jep", "jfif", "gif" -> R.drawable.ic_picture
@@ -354,11 +360,12 @@ object  Utilis {
 
 
     fun uniqueImageNameGen(): String {
-        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&()=@[]{}"
+        val characters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&()=@[]{}"
 
         val sb = StringBuilder(15)
 
-        for(x in 0 until 15){
+        for (x in 0 until 15) {
             val random = (characters.indices).random()
             sb.append(characters[random])
         }
@@ -371,9 +378,9 @@ object  Utilis {
         This function gets the domain of email
         split remove the @ and make the array like this -> [a20115][alunos.ipca.pt]
      */
-    fun getEmailDomain(email: String) : String{
+    fun getEmailDomain(email: String): String {
         val strArray = Pattern.compile("@").split(email)
-        val result= strArray[1]
+        val result = strArray[1]
 
         return result.toString()
 
@@ -387,10 +394,11 @@ object  Utilis {
        This function returns the encrypted system message
        @callBack = return the list
     */
-    fun buildSystemMessage(key: String, iv : String) : String {
+    fun buildSystemMessage(key: String, iv: String): String {
 
         // Build encryptation data of first message send by the system
-        var message = encryptMeta("This chat is being encripted with Singularity Encryption!", key, iv)
+        var message =
+            encryptMeta("This chat is being encripted with Singularity Encryption!", key, iv)
 
         return message.toString()
 
@@ -422,7 +430,10 @@ object  Utilis {
         return inSampleSize
     }
 
-    suspend fun  createNotificationGroup(notificationKeyName : String, registrationIds : JSONArray) : String {
+    suspend fun createNotificationGroup(
+        notificationKeyName: String,
+        registrationIds: JSONArray,
+    ): String {
 
         var notificationKey = ""
 
@@ -450,7 +461,8 @@ object  Utilis {
 
             // Build parameters for json
             httpsURLConnection.setRequestProperty("Content-Type", "application/json")
-            val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
+            val project_key =
+                "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
             val senderId = "209455028652"
             httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
             httpsURLConnection.setRequestProperty("project_id", senderId)
@@ -487,7 +499,6 @@ object  Utilis {
             } else {
                 httpsURLConnection.inputStream
             }
-            println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU NAO CHEGOU SEU BURRO")
             if (responseCode == 200) {
                 Log.e(ContentValues.TAG, "Group Created!!")
 
@@ -495,12 +506,10 @@ object  Utilis {
                     .use { it.readText() }  // defaults to UTF-8
                 withContext(Dispatchers.Main) {
                     //notification_key
-                    val jsonObject  = JSONObject(response)
+                    val jsonObject = JSONObject(response)
                     notificationKey = jsonObject.getString("notification_key")
-                    println("NotifKey: $notificationKey")
                     Log.d("NotifKey", notificationKey)
                 }
-                println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU $notificationKey")
                 return notificationKey
             } else {
                 Log.e(ContentValues.TAG, "Error it didn´t work")
@@ -517,7 +526,7 @@ object  Utilis {
     }
 
     //This function sends push notifications to devices that are subscribed to a specific topic
-    suspend fun sendNotificationToGroup(title: String, message: String, notificationKey : String) {
+    suspend fun sendNotificationToGroup(title: String, message: String, notificationKey: String) {
 
         delay(1500)
 
@@ -600,8 +609,10 @@ object  Utilis {
     }
 
 
-
-    suspend fun  removeKeyFromNotificationGroup(notificationKeyName : String, registrationIds : JSONArray) : String {
+    suspend fun removeKeyFromNotificationGroup(
+        notificationKeyName: String,
+        registrationIds: JSONArray,
+    ): String {
 
         var notificationKey = ""
 
@@ -629,7 +640,8 @@ object  Utilis {
 
             // Build parameters for json
             httpsURLConnection.setRequestProperty("Content-Type", "application/json")
-            val project_key = "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
+            val project_key =
+                "AAAAMMR-Gaw:APA91bFeijRa909_QEdEFsQeDSaJZRYD7rOk8B8Bc2QiYcGoyLG1xqqpZLkOJXmZrG0FbScojvqBCsweSEWDrMLM6kr67boS-BVB2oy7fL6Zn1N9ICVk6efGniauDa3z8eaOb1TENmEs"
             val senderId = "209455028652"
             httpsURLConnection.setRequestProperty("authorization", "key=$project_key")
             httpsURLConnection.setRequestProperty("project_id", senderId)
@@ -666,7 +678,6 @@ object  Utilis {
             } else {
                 httpsURLConnection.inputStream
             }
-            println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU NAO CHEGOU SEU BURRO")
             if (responseCode == 200) {
                 Log.e(ContentValues.TAG, "Group Created!!")
 
@@ -674,12 +685,9 @@ object  Utilis {
                     .use { it.readText() }  // defaults to UTF-8
                 withContext(Dispatchers.Main) {
                     //notification_key
-                    val jsonObject  = JSONObject(response)
+                    val jsonObject = JSONObject(response)
                     notificationKey = jsonObject.getString("notification_key")
-                    println("NotifKey: $notificationKey")
-                    Log.d("NotifKey", notificationKey)
                 }
-                println("CUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU $notificationKey")
                 return notificationKey
             } else {
                 Log.e(ContentValues.TAG, "Error it didn´t work")
@@ -694,7 +702,6 @@ object  Utilis {
         }
         return notificationKey
     }
-
 
 
 }

@@ -31,7 +31,7 @@ import java.util.*
 import java.util.regex.Pattern
 
 
-class SearchActivity: AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String>()
@@ -45,7 +45,6 @@ class SearchActivity: AppCompatActivity() {
     private var mLayoutManager: LinearLayoutManager? = null
 
 
-
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,9 +54,9 @@ class SearchActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val back = findViewById<ImageView>(R.id.back_btn)
-        overridePendingTransition(0,0)
+        overridePendingTransition(0, 0)
 
-        back.setOnClickListener(){
+        back.setOnClickListener() {
             finish()
         }
 
@@ -83,7 +82,6 @@ class SearchActivity: AppCompatActivity() {
             }
 
 
-
         // SearchBar Find chat
         val search = findViewById<SearchView>(R.id.searchView)
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -101,10 +99,10 @@ class SearchActivity: AppCompatActivity() {
                     tempArrayChats.clear()
                     tempArrayChats.addAll(chats)
 
-                }else if (searchText.isNotEmpty()) {
+                } else if (searchText.isNotEmpty()) {
                     tempArrayChats.clear()
-                    for (chat in chats){
-                        if (chat.name.toLowerCase().contains(searchText)  ){
+                    for (chat in chats) {
+                        if (chat.name.toLowerCase().contains(searchText)) {
 
                             tempArrayChats.add(chat)
 
@@ -126,7 +124,6 @@ class SearchActivity: AppCompatActivity() {
         mAdapter = SearchAdapter()
         binding.recyclerViewProfile.itemAnimator = DefaultItemAnimator()
         binding.recyclerViewProfile.adapter = mAdapter
-
 
 
     }
@@ -158,10 +155,9 @@ class SearchActivity: AppCompatActivity() {
                 textViewMessage.text = Utilis.getFirstAndLastName(tempArrayChats[position].name)
 
                 // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
-                if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()){
+                if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()) {
                     chats[position].ox = getMetaOx(context, chatIds[position])
-                }
-                else{
+                } else {
                     saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
                 }
 
@@ -178,7 +174,9 @@ class SearchActivity: AppCompatActivity() {
                 }
 
                 // set image
-                Utilis.getFile(this.context, "chats/${chatIds[position]}/icon.png", "png") { bitmap ->
+                Utilis.getFile(this.context,
+                    "chats/${chatIds[position]}/icon.png",
+                    "png") { bitmap ->
                     imageViewImage.setImageBitmap(bitmap)
                 }
 

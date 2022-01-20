@@ -37,12 +37,12 @@ class CreateDirectChatActivity : ActivityImageHelper() {
 
 
     val db = Firebase.firestore
-    var noteKey : String = ""
+    var noteKey: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Variables
-        var chatName : String
+        var chatName: String
 
         var type = intent.getStringExtra("type")!!
         var memberIds = intent.getStringArrayListExtra("users")!!
@@ -50,19 +50,20 @@ class CreateDirectChatActivity : ActivityImageHelper() {
 
         val ivGenerated = generateRandomIV()
 
-        for (memberId in memberIds){
+        for (memberId in memberIds) {
 
             // Getting all of tokens of  profile associated devices
             Backend.getAllTokens(memberId) {
-                if (tokens_adress.isEmpty()){
+                if (tokens_adress.isEmpty()) {
                     tokens_adress.clear()
                 }
                 tokens_adress.addAll(it)
 
                 GlobalScope.launch {
-                    withContext(Dispatchers.IO){
+                    withContext(Dispatchers.IO) {
                         Log.d("paaaaaa", tokens_adress.toString())
-                        noteKey = createNotificationGroup(generateRandomIV(), createJsonArrayString(tokens_adress))
+                        noteKey = createNotificationGroup(generateRandomIV(),
+                            createJsonArrayString(tokens_adress))
                     }
                 }
 
@@ -73,86 +74,85 @@ class CreateDirectChatActivity : ActivityImageHelper() {
         // Generate key for chats
         val keygen = metaGenrateKey()
 
-            Backend.getUserProfile(memberIds[1]) {
+        Backend.getUserProfile(memberIds[1]) {
 
 
-                chatName = it.name
+            chatName = it.name
 
-                // Chat data
-                var chat = Chat(
-                    chatName,
-                    type,
-                    keygen,
-                    ivGenerated,
-                    noteKey
-                )
+            // Chat data
+            var chat = Chat(
+                chatName,
+                type,
+                keygen,
+                ivGenerated,
+                noteKey
+            )
 
-                // System message data
-                val message = Message(
-                    "system",
-                    buildSystemMessage(keygen, ivGenerated),
-                    Timestamp.now(),
-                    ""
+            // System message data
+            val message = Message(
+                "system",
+                buildSystemMessage(keygen, ivGenerated),
+                Timestamp.now(),
+                ""
 
-                )
+            )
 
-                val user = HashMap<String, Any>()
-                val admin = hashMapOf<String?, Any>(
-                    "admin" to true
-                )
+            val user = HashMap<String, Any>()
+            val admin = hashMapOf<String?, Any>(
+                "admin" to true
+            )
 
-                db.collection("chat")
-                    .add(chat.toHash())
-                    .addOnSuccessListener { documentReference ->
-                        db.collection("chat")
-                            .document(documentReference.id)
-                            .collection("message")
-                            .add(message.toHash())
-                        for (member in memberIds) {
-                            Backend.getUserProfile(memberIds[0]) {
-                                if (member == Firebase.auth.currentUser!!.uid) {
-                                    // Chat data
-                                    chat = Chat(
-                                        it.name,
-                                        type,
-                                        keygen,
-                                        ivGenerated,
-                                        noteKey
-                                    )
-                                }
-
-                                db.collection("profile")
-                                    .document(member)
-                                    .collection("chat")
-                                    .document(documentReference.id)
-                                    .set(chat)
-                                db.collection("chat")
-                                    .document(documentReference.id)
-                                    .collection("user")
-                                    .document(member)
-                                    .set(user)
-                                db.collection("chat")
-                                    .document(documentReference.id)
-                                    .collection("user")
-                                    .document(member)
-                                    .update(admin)
-
+            db.collection("chat")
+                .add(chat.toHash())
+                .addOnSuccessListener { documentReference ->
+                    db.collection("chat")
+                        .document(documentReference.id)
+                        .collection("message")
+                        .add(message.toHash())
+                    for (member in memberIds) {
+                        Backend.getUserProfile(memberIds[0]) {
+                            if (member == Firebase.auth.currentUser!!.uid) {
+                                // Chat data
+                                chat = Chat(
+                                    it.name,
+                                    type,
+                                    keygen,
+                                    ivGenerated,
+                                    noteKey
+                                )
                             }
 
-
+                            db.collection("profile")
+                                .document(member)
+                                .collection("chat")
+                                .document(documentReference.id)
+                                .set(chat)
+                            db.collection("chat")
+                                .document(documentReference.id)
+                                .collection("user")
+                                .document(member)
+                                .set(user)
+                            db.collection("chat")
+                                .document(documentReference.id)
+                                .collection("user")
+                                .document(member)
+                                .update(admin)
 
                         }
 
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error adding document", e)
+
                     }
 
-                val intent = Intent(this, DrawerActivty::class.java)
-                startActivity(intent)
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error adding document", e)
+                }
 
-            }
-
+            val intent = Intent(this, DrawerActivty::class.java)
+            startActivity(intent)
 
         }
+
+
     }
+}

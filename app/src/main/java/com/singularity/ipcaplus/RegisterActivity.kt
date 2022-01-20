@@ -24,7 +24,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -32,7 +31,7 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val pattern : Pattern =
+        val pattern: Pattern =
             Pattern.compile("^" +
                     "(?=.*[@#$%^&+=])" +
                     "(?=.*[A-Z])" +
@@ -50,17 +49,19 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.buttonRegister.setOnClickListener {
             if (!binding.editTextTextPassword.text.isNullOrBlank() && !binding.editTextEmail.text.isNullOrBlank()
-                && pattern.matcher(binding.editTextTextPassword.text.toString()).matches()) {
+                && pattern.matcher(binding.editTextTextPassword.text.toString()).matches()
+            ) {
 
                 if (binding.editTextTextPassword.text.toString() == binding.editTextTextConfirmPassword.text.toString()) {
-                    val email : String = binding.editTextEmail.text.toString()
-                    val password : String = binding.editTextTextPassword.text.toString()
+                    val email: String = binding.editTextEmail.text.toString()
+                    val password: String = binding.editTextTextPassword.text.toString()
 
                     val emailDomain = Utilis.getEmailDomain(email)
-                    if(emailDomain != "alunos.ipca.pt" && emailDomain != "ipca.pt"){
+                    if (emailDomain != "alunos.ipca.pt" && emailDomain != "ipca.pt") {
                         Snackbar.make(binding.root,
-                            "Precisas de usar um email do ipca (ipca.pt)!", Snackbar.LENGTH_SHORT).show()
-                    }else{
+                            "Precisas de usar um email do ipca (ipca.pt)!", Snackbar.LENGTH_SHORT)
+                            .show()
+                    } else {
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(this) { task ->
                                 if (task.isSuccessful) {
@@ -77,41 +78,42 @@ class RegisterActivity : AppCompatActivity() {
                                             .set(profile!!.toHash())
                                             .addOnCompleteListener {
 
-                                            if (profile.role != "Professor") {
+                                                if (profile.role != "Professor") {
 
-                                                // Get user course in ipca data and create a collection with that document
-                                                Backend.setUserCourseByIpcaData(userID, ipcaDataId) {
+                                                    // Get user course in ipca data and create a collection with that document
+                                                    Backend.setUserCourseByIpcaData(userID,
+                                                        ipcaDataId) {
 
-                                                    // Create official chats for each subject
-                                                    Backend.getOficialChatByTag(it) { chats ->
+                                                        // Create official chats for each subject
+                                                        Backend.getOficialChatByTag(it) { chats ->
 
-                                                        Backend.setOficialChat(userID, chats)
+                                                            Backend.setOficialChat(userID, chats)
+                                                        }
+
                                                     }
 
+                                                } else {
+                                                    Backend.setTeacherSubjectsByIpcaData(userID,
+                                                        ipcaDataId)
                                                 }
 
                                             }
-                                            else {
-                                                Backend.setTeacherSubjectsByIpcaData(userID, ipcaDataId)
-                                            }
-
-                                            }
-
 
 
                                     }
 
-                                    startActivity(Intent(this, LoginActivity::class.java ))
+                                    startActivity(Intent(this, LoginActivity::class.java))
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
+                                    Log.w(ContentValues.TAG,
+                                        "createUserWithEmail:failure",
+                                        task.exception)
                                     Toast.makeText(baseContext, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show()
                                 }
                             }
                     }
-                }
-                else {
+                } else {
                     Snackbar.make(binding.root,
                         "Tens de confirmar a Password corretamente!", Snackbar.LENGTH_SHORT).show()
                 }

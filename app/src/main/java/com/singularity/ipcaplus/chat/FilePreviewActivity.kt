@@ -34,7 +34,7 @@ class FilePreviewActivity : AppCompatActivity() {
 
         // Setup WebView
         val webView = findViewById<WebView>(R.id.webview)
-        var progDailog = ProgressDialog.show(this, "A carregar","Espera um bocado...", true);
+        var progDailog = ProgressDialog.show(this, "A carregar", "Espera um bocado...", true);
         progDailog.setCancelable(false);
         webView.settings.javaScriptEnabled = true
 
@@ -58,7 +58,8 @@ class FilePreviewActivity : AppCompatActivity() {
 
     fun downloadFileRequest(path: String, name: String) {
 
-        confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+        confirmationDialog("Transferir Ficheiro",
+            "Tens certeza que queres transferir este ficheiro?") {
 
             val fileRef = Firebase.storage.reference.child("$path/${name}")
             val strArray = Pattern.compile("[.]").split(name)
@@ -73,7 +74,7 @@ class FilePreviewActivity : AppCompatActivity() {
     }
 
 
-    private fun confirmationDialog(title: String, description: String, callBack: ()->Unit) {
+    private fun confirmationDialog(title: String, description: String, callBack: () -> Unit) {
         val alertDialog = AlertDialog.Builder(this)
 
         alertDialog.setTitle(title)
@@ -120,7 +121,7 @@ class FilePreviewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
 
-        when (item.itemId){
+        when (item.itemId) {
             R.id.download -> {
 
                 downloadFileRequest(currentPath, fileName)

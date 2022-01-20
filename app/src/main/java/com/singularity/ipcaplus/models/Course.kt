@@ -4,15 +4,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class Course {
 
-    var name : String = ""
-    var tag : String = ""
+    var name: String = ""
+    var tag: String = ""
 
-    constructor(name : String, tag : String) {
+    constructor(name: String, tag: String) {
         this.name = name
         this.tag = tag
     }
 
-    fun toHash() :HashMap<String, Any> {
+    fun toHash(): HashMap<String, Any> {
         var hashMap = HashMap<String, Any>()
         hashMap.put("name", name)
         hashMap.put("tag", tag)
@@ -20,7 +20,7 @@ class Course {
     }
 
     companion object {
-        fun fromHash(hashMap: QueryDocumentSnapshot) : Course {
+        fun fromHash(hashMap: QueryDocumentSnapshot): Course {
             val course = Course(
                 hashMap["name"] as String,
                 hashMap["tag"] as String

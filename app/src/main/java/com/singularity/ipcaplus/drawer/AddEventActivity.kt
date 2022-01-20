@@ -28,6 +28,7 @@ class AddEventActivity : AppCompatActivity() {
 
 
     val db = Firebase.firestore
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +46,13 @@ class AddEventActivity : AppCompatActivity() {
         supportActionBar?.setCustomView(R.layout.custom_bar_layout)
         findViewById<TextView>(R.id.AppBarTittle).text = "Agendar Evento"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
         // Get chat id
-        val chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
+        val chat_id =
+            if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
 
         val datePickerDialog = Utilis.initDatePicker(binding.datePicker, this)
 

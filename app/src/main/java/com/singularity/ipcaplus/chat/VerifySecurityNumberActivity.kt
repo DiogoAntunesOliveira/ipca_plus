@@ -51,7 +51,7 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
         supportActionBar?.setCustomView(R.layout.custom_bar_layout)
         findViewById<TextView>(R.id.AppBarTittle).text = "Verificação de Segurança"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
@@ -80,13 +80,13 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
             }
         }
 
-        if (keygenData.isNullOrEmpty()){
+        if (keygenData.isNullOrEmpty()) {
             Snackbar.make(verifySecurity,
                 "You need to Sign Up with (ipca.pt) email!", Snackbar.LENGTH_SHORT).show()
 
-        }else{
+        } else {
             val writer = QRCodeWriter()
-            try{
+            try {
                 val bitMatrix = writer.encode(keygenData,
                     BarcodeFormat.QR_CODE,
                     512, 512)
@@ -95,29 +95,31 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
                 val height = bitMatrix.height
                 val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
 
-                for ( pxx in 0 until height){
-                    for (pxy in 0 until height){
-                        bmp.setPixel(pxx, pxy, if (bitMatrix[pxx, pxy]) Color.BLACK else Color.WHITE)
+                for (pxx in 0 until height) {
+                    for (pxy in 0 until height) {
+                        bmp.setPixel(pxx,
+                            pxy,
+                            if (bitMatrix[pxx, pxy]) Color.BLACK else Color.WHITE)
                     }
                 }
                 vQRCode.setImageBitmap(bmp)
 
 
-            }catch (e: WriterException){
+            } catch (e: WriterException) {
                 e.printStackTrace()
             }
         }
 
-        vQRCode.setOnClickListener{
+        vQRCode.setOnClickListener {
             // Starts scanner on Create of Overlay (you can also call this function using a button click)
             initScanner()
         }
 
-        findViewById<Button>(R.id.verifySecurityButton).setOnClickListener{
+        findViewById<Button>(R.id.verifySecurityButton).setOnClickListener {
             put0xBlank(chat_id)
-            put0xBlankProfile(chat_id){}
+            put0xBlankProfile(chat_id) {}
             GlobalScope.launch {
-                withContext(Dispatchers.IO){
+                withContext(Dispatchers.IO) {
                     Snackbar.make(binding.root,
                         "A tua rende foi validada", Snackbar.LENGTH_SHORT).show()
                     delay(1000)
@@ -128,7 +130,6 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
                 }
             }
         }
-
 
 
     }
@@ -149,7 +150,7 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
         }
     }
 
-    private fun blankSpaces(key : String): String {
+    private fun blankSpaces(key: String): String {
 
         var result = ""
         for (i in key.indices)
@@ -159,7 +160,7 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
     }
 
     // Start the QR Scanner
-    private fun initScanner(){
+    private fun initScanner() {
         IntentIntegrator(this).initiateScan()
         val integrator = IntentIntegrator(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)

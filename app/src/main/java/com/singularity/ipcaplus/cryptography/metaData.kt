@@ -21,10 +21,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 
-
-
-
-fun encryptMeta(strToEncrypt: String, secret_key: String, initVector : String): String? {
+fun encryptMeta(strToEncrypt: String, secret_key: String, initVector: String): String? {
     Security.addProvider(BouncyCastleProvider())
     hash(strToEncrypt)
     var keyBytes: ByteArray
@@ -68,7 +65,7 @@ fun encryptMeta(strToEncrypt: String, secret_key: String, initVector : String): 
     return null
 }
 
-fun decryptWithAESmeta(key: String, strToDecrypt: String?, initVector : String): String? {
+fun decryptWithAESmeta(key: String, strToDecrypt: String?, initVector: String): String? {
     Security.addProvider(BouncyCastleProvider())
     var keyBytes: ByteArray
 
@@ -132,7 +129,7 @@ fun metaGenrateKey(): String {
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
-fun saveKeygenOx(context : Context, chatUid : String, keygen: String){
+fun saveKeygenOx(context: Context, chatUid: String, keygen: String) {
 
     val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
     val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)

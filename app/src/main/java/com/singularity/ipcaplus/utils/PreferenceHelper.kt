@@ -12,9 +12,11 @@ object PreferenceHelper {
     val USER_PASSWORD = "PASSWORD"
     val USER_ROLE = "USER_ROLE"
 
-    fun defaultPreference(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    fun defaultPreference(context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
-    fun customPreference(context: Context, name: String): SharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
+    fun customPreference(context: Context, name: String): SharedPreferences =
+        context.getSharedPreferences(name, Context.MODE_PRIVATE)
 
     inline fun SharedPreferences.editMe(operation: (SharedPreferences.Editor) -> Unit) {
         val editMe = edit()

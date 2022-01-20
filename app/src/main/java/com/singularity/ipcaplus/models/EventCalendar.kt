@@ -6,8 +6,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 class EventCalendar {
 
     var id: String = ""
-    var name : String = ""
-    var desc : String = ""
+    var name: String = ""
+    var desc: String = ""
     lateinit var datetime: Timestamp
 
     constructor() {
@@ -15,16 +15,16 @@ class EventCalendar {
     }
 
     constructor(
-        datetime : Timestamp,
-        desc : String,
-        name : String
+        datetime: Timestamp,
+        desc: String,
+        name: String,
     ) {
         this.datetime = datetime
         this.desc = desc
         this.name = name
     }
 
-    fun toHash() :HashMap<String, Any> {
+    fun toHash(): HashMap<String, Any> {
         var hashMap = HashMap<String, Any>()
         hashMap.put("datetime", datetime)
         hashMap.put("desc", desc)
@@ -33,7 +33,7 @@ class EventCalendar {
     }
 
     companion object {
-        fun fromHash(hashMap: QueryDocumentSnapshot) : EventCalendar {
+        fun fromHash(hashMap: QueryDocumentSnapshot): EventCalendar {
             val event = EventCalendar(
                 hashMap["datetime"] as Timestamp,
                 hashMap["desc"] as String,

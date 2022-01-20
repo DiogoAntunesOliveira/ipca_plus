@@ -9,7 +9,11 @@ import android.widget.TextView
 import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.models.Contact
 
-class ExpandableListViewAdapter internal constructor(private val context: Context, private val chapterList: List<String>, private val topicsList: HashMap<String, List<Contact>>):
+class ExpandableListViewAdapter internal constructor(
+    private val context: Context,
+    private val chapterList: List<String>,
+    private val topicsList: HashMap<String, List<Contact>>,
+) :
     BaseExpandableListAdapter() {
 
     override fun getGroupCount(): Int {
@@ -40,13 +44,19 @@ class ExpandableListViewAdapter internal constructor(private val context: Contex
         return false
     }
 
-    override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
+    override fun getGroupView(
+        groupPosition: Int,
+        isExpanded: Boolean,
+        convertView: View?,
+        parent: ViewGroup?,
+    ): View {
 
         var convertView = convertView
         val name = getGroup(groupPosition) as String
 
         if (convertView == null) {
-            val  inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             convertView = inflater.inflate(R.layout.row_parent_contact, null)
         }
 
@@ -56,13 +66,20 @@ class ExpandableListViewAdapter internal constructor(private val context: Contex
         return convertView
     }
 
-    override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
+    override fun getChildView(
+        groupPosition: Int,
+        childPosition: Int,
+        isLastChild: Boolean,
+        convertView: View?,
+        parent: ViewGroup?,
+    ): View {
 
         var convertView = convertView
         val info = getChild(groupPosition, childPosition) as Contact
 
         if (convertView == null) {
-            val  inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             convertView = inflater.inflate(R.layout.row_child_contact, null)
         }
         val textViewDesc = convertView!!.findViewById<TextView>(R.id.textViewDesc)

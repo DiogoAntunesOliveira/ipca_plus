@@ -30,7 +30,7 @@ object Backend {
        @month = selected month
        @callBack = return the list
     */
-    fun getAllMonthEvents(month: String, callBack: (List<EventCalendar>)->Unit) {
+    fun getAllMonthEvents(month: String, callBack: (List<EventCalendar>) -> Unit) {
 
         val events = arrayListOf<EventCalendar>()
 
@@ -52,7 +52,8 @@ object Backend {
                                 val event = EventCalendar.fromHash(document)
                                 event.id = document.id
 
-                                val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                val date = Utilis.getDate(event.datetime.seconds * 1000,
+                                    "yyyy-MM-dd'T'HH:mm:ss.SSS")
                                 if (month == Utilis.getMonthById(Utilis.getMonth(date).toInt())) {
                                     events.add(event)
                                 }
@@ -65,7 +66,7 @@ object Backend {
     }
 
 
-    private fun getAllUserChatIds(callBack: (List<String>)->Unit) {
+    private fun getAllUserChatIds(callBack: (List<String>) -> Unit) {
 
         val chatIds = arrayListOf<String>()
 
@@ -88,7 +89,11 @@ object Backend {
        @month = selected month
        @callBack = return the list
     */
-    fun getAllChatMonthEvents(month: String, chat_id: String, callBack: (List<EventCalendar>)->Unit) {
+    fun getAllChatMonthEvents(
+        month: String,
+        chat_id: String,
+        callBack: (List<EventCalendar>) -> Unit,
+    ) {
 
         val events = arrayListOf<EventCalendar>()
 
@@ -124,7 +129,12 @@ object Backend {
        @day = selected day
        @callBack = return the list
     */
-    fun getAllChatMonthDayEvents(month: String, day: Int, chat_id: String, callBack: (List<EventCalendar>)->Unit) {
+    fun getAllChatMonthDayEvents(
+        month: String,
+        day: Int,
+        chat_id: String,
+        callBack: (List<EventCalendar>) -> Unit,
+    ) {
 
         val events = arrayListOf<EventCalendar>()
 
@@ -163,7 +173,7 @@ object Backend {
        @day = selected day
        @callBack = return the list
     */
-    fun getAllMonthDayEvents(month: String, day: Int, callBack: (List<EventCalendar>)->Unit) {
+    fun getAllMonthDayEvents(month: String, day: Int, callBack: (List<EventCalendar>) -> Unit) {
 
         val events = arrayListOf<EventCalendar>()
 
@@ -185,8 +195,10 @@ object Backend {
                                 val event = EventCalendar.fromHash(document)
                                 event.id = document.id
 
-                                val date = Utilis.getDate(event.datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
-                                if (day == Utilis.getDay(date).toInt() && month == Utilis.getMonthById(
+                                val date = Utilis.getDate(event.datetime.seconds * 1000,
+                                    "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                                if (day == Utilis.getDay(date)
+                                        .toInt() && month == Utilis.getMonthById(
                                         Utilis.getMonth(date).toInt())
                                 ) {
                                     events.add(event)
@@ -221,7 +233,7 @@ object Backend {
        This function returns all events in the firebase to an list
        @callBack = return the list
     */
-    fun getDayCourseClasses(day: String, courseId: String, callBack: (List<SubjectClass>)->Unit) {
+    fun getDayCourseClasses(day: String, courseId: String, callBack: (List<SubjectClass>) -> Unit) {
 
         val subjectClasses = arrayListOf<SubjectClass>()
         val subjectClassesWithBreaks = arrayListOf<SubjectClass>()
@@ -247,65 +259,62 @@ object Backend {
 
                                 if (documents2!!.size() != 0) {
 
-                                    println("subject ---- " + documents2!!.size())
+                                    // Get teacher name
+                                    db.collection("ipca_data")
+                                        .document(subject.teacher)
+                                        .get()
+                                        .addOnSuccessListener { documents3 ->
+                                            val teacherName = documents3.data!!["name"].toString()
 
+                                            documents2?.let {
 
-                                // Get teacher name
-                                db.collection("ipca_data")
-                                    .document(subject.teacher)
-                                    .get()
-                                    .addOnSuccessListener { documents3 ->
-                                        val teacherName = documents3.data!!["name"].toString()
+                                                for (_document2 in documents2) {
+                                                    val subjectClass =
+                                                        SubjectClass.fromHash(_document2)
+                                                    if (day == subjectClass.day) {
+                                                        subjectClass.name = subject.name
+                                                        subjectClass.teacher = teacherName
+                                                        subjectClasses.add(subjectClass)
+                                                    }
+                                                }
 
-                                    documents2?.let {
-
-                                        for (_document2 in documents2) {
-
-
-                                            println("---------------------------------> teacher: " + teacherName)
-
-                                            val subjectClass = SubjectClass.fromHash(_document2)
-                                            if (day == subjectClass.day) {
-                                                subjectClass.name = subject.name
-                                                subjectClass.teacher = teacherName
-                                                subjectClasses.add(subjectClass)
                                             }
-                                        }
 
-                                    }
+                                            // Order the subjects by time
+                                            for (i in 0 until subjectClasses.size) {
+                                                for (j in 0 until subjectClasses.size - 1) {
 
-                                    // Order the subjects by time
-                                    for (i in 0 until subjectClasses.size) {
-                                        for (j in 0 until subjectClasses.size - 1) {
-
-                                            if (Utilis.convertHoursStringToInt(subjectClasses[j].start_time) > Utilis.convertHoursStringToInt(
-                                                    subjectClasses[j + 1].start_time
-                                                )
-                                            ) {
-                                                val temp = subjectClasses[j]
-                                                subjectClasses[j] = subjectClasses[j + 1]
-                                                subjectClasses[j + 1] = temp
+                                                    if (Utilis.convertHoursStringToInt(
+                                                            subjectClasses[j].start_time) > Utilis.convertHoursStringToInt(
+                                                            subjectClasses[j + 1].start_time
+                                                        )
+                                                    ) {
+                                                        val temp = subjectClasses[j]
+                                                        subjectClasses[j] = subjectClasses[j + 1]
+                                                        subjectClasses[j + 1] = temp
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
 
-                                    // Add Break Times Between Classes
-                                    for (i in 0 until subjectClasses.size) {
-                                        if (i == 0) {
-                                            subjectClassesWithBreaks.add(subjectClasses[i])
-                                        }
-                                        else {
-                                            val num1 = Utilis.convertHoursStringToInt(subjectClasses[i].start_time) * 0.6
-                                            val num2 = Utilis.convertHoursStringToInt(subjectClasses[i - 1].end_time) * 0.6
-                                            val diff = (num1 - num2).toInt()
+                                            // Add Break Times Between Classes
+                                            for (i in 0 until subjectClasses.size) {
+                                                if (i == 0) {
+                                                    subjectClassesWithBreaks.add(subjectClasses[i])
+                                                } else {
+                                                    val num1 = Utilis.convertHoursStringToInt(
+                                                        subjectClasses[i].start_time) * 0.6
+                                                    val num2 = Utilis.convertHoursStringToInt(
+                                                        subjectClasses[i - 1].end_time) * 0.6
+                                                    val diff = (num1 - num2).toInt()
 
-                                            subjectClassesWithBreaks.add(SubjectClass("breaktime", diff.toString()))
-                                            subjectClassesWithBreaks.add(subjectClasses[i])
-                                        }
-                                    }
+                                                    subjectClassesWithBreaks.add(SubjectClass("breaktime",
+                                                        diff.toString()))
+                                                    subjectClassesWithBreaks.add(subjectClasses[i])
+                                                }
+                                            }
 
-                                    callBack(subjectClassesWithBreaks)
-                                }
+                                            callBack(subjectClassesWithBreaks)
+                                        }
                                 }
                             }
 
@@ -319,7 +328,7 @@ object Backend {
     }
 
 
-    fun getDayTeacherClasses(day: String, uid: String, callBack: (List<SubjectClass>)->Unit) {
+    fun getDayTeacherClasses(day: String, uid: String, callBack: (List<SubjectClass>) -> Unit) {
 
         val subjectClasses = arrayListOf<SubjectClass>()
         val subjectClassesWithBreaks = arrayListOf<SubjectClass>()
@@ -346,58 +355,60 @@ object Backend {
 
                                 if (documents2!!.size() != 0) {
 
-                                documents2?.let {
+                                    documents2?.let {
 
-                                    for (_document2 in documents2) {
+                                        for (_document2 in documents2) {
 
-                                        val subjectClass = SubjectClass.fromHash(_document2)
-                                        if (day == subjectClass.day) {
-                                            subjectClass.name = name
-                                            subjectClass.teacher = UserLoggedIn.name.toString()
-                                            subjectClasses.add(subjectClass)
+                                            val subjectClass = SubjectClass.fromHash(_document2)
+                                            if (day == subjectClass.day) {
+                                                subjectClass.name = name
+                                                subjectClass.teacher = UserLoggedIn.name.toString()
+                                                subjectClasses.add(subjectClass)
+                                            }
+
                                         }
 
                                     }
 
-                                }
+                                    // Order the subjects by time
+                                    for (i in 0 until subjectClasses.size) {
+                                        for (j in 0 until subjectClasses.size - 1) {
 
-                                // Order the subjects by time
-                                for (i in 0 until subjectClasses.size) {
-                                    for (j in 0 until subjectClasses.size - 1) {
-
-                                        if (Utilis.convertHoursStringToInt(subjectClasses[j].start_time) > Utilis.convertHoursStringToInt(
-                                                subjectClasses[j + 1].start_time
-                                            )
-                                        ) {
-                                            val temp = subjectClasses[j]
-                                            subjectClasses[j] = subjectClasses[j + 1]
-                                            subjectClasses[j + 1] = temp
+                                            if (Utilis.convertHoursStringToInt(subjectClasses[j].start_time) > Utilis.convertHoursStringToInt(
+                                                    subjectClasses[j + 1].start_time
+                                                )
+                                            ) {
+                                                val temp = subjectClasses[j]
+                                                subjectClasses[j] = subjectClasses[j + 1]
+                                                subjectClasses[j + 1] = temp
+                                            }
                                         }
                                     }
-                                }
 
-                                // Add Break Times Between Classes
-                                for (i in 0 until subjectClasses.size) {
-                                    if (i == 0) {
-                                        subjectClassesWithBreaks.add(subjectClasses[i])
+                                    // Add Break Times Between Classes
+                                    for (i in 0 until subjectClasses.size) {
+                                        if (i == 0) {
+                                            subjectClassesWithBreaks.add(subjectClasses[i])
+                                        } else {
+                                            val num1 =
+                                                Utilis.convertHoursStringToInt(subjectClasses[i].start_time) * 0.6
+                                            val num2 =
+                                                Utilis.convertHoursStringToInt(subjectClasses[i - 1].end_time) * 0.6
+                                            val diff = (num1 - num2).toInt()
+
+                                            subjectClassesWithBreaks.add(SubjectClass("breaktime",
+                                                diff.toString()))
+                                            subjectClassesWithBreaks.add(subjectClasses[i])
+                                        }
                                     }
-                                    else {
-                                        val num1 = Utilis.convertHoursStringToInt(subjectClasses[i].start_time) * 0.6
-                                        val num2 = Utilis.convertHoursStringToInt(subjectClasses[i - 1].end_time) * 0.6
-                                        val diff = (num1 - num2).toInt()
 
-                                        subjectClassesWithBreaks.add(SubjectClass("breaktime", diff.toString()))
-                                        subjectClassesWithBreaks.add(subjectClasses[i])
-                                    }
+                                    callBack(subjectClassesWithBreaks)
                                 }
-
-                                callBack(subjectClassesWithBreaks)
                             }
-                        }
+                    }
                 }
-            }
 
-        }
+            }
     }
 
 
@@ -405,7 +416,7 @@ object Backend {
        This function returns the user course by callback
        @id = user uid
     */
-    fun getUserCourseId(uid: String, callBack:(String)->Unit) {
+    fun getUserCourseId(uid: String, callBack: (String) -> Unit) {
 
         db.collection("profile")
             .document(uid)
@@ -441,7 +452,7 @@ object Backend {
     }
 
 
-    fun setUserCourseByIpcaData(userID: String, ipcaDataID: String, callBack:(String)->Unit) {
+    fun setUserCourseByIpcaData(userID: String, ipcaDataID: String, callBack: (String) -> Unit) {
 
         var courseTag = ""
 
@@ -480,7 +491,7 @@ object Backend {
        This function returns all contacts in the firebase to an list
        @callBack = return the list
     */
-    fun getAllContacts(callBack: (List<Contact>)->Unit) {
+    fun getAllContacts(callBack: (List<Contact>) -> Unit) {
 
         val contacts = arrayListOf<Contact>()
 
@@ -506,7 +517,7 @@ object Backend {
        ------------------------------------------------ Profile ------------------------------------------------
     */
 
-    fun getUserProfile(userId: String, callBack:(Profile)->Unit) {
+    fun getUserProfile(userId: String, callBack: (Profile) -> Unit) {
 
         var profile = Profile()
 
@@ -528,7 +539,7 @@ object Backend {
             }
     }
 
-    fun getAllUsers (callBack:(List<Profile>)->Unit) {
+    fun getAllUsers(callBack: (List<Profile>) -> Unit) {
         val profiles = arrayListOf<Profile>()
 
         db.collection("profile")
@@ -546,7 +557,7 @@ object Backend {
             }
     }
 
-    fun getAllUsersExceptCurrent (callBack:(List<Profile>)->Unit) {
+    fun getAllUsersExceptCurrent(callBack: (List<Profile>) -> Unit) {
         val profiles = arrayListOf<Profile>()
 
         db.collection("profile")
@@ -568,7 +579,7 @@ object Backend {
     }
 
 
-    fun getAllUsersExceptChatUsers (chatID: String, callBack:(List<Profile>)->Unit) {
+    fun getAllUsersExceptChatUsers(chatID: String, callBack: (List<Profile>) -> Unit) {
 
         val currentUserIds = arrayListOf<String>()
         val profiles = arrayListOf<Profile>()
@@ -616,13 +627,12 @@ object Backend {
     }
 
 
-
     /*
        ------------------------------------------------ Chats ------------------------------------------------
     */
 
 
-    fun getChatUsers(chatID: String, callBack: (List<Profile>)->Unit) {
+    fun getChatUsers(chatID: String, callBack: (List<Profile>) -> Unit) {
 
         val userIds = arrayListOf<String>()
         val adminIds = arrayListOf<String>()
@@ -675,7 +685,7 @@ object Backend {
     }
 
 
-    fun getChatUsersUids(chatID: String, callBack: (List<String>) -> Unit){
+    fun getChatUsersUids(chatID: String, callBack: (List<String>) -> Unit) {
         var userIds = arrayListOf<String>()
 
         // Get the ids of the users in the chat
@@ -720,9 +730,9 @@ object Backend {
        This function returns last chat message by chat id
        @callBack = return the message
     */
-    fun getLastMessageByChatID(chatID: String, callBack: (Message?)->Unit) {
+    fun getLastMessageByChatID(chatID: String, callBack: (Message?) -> Unit) {
 
-        var message : Message? = null
+        var message: Message? = null
 
         db.collection("chat").document("${chatID}").collection("message")
             .orderBy("time", Query.Direction.DESCENDING).limit(1)
@@ -730,16 +740,16 @@ object Backend {
                 documents?.let {
                     for (document in documents) {
                         message = Message.fromHash(document)
-                        }
                     }
-
-                    callBack(message)
                 }
+
+                callBack(message)
+            }
 
     }
 
 
-    fun getChatAdminIds(chatID: String, callBack: (List<String>)->Unit) {
+    fun getChatAdminIds(chatID: String, callBack: (List<String>) -> Unit) {
 
         val adminIds = arrayListOf<String>()
 
@@ -781,7 +791,12 @@ object Backend {
     }
 
 
-    fun addUsersIntoChat(chat: Chat, chatId: String, usersId: ArrayList<String>, callBack: ()->Unit) {
+    fun addUsersIntoChat(
+        chat: Chat,
+        chatId: String,
+        usersId: ArrayList<String>,
+        callBack: () -> Unit,
+    ) {
 
         for (userId in usersId) {
 
@@ -809,7 +824,7 @@ object Backend {
     }
 
 
-    fun deleteChat(chatId: String, callback: ()->Unit) {
+    fun deleteChat(chatId: String, callback: () -> Unit) {
 
         val userIds = arrayListOf<String>()
 
@@ -848,18 +863,14 @@ object Backend {
                             }
 
                     }
+                }
             }
-        }
-
-
-
 
 
     }
 
 
-
-    fun getAllDirectChatIdsByUser(userId: String, callBack: (List<String?>) -> Unit){
+    fun getAllDirectChatIdsByUser(userId: String, callBack: (List<String?>) -> Unit) {
 
         var chatIds = arrayListOf<String?>()
 
@@ -878,9 +889,9 @@ object Backend {
 
     }
 
-    fun getDirectChatById(chatIds: List<String?>, userId: String, callBack: (String?)-> Unit) {
+    fun getDirectChatById(chatIds: List<String?>, userId: String, callBack: (String?) -> Unit) {
 
-        var chatId : String? = null
+        var chatId: String? = null
 
         for (id in chatIds) {
             db.collection("chat")
@@ -888,8 +899,8 @@ object Backend {
                 .collection("user")
                 .get()
                 .addOnSuccessListener { documents ->
-                    for(document in documents) {
-                        if(document.id == userId){
+                    for (document in documents) {
+                        if (document.id == userId) {
                             chatId = document.id
                         }
                     }
@@ -899,15 +910,15 @@ object Backend {
 
     }
 
-    fun getGroupChatById(chatId: String, callBack: (Chat?)-> Unit) {
+    fun getGroupChatById(chatId: String, callBack: (Chat?) -> Unit) {
 
-        var chat : Chat? = null
+        var chat: Chat? = null
 
         db.collection("chat")
             .get()
             .addOnSuccessListener { documents ->
-                for(document in documents) {
-                    if (document.id == chatId){
+                for (document in documents) {
+                    if (document.id == chatId) {
                         chat = Chat.fromHash(document)
                     }
                 }
@@ -916,7 +927,7 @@ object Backend {
 
     }
 
-    fun getOficialChatByTag(courseTag : String, callBack: (List<Chat>) -> Unit) {
+    fun getOficialChatByTag(courseTag: String, callBack: (List<Chat>) -> Unit) {
 
         var oficialChat = arrayListOf<Chat>()
 
@@ -994,37 +1005,35 @@ object Backend {
 
     }
 
-    fun setOficialChat (userId: String, chats: (List<Chat>)) {
+    fun setOficialChat(userId: String, chats: (List<Chat>)) {
 
-            // Insert chats into user profile
-            for (chat in chats) {
-                db.collection("profile")
-                    .document(userId)
-                    .collection("chat")
-                    .document(chat.id.toString())
-                        .set(chat)
-                db.collection("chat")
-                    .document(chat.id.toString())
-                    .collection("user")
-                    .document(userId)
-                    .set(mapOf(
-                        "admin" to null
-                    ))
+        // Insert chats into user profile
+        for (chat in chats) {
+            db.collection("profile")
+                .document(userId)
+                .collection("chat")
+                .document(chat.id.toString())
+                .set(chat)
+            db.collection("chat")
+                .document(chat.id.toString())
+                .collection("user")
+                .document(userId)
+                .set(mapOf(
+                    "admin" to null
+                ))
 
 
-            }
         }
-
-
+    }
 
 
     /*
        ------------------------------------------------ Register Manipulation ------------------------------------------------
     */
 
-    fun getIpcaData(email: String, callBack: (Profile?, String)->Unit) {
+    fun getIpcaData(email: String, callBack: (Profile?, String) -> Unit) {
 
-        var profile : Profile? = null
+        var profile: Profile? = null
         var id = ""
 
         db.collection("ipca_data")
@@ -1076,7 +1085,7 @@ object Backend {
    */
 
 
-    fun deleteAllFilesInsideFolder(filePath: String, callback: ()->Unit) {
+    fun deleteAllFilesInsideFolder(filePath: String, callback: () -> Unit) {
 
         val storage = Firebase.storage
         val listRef = storage.reference.child(filePath)
@@ -1095,7 +1104,7 @@ object Backend {
     }
 
 
-    fun getFileUrl(filePath: String, callback: (Uri)->Unit) {
+    fun getFileUrl(filePath: String, callback: (Uri) -> Unit) {
 
         val storageRef = FirebaseStorage.getInstance().reference.child(filePath)
 
@@ -1106,9 +1115,7 @@ object Backend {
     }
 
 
-    fun postTokenAddress(tokenAdress: String, uid: String){
-        println(tokenAdress)
-        println(uid)
+    fun postTokenAddress(tokenAdress: String, uid: String) {
         var token = HashMap<String, String>()
         db.collection("profile")
             .document(uid)
@@ -1117,14 +1124,14 @@ object Backend {
             .set(token)
     }
 
-    fun getAllTokens(uid: String, callBack: (List<String>) -> Unit){
+    fun getAllTokens(uid: String, callBack: (List<String>) -> Unit) {
         val tokens = arrayListOf<String>()
 
         db.collection("profile").document(uid).collection("tokens")
             .addSnapshotListener { documents, _ ->
                 documents?.let {
                     for (document in documents) {
-                            tokens.add(document.id)
+                        tokens.add(document.id)
                     }
 
                     callBack(tokens)
@@ -1137,14 +1144,14 @@ object Backend {
         return JSONArray(array)
     }
 
-    fun getIv(chat_id: String, callBack: (String?)->Unit) {
+    fun getIv(chat_id: String, callBack: (String?) -> Unit) {
 
-        var iv : String? = null
+        var iv: String? = null
 
         db.collection("chat")
             .get()
             .addOnSuccessListener { documents ->
-                for(document in documents) {
+                for (document in documents) {
                     if (document.id == chat_id) {
                         val chat = Chat.fromHash(document)
                         iv = chat.iv.toString()
@@ -1154,14 +1161,14 @@ object Backend {
             }
     }
 
-    fun getNotificationKey(chat_id: String, callBack: (String?)->Unit) {
+    fun getNotificationKey(chat_id: String, callBack: (String?) -> Unit) {
 
-        var notificationKey : String? = null
+        var notificationKey: String? = null
 
         db.collection("chat")
             .get()
             .addOnSuccessListener { documents ->
-                for(document in documents) {
+                for (document in documents) {
                     if (document.id == chat_id) {
                         val chat = Chat.fromHash(document)
                         notificationKey = chat.notificationKey.toString()
@@ -1171,7 +1178,7 @@ object Backend {
             }
     }
 
-    fun put0xBlank(chatId: String){
+    fun put0xBlank(chatId: String) {
 
         db.collection("chat")
             .document(chatId)
@@ -1179,7 +1186,8 @@ object Backend {
                 "ox" to ""
             ))
     }
-    fun put0xBlankProfile(chatId: String, callback: () -> Unit){
+
+    fun put0xBlankProfile(chatId: String, callback: () -> Unit) {
 
         val userIds = arrayListOf<String>()
 
@@ -1217,7 +1225,7 @@ object Backend {
          -------------------------------------------- Notifications ---------------------------------------
      */
 
-    fun clearNotificationKeyCamp(chatId: String){
+    fun clearNotificationKeyCamp(chatId: String) {
 
         db.collection("chat")
             .document(chatId)
@@ -1226,7 +1234,7 @@ object Backend {
             ))
     }
 
-    fun updateNotificationKeyCamp(chatId: String, value : String){
+    fun updateNotificationKeyCamp(chatId: String, value: String) {
 
         db.collection("chat")
             .document(chatId)
@@ -1234,13 +1242,6 @@ object Backend {
                 "notificationKey" to value
             ))
     }
-
-
-
-
-
-
-
 
 
 }

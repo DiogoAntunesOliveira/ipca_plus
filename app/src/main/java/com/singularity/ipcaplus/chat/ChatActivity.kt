@@ -81,7 +81,7 @@ class ChatActivity : ActivityImageHelper() {
     private lateinit var chat_id: String
     var tokens_adress = arrayListOf<String>()
     var chat_user_uids = arrayListOf<String>()
-    var chat_users= arrayListOf<Profile>()
+    var chat_users = arrayListOf<Profile>()
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
 
@@ -157,7 +157,7 @@ class ChatActivity : ActivityImageHelper() {
                         ""
                     )
 
-                    Backend.getUserProfile(Firebase.auth.currentUser!!.uid){ user ->
+                    Backend.getUserProfile(Firebase.auth.currentUser!!.uid) { user ->
                         userName = Utilis.getFirstAndLastName(user.name)
                     }
 
@@ -169,7 +169,7 @@ class ChatActivity : ActivityImageHelper() {
                                 withContext(Dispatchers.IO) {
                                     getNotificationKey(chat_id) {
 
-                                        Backend.getGroupChatById(chat_id){ chat->
+                                        Backend.getGroupChatById(chat_id) { chat ->
                                             GlobalScope.launch {
                                                 withContext(Dispatchers.IO) {
                                                     sendNotificationToGroup(chat!!.name,
@@ -311,13 +311,24 @@ class ChatActivity : ActivityImageHelper() {
         intent.action = Intent.ACTION_OPEN_DOCUMENT
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "*/*"
-        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+        val extraMimeTypes = arrayOf("application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
             "text/plain",
             "application/pdf",
             "application/zip",
-            "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
+            "image/gif",
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/svg+xml",
+            "image/webp",
+            "image/vnd.wap.wbmp",
+            "image/vnd.nok-wallpaper",
+            "text/xml",
             "application/json",
             "text/json",
             "text/javascript"
@@ -333,7 +344,8 @@ class ChatActivity : ActivityImageHelper() {
     */
     fun downloadFileRequest(path: String, name: String) {
 
-        confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+        confirmationDialog("Transferir Ficheiro",
+            "Tens certeza que queres transferir este ficheiro?") {
 
             val fileRef = Firebase.storage.reference.child("$path/${name}")
             val strArray = Pattern.compile("[.]").split(name)
@@ -351,7 +363,7 @@ class ChatActivity : ActivityImageHelper() {
     /*
         Confirmation Dialog Display Yes / No Options
     */
-    private fun confirmationDialog(title: String, description: String, callBack: ()->Unit) {
+    private fun confirmationDialog(title: String, description: String, callBack: () -> Unit) {
         val alertDialog = AlertDialog.Builder(this)
 
         alertDialog.setTitle(title)
@@ -393,7 +405,8 @@ class ChatActivity : ActivityImageHelper() {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                    val filePath = "chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}"
+                    val filePath =
+                        "chats/${chat_id}/messages/${Utilis.uniqueImageNameGen()}.${extension}"
                     val storageRef = FirebaseStorage.getInstance()
                         .getReference(filePath)
 
@@ -484,8 +497,7 @@ class ChatActivity : ActivityImageHelper() {
                 }
 
                 path += data?.data.toString()
-            }
-            else {
+            } else {
                 for (i in 0 until clipData.itemCount) {
                     val item = clipData.getItemAt(i)
                     val uri: Uri = item.uri
@@ -571,7 +583,6 @@ class ChatActivity : ActivityImageHelper() {
                         .inflate(R.layout.row_message_system, parent, false))
 
 
-
             } else if (viewType <= 3) {
                 otherUser = false
 
@@ -628,12 +639,12 @@ class ChatActivity : ActivityImageHelper() {
 
                     timeLastMessage.visibility = View.INVISIBLE
 
-                    textViewMessage.setOnLongClickListener{
+                    textViewMessage.setOnLongClickListener {
                         copyTextToClipboard(textViewMessage)
                         true
                     }
 
-                    textViewMessage.setOnClickListener{
+                    textViewMessage.setOnClickListener {
                         timeLastMessage.visibility = View.VISIBLE
                     }
 
@@ -663,9 +674,11 @@ class ChatActivity : ActivityImageHelper() {
                                     "png") { bitmap ->
                                     imageViewUser.setImageBitmap(bitmap)
 
-                                    imageViewUser.setOnLongClickListener{
+                                    imageViewUser.setOnLongClickListener {
                                         //messages[position].user
-                                        openShortcut(bitmap, textViewUsername.text.toString(), messages[position].user)
+                                        openShortcut(bitmap,
+                                            textViewUsername.text.toString(),
+                                            messages[position].user)
                                         true
                                     }
                                 }
@@ -774,7 +787,7 @@ class ChatActivity : ActivityImageHelper() {
         }
     }
 
-    private fun copyTextToClipboard(textCopy : TextView) {
+    private fun copyTextToClipboard(textCopy: TextView) {
         val textToCopy = textCopy.text
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("text", textToCopy)
@@ -782,7 +795,7 @@ class ChatActivity : ActivityImageHelper() {
         Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
     }
 
-    private fun openShortcut(image: Bitmap, name: String, userId : String) {
+    private fun openShortcut(image: Bitmap, name: String, userId: String) {
 
         // Variables
         val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
@@ -790,7 +803,7 @@ class ChatActivity : ActivityImageHelper() {
 
         row.findViewById<ImageView>(R.id.imageViewProfileShorcut).setImageBitmap(image)
 
-        Backend.getUserProfile(userId){
+        Backend.getUserProfile(userId) {
             row.findViewById<TextView>(R.id.UserNameTextView).text = getFirstAndLastName(it.name)
         }
 

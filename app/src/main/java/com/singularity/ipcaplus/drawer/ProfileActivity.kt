@@ -38,7 +38,7 @@ class ProfileActivity : ActivityImageHelper() {
     private var imageUri: Uri? = null
     private lateinit var binding: ActivityProfileBinding
     lateinit var profileData: Profile
-    lateinit var contextInfo : Context
+    lateinit var contextInfo: Context
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,8 +89,7 @@ class ProfileActivity : ActivityImageHelper() {
                         }
                     }
 
-            }
-            else {
+            } else {
                 binding.textViewCourse.visibility = View.GONE
                 binding.textViewCourseTitle.visibility = View.GONE
             }
@@ -105,12 +104,13 @@ class ProfileActivity : ActivityImageHelper() {
         if (userId == Firebase.auth.currentUser!!.uid) {
             // Change Profile Picture
             binding.imageViewProfile.setOnClickListener {
-                checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+                checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    STORAGE_PERMISSION_CODE)
             }
         }
 
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
@@ -122,10 +122,10 @@ class ProfileActivity : ActivityImageHelper() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
             CropImage.activity(data?.data)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1,1)
+                .setAspectRatio(1, 1)
                 .start(this)
         }
 
@@ -137,7 +137,8 @@ class ProfileActivity : ActivityImageHelper() {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                    val storageRef = FirebaseStorage.getInstance().getReference("profilePictures/${userId}.png")
+                    val storageRef =
+                        FirebaseStorage.getInstance().getReference("profilePictures/${userId}.png")
 
                     // compressing image
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
@@ -153,8 +154,9 @@ class ProfileActivity : ActivityImageHelper() {
                             storageRef.downloadUrl.addOnSuccessListener {
 
                                 //getting image url
-                                Log.i("xxx",it.toString())
-                                Utilis.uploadFile(it, "profilePictures/" + Firebase.auth.uid!! + ".png")
+                                Log.i("xxx", it.toString())
+                                Utilis.uploadFile(it,
+                                    "profilePictures/" + Firebase.auth.uid!! + ".png")
 
                             }.addOnFailureListener {
 

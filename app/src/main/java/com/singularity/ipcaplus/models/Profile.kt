@@ -3,20 +3,27 @@ package com.singularity.ipcaplus.models
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class Profile {
-    var name : String = ""
-    var studentNumber : String = ""
-    var gender : String = ""
-    var contact : String = ""
-    var age : String = ""
-    var role : String = ""
-    var id : String? = null
-    var isAdmin : Boolean = false
+    var name: String = ""
+    var studentNumber: String = ""
+    var gender: String = ""
+    var contact: String = ""
+    var age: String = ""
+    var role: String = ""
+    var id: String? = null
+    var isAdmin: Boolean = false
 
     constructor() {
 
     }
 
-    constructor(age: String, contact: String, gender: String, name : String, role : String, studentNumber : String) {
+    constructor(
+        age: String,
+        contact: String,
+        gender: String,
+        name: String,
+        role: String,
+        studentNumber: String,
+    ) {
         this.name = name
         this.gender = gender
         this.studentNumber = studentNumber
@@ -25,7 +32,7 @@ class Profile {
         this.role = role
     }
 
-    fun toHash() :HashMap<String, Any> {
+    fun toHash(): HashMap<String, Any> {
         var hashMap = HashMap<String, Any>()
         hashMap.put("age", age)
         hashMap.put("contact", contact)
@@ -37,7 +44,7 @@ class Profile {
     }
 
     companion object {
-        fun fromHash(hashMap: QueryDocumentSnapshot) : Profile {
+        fun fromHash(hashMap: QueryDocumentSnapshot): Profile {
 
             val profile = Profile(
                 hashMap["age"] as String,

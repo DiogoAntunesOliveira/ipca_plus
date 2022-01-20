@@ -97,7 +97,7 @@ class ChatFilesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
 
-        when (item.itemId){
+        when (item.itemId) {
             R.id.add -> {
                 addDialog()
                 return true
@@ -127,7 +127,9 @@ class ChatFilesActivity : AppCompatActivity() {
 
                             if (cursor != null && cursor!!.moveToFirst()) {
 
-                                fileName = cursor!!.getString(cursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME).toInt())
+                                fileName =
+                                    cursor!!.getString(cursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                                        .toInt())
 
                             }
 
@@ -138,8 +140,7 @@ class ChatFilesActivity : AppCompatActivity() {
                     }
 
                     path += data?.data.toString()
-                }
-                else {
+                } else {
                     for (i in 0 until clipData.itemCount) {
                         val item = clipData.getItemAt(i)
                         val uri: Uri = item.uri
@@ -192,13 +193,13 @@ class ChatFilesActivity : AppCompatActivity() {
 
         if (item.title === "Transferir") {
             downloadFileRequest(currentPath, selectedFile)
-        }
-        else if (item.title === "Apagar") {
+        } else if (item.title === "Apagar") {
 
             // Verify If the selected File is a folder or a file
             if (selectedFile.contains(".")) {
 
-                confirmationDialog("Apagar Ficheiro", "Tens certeza que queres apagar este ficheiro?") {
+                confirmationDialog("Apagar Ficheiro",
+                    "Tens certeza que queres apagar este ficheiro?") {
 
                     fileRef.delete()
                         .addOnSuccessListener {
@@ -206,10 +207,10 @@ class ChatFilesActivity : AppCompatActivity() {
                         }
                 }
 
-            }
-            else {
+            } else {
 
-                confirmationDialog("Apagar Pasta", "Tens certeza que queres apagar esta pasta e tudo dentro dela?") {
+                confirmationDialog("Apagar Pasta",
+                    "Tens certeza que queres apagar esta pasta e tudo dentro dela?") {
 
                     Backend.deleteAllFilesInsideFolder("$currentPath/$selectedFile") {
                         refreshList()
@@ -272,7 +273,7 @@ class ChatFilesActivity : AppCompatActivity() {
     /*
         Confirmation Dialog Display Yes / No Options
     */
-    private fun confirmationDialog(title: String, description: String, callBack: ()->Unit) {
+    private fun confirmationDialog(title: String, description: String, callBack: () -> Unit) {
         val alertDialog = AlertDialog.Builder(this)
 
         alertDialog.setTitle(title)
@@ -325,13 +326,24 @@ class ChatFilesActivity : AppCompatActivity() {
         intent.action = Intent.ACTION_OPEN_DOCUMENT
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "*/*"
-        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+        val extraMimeTypes = arrayOf("application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
             "text/plain",
             "application/pdf",
             "application/zip",
-        "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
+            "image/gif",
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/svg+xml",
+            "image/webp",
+            "image/vnd.wap.wbmp",
+            "image/vnd.nok-wallpaper",
+            "text/xml",
             "application/json",
             "text/json",
             "text/javascript"
@@ -375,14 +387,14 @@ class ChatFilesActivity : AppCompatActivity() {
             // Remove last folder in the path
             val strArrayPath = Pattern.compile("/").split(currentPath)
             var newPath = ""
-            for (i in 0 until strArrayPath.size-1)
+            for (i in 0 until strArrayPath.size - 1)
                 newPath += "/${strArrayPath[i]}"
             currentPath = newPath
 
             // Remove last folder in the title path
             val strArrayTitlePath = Pattern.compile("/").split(titlePath)
             var newTitlePath = "root"
-            for (i in 1 until strArrayTitlePath.size-1)
+            for (i in 1 until strArrayTitlePath.size - 1)
                 newTitlePath += "/${strArrayTitlePath[i]}"
             titlePath = newTitlePath
 
@@ -401,7 +413,8 @@ class ChatFilesActivity : AppCompatActivity() {
     */
     fun downloadFileRequest(path: String, name: String) {
 
-        confirmationDialog("Transferir Ficheiro", "Tens certeza que queres transferir este ficheiro?") {
+        confirmationDialog("Transferir Ficheiro",
+            "Tens certeza que queres transferir este ficheiro?") {
 
             val fileRef = Firebase.storage.reference.child("$path/${name}")
             val strArray = Pattern.compile("[.]").split(name)
@@ -442,13 +455,12 @@ class ChatFilesActivity : AppCompatActivity() {
                         titlePath += "/${files[position].name}"
                         refreshView()
                     }
-                }
-                else {
+                } else {
                     linearLayout.setOnClickListener {
 
                         // Verify if its an image
                         val extensionArray = Pattern.compile("[.]").split(files[position].name)
-                        val extension = extensionArray[extensionArray.size-1]
+                        val extension = extensionArray[extensionArray.size - 1]
 
                         // Show Preview if its an image. Ask to download if dont
                         if (extension == "png" || extension == "jpg" || extension == "jpeg" || extension == "jep" || extension == "jfif" || extension == "gif") {
@@ -463,8 +475,7 @@ class ChatFilesActivity : AppCompatActivity() {
 
                             }
 
-                        }
-                        else {
+                        } else {
 
                             downloadFileRequest(currentPath, files[position].name)
 

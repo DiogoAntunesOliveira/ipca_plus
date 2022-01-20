@@ -4,24 +4,24 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class Contact {
 
-    var desc : String = ""
-    var email : String = ""
-    var location : String = ""
-    var name : String = ""
-    var number : String = ""
-    var site : String = ""
+    var desc: String = ""
+    var email: String = ""
+    var location: String = ""
+    var name: String = ""
+    var number: String = ""
+    var site: String = ""
 
     constructor() {
 
     }
 
     constructor(
-        desc : String,
-        email : String,
-        location : String,
-        name : String,
-        number : String,
-        site : String
+        desc: String,
+        email: String,
+        location: String,
+        name: String,
+        number: String,
+        site: String,
     ) {
         this.desc = desc
         this.email = email
@@ -31,7 +31,7 @@ class Contact {
         this.site = site
     }
 
-    fun toHash() :HashMap<String, Any> {
+    fun toHash(): HashMap<String, Any> {
         val hashMap = HashMap<String, Any>()
         hashMap.put("desc", desc)
         hashMap.put("email", email)
@@ -43,7 +43,7 @@ class Contact {
     }
 
     companion object {
-        fun fromHash(hashMap: QueryDocumentSnapshot) : Contact {
+        fun fromHash(hashMap: QueryDocumentSnapshot): Contact {
             val contact = Contact(
                 hashMap["desc"] as String,
                 hashMap["email"] as String,

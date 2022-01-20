@@ -5,11 +5,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class Message {
 
-    var user : String = ""
-    var message : String = ""
-    var time :  Timestamp
-    var files : String = ""
-    var id : String? =  null
+    var user: String = ""
+    var message: String = ""
+    var time: Timestamp
+    var files: String = ""
+    var id: String? = null
 
     constructor(user: String, message: String, time: Timestamp, files: String) {
         this.user = user
@@ -18,7 +18,7 @@ class Message {
         this.files = files
     }
 
-    fun toHash() :HashMap<String, Any> {
+    fun toHash(): HashMap<String, Any> {
         var hashMap = HashMap<String, Any>()
         hashMap.put("user", user)
         hashMap.put("message", message)
@@ -28,7 +28,7 @@ class Message {
     }
 
     companion object {
-        fun fromHash(hashMap: QueryDocumentSnapshot) : Message {
+        fun fromHash(hashMap: QueryDocumentSnapshot): Message {
             val message = Message(
                 hashMap["user"] as String,
                 hashMap["message"] as String,

@@ -18,7 +18,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -46,6 +46,7 @@ class HomeFragment : Fragment() {
 
         collectionPagerAdapter.notifyDataSetChanged()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
 
     inner class CollectionPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-        override fun getCount(): Int  = fragments.count()
+        override fun getCount(): Int = fragments.count()
 
         override fun getPageTitle(position: Int): CharSequence {
             return tabsTitles[position]
