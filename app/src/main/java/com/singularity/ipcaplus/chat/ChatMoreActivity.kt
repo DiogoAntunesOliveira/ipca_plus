@@ -11,10 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -27,10 +24,20 @@ import com.singularity.ipcaplus.databinding.ActivityChatMoreBinding
 import com.singularity.ipcaplus.drawer.DrawerActivty
 import com.singularity.ipcaplus.utils.ActivityImageHelper
 import com.singularity.ipcaplus.utils.Backend
+import com.singularity.ipcaplus.utils.Backend.clearNotificationKeyCamp
+import com.singularity.ipcaplus.utils.Backend.createJsonArrayString
+import com.singularity.ipcaplus.utils.Backend.getChatUsersUids
+import com.singularity.ipcaplus.utils.Backend.updateNotificationKeyCamp
 import com.singularity.ipcaplus.utils.Utilis
 import com.singularity.ipcaplus.utils.Utilis.calculateInSampleSize
+import com.singularity.ipcaplus.utils.Utilis.createNotificationGroup
+import com.singularity.ipcaplus.utils.Utilis.removeKeyFromNotificationGroup
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 class ChatMoreActivity : ActivityImageHelper() {
@@ -40,11 +47,15 @@ class ChatMoreActivity : ActivityImageHelper() {
     lateinit var chat_id: String
     var is_admin: Boolean = false
     private lateinit var binding: ActivityChatMoreBinding
+    var noteKey: String = ""
+    var docId: String = ""
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_more)
+        var tokens_adress = arrayListOf<String>()
+        var tokens_adress_user = arrayListOf<String>()
 
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_stay)
 
@@ -60,7 +71,7 @@ class ChatMoreActivity : ActivityImageHelper() {
         supportActionBar?.setCustomView(R.layout.custom_bar_layout)
         findViewById<TextView>(R.id.AppBarTittle).text = "Definições de grupo"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
@@ -97,8 +108,7 @@ class ChatMoreActivity : ActivityImageHelper() {
                     startActivity(intent)
                 }
             }
-        }
-        else {
+        } else {
             binding.changeGroupName.visibility = View.GONE
             binding.changeGroupImage.visibility = View.GONE
             binding.deleteChat.visibility = View.GONE
@@ -111,14 +121,16 @@ class ChatMoreActivity : ActivityImageHelper() {
         }
 
         binding.notifications.setOnClickListener {
-            val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
-            val view = layoutInflater.inflate(R.layout.dialog_notifications_manager, null)
-            dialog.setContentView(view)
-            dialog.show()
+            openNotificationsDialog(tokens_adress, tokens_adress_user)
+
+
+            //removeKeyFromNotificationGroup(chat_id,)
+            //dialog.setContentView(view)
+            //dialog.show()
         }
 
         binding.securityNumberVerification.setOnClickListener {
-            val intent = Intent(this, VerifySecurityNumberActivity::class.java )
+            val intent = Intent(this, VerifySecurityNumberActivity::class.java)
             intent.putExtra("chat_id", chat_id)
             startActivity(intent)
         }
@@ -153,13 +165,14 @@ class ChatMoreActivity : ActivityImageHelper() {
         imageViewDialog = view.findViewById(R.id.imageViewChatPhoto)
 
 
-        Utilis.getFile(this,"chats/$chat_id/icon.png", "png") { bitmap ->
+        Utilis.getFile(this, "chats/$chat_id/icon.png", "png") { bitmap ->
 
             view.findViewById<ImageView>(R.id.imageViewChatPhoto).setImageBitmap(bitmap)
         }
 
         imageViewDialog.setOnClickListener {
-            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                STORAGE_PERMISSION_CODE)
             dialog.dismiss()
         }
 
@@ -178,7 +191,8 @@ class ChatMoreActivity : ActivityImageHelper() {
         dialog.show()
 
 
-        row.findViewById<EditText>(R.id.editTextName).setText(binding.textViewGroupName.text.toString())
+        row.findViewById<EditText>(R.id.editTextName)
+            .setText(binding.textViewGroupName.text.toString())
 
         row.findViewById<Button>(R.id.buttonSave).setOnClickListener {
             val newName = row.findViewById<EditText>(R.id.editTextName).text.toString()
@@ -189,6 +203,61 @@ class ChatMoreActivity : ActivityImageHelper() {
 
     }
 
+    private fun openNotificationsDialog(
+        tokens_adress: ArrayList<String>,
+        tokens_adress_user: ArrayList<String>,
+    ) {
+
+        // Variables
+        val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        val row = layoutInflater.inflate(R.layout.dialog_notifications_manager, null)
+        dialog.setContentView(row)
+        dialog.show()
+
+        row.findViewById<Switch>(R.id.notificationsSwitch)
+            .setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    Toast.makeText(this, "olaaaaa", Toast.LENGTH_SHORT).show()
+                    //clearNotificationKeyCamp(chat_id)
+                    getChatUsersUids(chat_id) { memberIds ->
+                        val allMemberIds = arrayListOf<String>()
+
+                        for (id in memberIds) {
+                            if (id != Firebase.auth.currentUser!!.uid) {
+                                allMemberIds.add(id)
+                            } else {
+                                tokens_adress_user.add(id)
+                            }
+                        }
+
+                        for (memberId in allMemberIds) {
+                            // Getting all of tokens of  profile associated devices
+                            Backend.getAllTokens(memberId) {
+
+                                tokens_adress.addAll(it)
+                                println(tokens_adress.toString())
+
+                                GlobalScope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        //noteKey = createNotificationGroup(docId, Backend.createJsonArrayString(tokens_adress))
+                                        var newNoteKey = removeKeyFromNotificationGroup(docId,
+                                            createJsonArrayString(tokens_adress_user))
+                                        /*clearNotificationKeyCamp(docId)
+                                        updateNotificationKeyCamp(docId, newNoteKey)*/
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "As tuas notificaçoes foram ativadas", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
+
 
     /*
        This function happen after picking photo, and make changes in the activity
@@ -196,10 +265,10 @@ class ChatMoreActivity : ActivityImageHelper() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
             CropImage.activity(data?.data)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1,1)
+                .setAspectRatio(1, 1)
                 .start(this)
         }
 
@@ -209,7 +278,8 @@ class ChatMoreActivity : ActivityImageHelper() {
                 imageViewGroup.setImageURI(result.uri)
 
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
-                val storageRef = FirebaseStorage.getInstance().getReference("chats/$chat_id/icon.png")
+                val storageRef =
+                    FirebaseStorage.getInstance().getReference("chats/$chat_id/icon.png")
 
                 // compressing image
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, result.uri)
@@ -225,7 +295,7 @@ class ChatMoreActivity : ActivityImageHelper() {
                         storageRef.downloadUrl.addOnSuccessListener {
 
                             //getting image url
-                            Log.i("xxx",it.toString())
+                            Log.i("xxx", it.toString())
                             Utilis.uploadFile(it, "chats/$chat_id/icon.png")
 
                         }.addOnFailureListener {

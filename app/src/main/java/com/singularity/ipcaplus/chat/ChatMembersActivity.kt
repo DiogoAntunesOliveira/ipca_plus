@@ -98,12 +98,11 @@ class ChatMembersActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         super.onOptionsItemSelected(item)
 
-        when (item.itemId){
+        when (item.itemId) {
             R.id.add -> {
                 val intent = Intent(this, AddPeopleActivity::class.java)
                 intent.putExtra("chat_id", chat_id)
                 startActivity(intent)
-                println("-------------------> adicionar")
                 return true
             }
         }
@@ -111,7 +110,11 @@ class ChatMembersActivity : AppCompatActivity() {
     }
 
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?,
+    ) {
         super.onCreateContextMenu(menu, v, menuInfo)
 
         selectedUser = v.findViewById<TextView>(R.id.userId).text.toString()
@@ -130,13 +133,10 @@ class ChatMembersActivity : AppCompatActivity() {
 
         if (item.title == "Atribuir admin") {
             Backend.changeUserChatAdminStatus(chat_id, selectedUser, true)
-        }
-        else if (item.title == "Remover admin") {
+        } else if (item.title == "Remover admin") {
             Backend.changeUserChatAdminStatus(chat_id, selectedUser, false)
-        }
-        else if (item.title == "Remover do grupo") {
+        } else if (item.title == "Remover do grupo") {
             Backend.removeUserFromChat(chat_id, selectedUser)
-            println("-------------------> remover $selectedUser")
         }
 
         refreshList()
@@ -158,7 +158,8 @@ class ChatMembersActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.row_user_in_chat, parent, false)
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.row_user_in_chat, parent, false)
             )
         }
 
@@ -177,7 +178,9 @@ class ChatMembersActivity : AppCompatActivity() {
                 val isAdmin = findViewById<TextView>(R.id.isAdmin)
 
                 // Set data
-                Utilis.getFile(context, "profilePictures/${members[position].id}.png", "png") { bitmap ->
+                Utilis.getFile(context,
+                    "profilePictures/${members[position].id}.png",
+                    "png") { bitmap ->
                     imageViewProfile.setImageBitmap(bitmap)
                 }
 
@@ -187,8 +190,7 @@ class ChatMembersActivity : AppCompatActivity() {
 
                 if (members[position].isAdmin) {
                     textViewAdminTag.visibility = View.GONE
-                }
-                else {
+                } else {
                     textViewAdminTag.visibility = View.VISIBLE
                 }
 
@@ -198,8 +200,7 @@ class ChatMembersActivity : AppCompatActivity() {
                         registerForContextMenu(it)
                         it.showContextMenu(100f, 50f)
                     }
-                }
-                else {
+                } else {
                     imageViewThreePoints.visibility = View.GONE
                 }
 

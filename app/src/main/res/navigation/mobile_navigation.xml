@@ -53,4 +53,10 @@
         android:label="News"
         tools:layout="@layout/activity_news_web"/>
 
+    <activity
+        android:id="@+id/nav_invite"
+        android:name="com.singularity.ipcaplus.drawer.ShareWithFriendsActivity"
+        android:label="ShareWithFriends"
+        tools:layout="@layout/activity_share_with_friends"/>
+
 </navigation>

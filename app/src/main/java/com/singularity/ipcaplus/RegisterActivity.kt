@@ -16,6 +16,7 @@ import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
+import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -30,6 +31,14 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val pattern: Pattern =
+            Pattern.compile("^" +
+                    "(?=.*[@#$%^&+=])" +
+                    "(?=.*[A-Z])" +
+                    "(?=\\S+$)" +
+                    ".{8,}" +
+                    "$")
+
         // Create Action Bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24)
@@ -39,64 +48,84 @@ class RegisterActivity : AppCompatActivity() {
 
 
         binding.buttonRegister.setOnClickListener {
-            if (!binding.editTextTextPassword.text.isNullOrBlank() && !binding.editTextEmail.text.isNullOrBlank()) {
-            if (binding.editTextTextPassword.text.toString() == binding.editTextTextConfirmPassword.text.toString()) {
-                val email : String = binding.editTextEmail.text.toString()
-                val password : String = binding.editTextTextPassword.text.toString()
+            if (!binding.editTextTextPassword.text.isNullOrBlank() && !binding.editTextEmail.text.isNullOrBlank()
+                && pattern.matcher(binding.editTextTextPassword.text.toString()).matches()
+            ) {
 
-                val emailDomain = Utilis.getEmailDomain(email)
-                if(emailDomain != "alunos.ipca.pt" && emailDomain != "ipca.pt"){
-                    Snackbar.make(binding.root,
-                        "Precisas de usar um email do ipca (ipca.pt)!", Snackbar.LENGTH_SHORT).show()
-                }else{
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
+                if (binding.editTextTextPassword.text.toString() == binding.editTextTextConfirmPassword.text.toString()) {
+                    val email: String = binding.editTextEmail.text.toString()
+                    val password: String = binding.editTextTextPassword.text.toString()
 
-                                emailVerification()
+                    val emailDomain = Utilis.getEmailDomain(email)
+                    if (emailDomain != "alunos.ipca.pt" && emailDomain != "ipca.pt") {
+                        Snackbar.make(binding.root,
+                            "Precisas de usar um email do ipca (ipca.pt)!", Snackbar.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this) { task ->
+                                if (task.isSuccessful) {
 
-                                Backend.getIpcaData(email) { profile, ipcaDataId ->
+                                    emailVerification()
 
-                                    val userID = auth.currentUser!!.uid
+                                    Backend.getIpcaData(email) { profile, ipcaDataId ->
 
-                                    // Create profile with ipca data
-                                    db.collection("profile")
-                                        .document(userID)
-                                        .set(profile!!.toHash())
-                                        .addOnCompleteListener {
+                                        val userID = auth.currentUser!!.uid
 
-                                            // Get user course in ipca data and create a collection with that document
-                                            Backend.setUserCourseByIpcaData(userID, ipcaDataId) {
+                                        // Create profile with ipca data
+                                        db.collection("profile")
+                                            .document(userID)
+                                            .set(profile!!.toHash())
+                                            .addOnCompleteListener {
 
-                                                // Create official chats for each subject
-                                                Backend.getOficialChatByTag(it) { chats ->
-                                                    Backend.setOficialChat(userID, chats)
+                                                if (profile.role != "Professor") {
+
+                                                    // Get user course in ipca data and create a collection with that document
+                                                    Backend.setUserCourseByIpcaData(userID,
+                                                        ipcaDataId) {
+
+                                                        // Create official chats for each subject
+                                                        Backend.getOficialChatByTag(it) { chats ->
+
+                                                            Backend.setOficialChat(userID, chats)
+                                                        }
+
+                                                    }
+
+                                                } else {
+                                                    Backend.setTeacherSubjectsByIpcaData(userID,
+                                                        ipcaDataId)
                                                 }
 
                                             }
 
-                                        }
 
+                                    }
 
-
+                                    startActivity(Intent(this, LoginActivity::class.java))
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(ContentValues.TAG,
+                                        "createUserWithEmail:failure",
+                                        task.exception)
+                                    Toast.makeText(baseContext, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show()
                                 }
-
-                                startActivity(Intent(this, LoginActivity::class.java ))
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
-                                Toast.makeText(baseContext, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show()
                             }
-                        }
+                    }
+                } else {
+                    Snackbar.make(binding.root,
+                        "Tens de confirmar a Password corretamente!", Snackbar.LENGTH_SHORT).show()
                 }
-            }
-            else {
-                Snackbar.make(binding.root,
-                    "Tens de confirmar a Password corretamente!", Snackbar.LENGTH_SHORT).show()
-            }
+            } else {
+                Toast.makeText(baseContext, "Palavra-passe precisa conter:\n" +
+                        "- Pelo menos um caracter especial\n" +
+                        "- Pelo menos uma maiuscula\n" +
+                        "- Minimo de 8 letras",
+                    Toast.LENGTH_LONG).show()
             }
         }
+
 
     }
 
@@ -114,6 +143,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
     }
+
 
     // When the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {

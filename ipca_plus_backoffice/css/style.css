@@ -79,10 +79,10 @@ h1 {
 /* Modal Content */
 .modal-content {
     border-radius: 20px;
-    background-color: #fefefe;
+    background-color: #fefefe00;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: none;
     width: 20%;
     height: 40%;
 }

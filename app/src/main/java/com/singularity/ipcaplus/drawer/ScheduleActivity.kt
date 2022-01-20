@@ -18,15 +18,17 @@ import com.singularity.ipcaplus.R
 import com.singularity.ipcaplus.utils.PreferenceHelper.userId
 import com.singularity.ipcaplus.databinding.ActivityScheduleBinding
 import com.singularity.ipcaplus.models.Subject
+import com.singularity.ipcaplus.models.SubjectClass
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.PreferenceHelper
+import com.singularity.ipcaplus.utils.UserLoggedIn
 
 class ScheduleActivity : AppCompatActivity() {
 
     // Variables
     var day = "seg"
     var weekButtons = arrayListOf<Button>()
-    var subjects = arrayListOf<Subject>()
+    var subjects = arrayListOf<SubjectClass>()
     private var scheduleAdapter: RecyclerView.Adapter<*>? = null
     private var scheduleLayoutManager: LinearLayoutManager? = null
     private lateinit var binding: ActivityScheduleBinding
@@ -49,14 +51,18 @@ class ScheduleActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.AppBarTittle).text = "Horário"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
         // Add all Subjects To List based on the selected day and the User Course
         val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourses(prefs.userId!!) {
-            addSubjectsToList(it)
+        if (UserLoggedIn.role != "Professor") {
+            Backend.getUserCourseId(prefs.userId!!) {
+                addStudentSubjectsToList(it)
+            }
+        } else {
+            addTeacherSubjectsToList(prefs.userId!!)
         }
 
         // Button Events
@@ -78,7 +84,7 @@ class ScheduleActivity : AppCompatActivity() {
 
 
     // This function is for select an section by clicking on the section image
-    private var onClickWeekDay: (view: View)->Unit = {
+    private var onClickWeekDay: (view: View) -> Unit = {
 
         val button = it as Button
 
@@ -95,8 +101,12 @@ class ScheduleActivity : AppCompatActivity() {
         // Reset Schedule and get the new Subjects
         day = button.text.toString().lowercase()
         val prefs = PreferenceHelper.customPreference(this, "User_data")
-        Backend.getUserCourses(prefs.userId!!) {
-            addSubjectsToList(it)
+        if (UserLoggedIn.role != "Professor") {
+            Backend.getUserCourseId(prefs.userId!!) {
+                addStudentSubjectsToList(it)
+            }
+        } else {
+            addTeacherSubjectsToList(prefs.userId!!)
         }
 
         // if (button.currentTextColor == Color.BLACK) {
@@ -104,9 +114,19 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
 
-    // Get All Subjects during the day
-    fun addSubjectsToList(courseId: String) {
-        Backend.getDayCourseSubjects(day, courseId){
+    // Get All student Subjects during the day
+    fun addStudentSubjectsToList(courseId: String) {
+        Backend.getDayCourseClasses(day, courseId) {
+            subjects.clear()
+            subjects.addAll(it)
+            currentIndex = 0
+            scheduleAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    // Get All teacher Subjects during the day
+    fun addTeacherSubjectsToList(courseId: String) {
+        Backend.getDayTeacherClasses(day, courseId) {
             subjects.clear()
             subjects.addAll(it)
             currentIndex = 0
@@ -123,6 +143,7 @@ class ScheduleActivity : AppCompatActivity() {
 
 
     var currentIndex: Int = 0
+
     inner class ScheduleAdapter : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
         inner class ViewHolder(val v: View) : RecyclerView.ViewHolder(v)
@@ -132,10 +153,10 @@ class ScheduleActivity : AppCompatActivity() {
             if (subjects[currentIndex].name == "breaktime") {
 
                 return ViewHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.row_breaktime, parent, false)
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.row_breaktime, parent, false)
                 )
-            }
-            else {
+            } else {
                 return ViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.row_subject, parent, false)
                 )
@@ -152,8 +173,7 @@ class ScheduleActivity : AppCompatActivity() {
                     val textViewBreakTimeTime = findViewById<TextView>(R.id.textViewBreakTimeTime)
                     textViewBreakTimeTime.text = "${subjects[currentIndex].start_time} min"
                     currentIndex++
-                }
-                else {
+                } else {
 
                     // Get data
                     val textViewSubject = findViewById<TextView>(R.id.textViewSubject)
@@ -164,7 +184,8 @@ class ScheduleActivity : AppCompatActivity() {
                     // Set data
                     textViewSubject.text = subjects[position].name
                     textViewTitleTeacher.text = subjects[position].teacher
-                    textViewHours.text = subjects[position].start_time + " - " + subjects[position].end_time
+                    textViewHours.text =
+                        subjects[position].start_time + " - " + subjects[position].end_time
                     textViewClassRoom.text = "Sala " + subjects[position].classroom
 
                     currentIndex++

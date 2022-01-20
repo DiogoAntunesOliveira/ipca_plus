@@ -48,7 +48,7 @@
             android:layout_height="80dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@drawable/ic_defaultimage" />
 
     </androidx.cardview.widget.CardView>
 

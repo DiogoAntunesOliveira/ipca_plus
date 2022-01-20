@@ -59,7 +59,7 @@ class CalendarActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.AppBarTittle).text = "Calendario"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
@@ -69,14 +69,14 @@ class CalendarActivity : AppCompatActivity() {
         binding.compactcalendarView.setCurrentDate(Date())
 
         // Get chat id
-        chat_id = if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
+        chat_id =
+            if (intent.hasExtra("chat_id")) intent.getStringExtra("chat_id").toString() else "none"
 
         // Get All Events This Month
         if (chat_id == "none") {
             addAllMonthEvents(binding.monthTitle.text.toString())
             placeCustomCalendarPinsGeneral()
-        }
-        else {
+        } else {
             addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
             placeCustomCalendarPinsChat()
         }
@@ -89,8 +89,7 @@ class CalendarActivity : AppCompatActivity() {
         // Add Event Button
         if (chat_id == "none") {
             binding.fabAddEvent.visibility = View.GONE
-        }
-        else {
+        } else {
             binding.fabAddEvent.setOnClickListener {
                 val intent = Intent(this, AddEventActivity::class.java)
                 intent.putExtra("chat_id", chat_id)
@@ -107,23 +106,24 @@ class CalendarActivity : AppCompatActivity() {
                 if (chat_id == "none") {
                     addAllDayEvents(binding.monthTitle.text.toString(), dateClicked.date)
                     placeCustomCalendarPinsGeneral()
-                }
-                else {
-                    addAllChatDayEvents(binding.monthTitle.text.toString(), dateClicked.date, chat_id)
+                } else {
+                    addAllChatDayEvents(binding.monthTitle.text.toString(),
+                        dateClicked.date,
+                        chat_id)
                     placeCustomCalendarPinsChat()
                 }
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                binding.monthTitle.text = Utilis.getMonthById(firstDayOfNewMonth.month+1)
-                binding.yearTitle.text = Utilis.getYearByCalendarId(firstDayOfNewMonth.year).toString()
+                binding.monthTitle.text = Utilis.getMonthById(firstDayOfNewMonth.month + 1)
+                binding.yearTitle.text =
+                    Utilis.getYearByCalendarId(firstDayOfNewMonth.year).toString()
 
                 // Refresh with new Month Events
                 if (chat_id == "none") {
                     addAllMonthEvents(binding.monthTitle.text.toString())
                     placeCustomCalendarPinsGeneral()
-                }
-                else {
+                } else {
                     addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
                     placeCustomCalendarPinsChat()
                 }
@@ -146,7 +146,7 @@ class CalendarActivity : AppCompatActivity() {
 
 
     fun addAllMonthEvents(month: String) {
-        Backend.getAllMonthEvents (month) { allEvents ->
+        Backend.getAllMonthEvents(month) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
@@ -155,7 +155,7 @@ class CalendarActivity : AppCompatActivity() {
 
 
     fun addAllChatMonthEvents(month: String, chat_id: String) {
-        Backend.getAllChatMonthEvents (month, chat_id) { allEvents ->
+        Backend.getAllChatMonthEvents(month, chat_id) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
@@ -164,7 +164,7 @@ class CalendarActivity : AppCompatActivity() {
 
 
     fun addAllDayEvents(month: String, day: Int) {
-        Backend.getAllMonthDayEvents (month, day) { allEvents ->
+        Backend.getAllMonthDayEvents(month, day) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
@@ -173,7 +173,7 @@ class CalendarActivity : AppCompatActivity() {
 
 
     fun addAllChatDayEvents(month: String, day: Int, chat_id: String) {
-        Backend.getAllChatMonthDayEvents (month, day, chat_id) { allEvents ->
+        Backend.getAllChatMonthDayEvents(month, day, chat_id) { allEvents ->
             events.clear()
             events.addAll(allEvents)
             eventAdapter?.notifyDataSetChanged()
@@ -182,10 +182,10 @@ class CalendarActivity : AppCompatActivity() {
 
 
     private fun placeCustomCalendarPinsGeneral() {
-        Backend.getAllMonthEvents (binding.monthTitle.text.toString()) { allEvents ->
+        Backend.getAllMonthEvents(binding.monthTitle.text.toString()) { allEvents ->
             binding.compactcalendarView.removeAllEvents()
             for (event in allEvents) {
-                val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+                val ev1 = Event(Color.parseColor("#037B4A"), event.datetime.seconds * 1000)
                 binding.compactcalendarView.addEvent(ev1)
             }
         }
@@ -193,10 +193,10 @@ class CalendarActivity : AppCompatActivity() {
 
 
     private fun placeCustomCalendarPinsChat() {
-        Backend.getAllChatMonthEvents (binding.monthTitle.text.toString(), chat_id) { allEvents ->
+        Backend.getAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id) { allEvents ->
             binding.compactcalendarView.removeAllEvents()
             for (event in allEvents) {
-                val ev1 = Event(Color.GREEN,event.datetime.seconds * 1000)
+                val ev1 = Event(Color.parseColor("#037B4A"), event.datetime.seconds * 1000)
                 binding.compactcalendarView.addEvent(ev1)
             }
         }
@@ -225,7 +225,8 @@ class CalendarActivity : AppCompatActivity() {
                 val deleteButton = findViewById<ImageView>(R.id.deleteButton)
 
                 // Set data
-                val date = Utilis.getDate(events[position].datetime.seconds * 1000, "yyyy-MM-dd'T'HH:mm:ss.SSS")
+                val date = Utilis.getDate(events[position].datetime.seconds * 1000,
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS")
                 textViewDay.text = Utilis.getDay(date)
                 textViewName.text = events[position].name
                 textViewDesc.text = events[position].desc

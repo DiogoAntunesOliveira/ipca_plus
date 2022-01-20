@@ -31,7 +31,7 @@ class ContactsActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.AppBarTittle).text = "Contactos"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 

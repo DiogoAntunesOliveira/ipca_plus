@@ -12,7 +12,7 @@ import android.widget.TextView
 import com.singularity.ipcaplus.R
 
 class NewsWebActivity : AppCompatActivity() {
-    private lateinit var webView : WebView
+    private lateinit var webView: WebView
 
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +26,12 @@ class NewsWebActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.AppBarTittle).text = "Notícias"
         // Back button
-        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener{
+        findViewById<ImageView>(R.id.BackButtonImageView).setOnClickListener {
             finish()
         }
 
         webView = findViewById(R.id.webview)
-        var progDailog = ProgressDialog.show(this, "A carregar","Espera um bocado...", true);
+        var progDailog = ProgressDialog.show(this, "A carregar", "Espera um bocado...", true);
         progDailog.setCancelable(false);
         webView.settings.setJavaScriptEnabled(true)
 

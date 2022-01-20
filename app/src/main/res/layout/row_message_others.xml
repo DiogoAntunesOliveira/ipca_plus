@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
+        android:fontFamily="@font/poppins"
         android:text="User name"
         android:textColor="@color/green_200"
         android:textSize="8sp"
@@ -39,7 +40,7 @@
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@drawable/ic_defaultimage" />
 
     </androidx.cardview.widget.CardView>
 
@@ -51,6 +52,7 @@
         android:layout_marginEnd="5dp"
         android:background="@drawable/rounded_shape"
         android:backgroundTint="@color/grey_200"
+        android:fontFamily="@font/poppins"
         android:maxWidth="280dp"
         android:padding="10dp"
         android:textAlignment="textStart"
@@ -67,13 +69,11 @@
         android:id="@+id/timeLastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/poppins"
         android:text="Time"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

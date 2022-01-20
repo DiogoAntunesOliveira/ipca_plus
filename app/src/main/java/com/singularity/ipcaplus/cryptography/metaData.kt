@@ -21,18 +21,11 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 
-
-
-
-fun encryptMeta(strToEncrypt: String, secret_key: String, initVector : String): String? {
+fun encryptMeta(strToEncrypt: String, secret_key: String, initVector: String): String? {
     Security.addProvider(BouncyCastleProvider())
     hash(strToEncrypt)
     var keyBytes: ByteArray
-    //val initVector = generateRandomIV()
-    //val initVector = "7c5afb00aaecb1a1"
     val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
-    println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE $initVector")
-
 
     try {
         keyBytes = secret_key.toByteArray(charset("UTF8"))
@@ -72,10 +65,9 @@ fun encryptMeta(strToEncrypt: String, secret_key: String, initVector : String): 
     return null
 }
 
-fun decryptWithAESmeta(key: String, strToDecrypt: String?, initVector : String): String? {
+fun decryptWithAESmeta(key: String, strToDecrypt: String?, initVector: String): String? {
     Security.addProvider(BouncyCastleProvider())
     var keyBytes: ByteArray
-    //val initVector = "7c5afb00aaecb1a1"
 
     try {
         val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
@@ -114,7 +106,6 @@ fun decryptWithAESmeta(key: String, strToDecrypt: String?, initVector : String):
 }
 
 fun metaGenrateKey(): String {
-    //val secretKey: String = "662ede816988e58fb6d057d9d85605e0"
     val keygen = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             + "0123456789"
             + "abcdefghijklmnopqrstuvxyz")
@@ -134,23 +125,11 @@ fun metaGenrateKey(): String {
         secretKey.append(keygen[index])
 
     }
-    println(secretKey)
     return secretKey.toString()
 }
-/*
-fun metaBlock(message: String){
-    //val secretKey: String = "662ede816988e58fb6d057d9d85605e0"
-    val keygen = metaGenrateKey()
-
-    var meta = encryptMeta(message, keygen)
-    println(meta)
-
-    val message_decripted = decryptWithAESmeta(keygen, meta)
-    println(message_decripted)
-}*/
 
 @RequiresApi(Build.VERSION_CODES.M)
-fun saveKeygenOx(context : Context, chatUid : String, keygen: String){
+fun saveKeygenOx(context: Context, chatUid: String, keygen: String) {
 
     val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
     val masterKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
@@ -183,7 +162,6 @@ fun getMetaOx(context: Context, chatUid: String): String? {
     )
 
     // reading a value
-    println(sharedPreferences.getString(chatUid, ""))
     return sharedPreferences.getString(chatUid, "") // -> "some_data"
 }
 

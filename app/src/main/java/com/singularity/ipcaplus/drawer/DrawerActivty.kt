@@ -67,20 +67,23 @@ class DrawerActivty : AppCompatActivity() {
         binding = ActivityDrawerActivtyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
+        binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
+            .setOnClickListener {
 
-            val intent = Intent(this, ProfileActivity::class.java)
-            intent.putExtra("userId", Firebase.auth.currentUser!!.uid)
-            startActivity(intent)
-        }
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.putExtra("userId", Firebase.auth.currentUser!!.uid)
+                startActivity(intent)
+            }
 
-        Utilis.getFile(this,"profilePictures/" + Firebase.auth.uid + ".png", "png") { bitmap ->
-            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
+        Utilis.getFile(this, "profilePictures/" + Firebase.auth.uid + ".png", "png") { bitmap ->
+            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
+                .setImageBitmap(bitmap)
         }
-        if(!UserLoggedIn.name.isNullOrEmpty()){
+        if (!UserLoggedIn.name.isNullOrEmpty()) {
             val name = Utilis.getFirstAndLastName(UserLoggedIn.name!!)
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textView3).text = name
-            binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text = UserLoggedIn.email
+            binding.navView.getHeaderView(0).findViewById<TextView>(R.id.emailTextView).text =
+                UserLoggedIn.email
         }
 
         // Getting device FCM token
@@ -92,7 +95,7 @@ class DrawerActivty : AppCompatActivity() {
 
             // Get new FCM registration token
             var fcmToken = task.result
-            
+
             // Posting FCM token address on firebase
             postTokenAddress(fcmToken.toString(), Firebase.auth.currentUser!!.uid)
         })
@@ -100,7 +103,8 @@ class DrawerActivty : AppCompatActivity() {
 
 
         setSupportActionBar(binding.appBarMain.toolbar)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN )
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         binding.appBarMain.fabAddChat.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -190,13 +194,14 @@ class DrawerActivty : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        Utilis.getFile(this,"profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
-            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile).setImageBitmap(bitmap)
+        Utilis.getFile(this, "profilePictures/" + Firebase.auth.uid!! + ".png", "png") { bitmap ->
+            binding.navView.getHeaderView(0).findViewById<ImageView>(R.id.imageView_profile)
+                .setImageBitmap(bitmap)
         }
     }
 
 
-        override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.drawer, menu)
         return true

@@ -41,5 +41,6 @@
     <string name="inicio">Início</string>
 
     <string name="default_notification_channel_id" />
+    <string name="sharewithfriends">Aqui podes partilhar esta fantástica app com os teus colegas, para isso basta copiares e enviares para os teus amigos ou então carrega no botao abaixo e partilha diretamente.</string>
 
 </resources>

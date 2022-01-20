@@ -1,4 +1,3 @@
-
 // Get data
 
 // Get selected course id
@@ -100,9 +99,9 @@ function forEdition(id) {
   id = id.replace("Edit", "");
 
   docRef = db.collection("course")
-  .doc(courseID)
-  .collection("subject")
-  .doc(id);
+    .doc(courseID)
+    .collection("subject")
+    .doc(id);
 
   docRef.get().then((doc) => {
     form.value = id;
@@ -148,8 +147,8 @@ function refreshSubjectList() {
 
   // Add the elements
   db.collection("course")
-  .doc(courseID)
-  .collection("subject")
+    .doc(courseID)
+    .collection("subject")
     .orderBy("name")
     .get()
     .then((snap) => {
@@ -168,97 +167,57 @@ function addSubject() {
   var subjectName = form.name.value
 
   db.collection("course")
-  .doc(courseID)
-  .collection("subject")
+    .doc(courseID)
+    .collection("subject")
     .add({
       name: subjectName,
       teacher: teacherID
     })
     .then((docRef) => {
-      
+
       /* Add subject to teacher */
       db.collection("ipca_data")
         .doc(teacherID)
         .collection("subject")
-        .add({
-          id: docRef.id
+        .doc(docRef.id)
+        .set({
+          id: docRef.id,
+          name: subjectName,
+          course: courseID
         })
         .then(() => {
 
           /* ----------------- Create oficial chat ----------------- */
           db.collection("chat")
-          .add({
-            name: subjectName,
-            type: "oficial" + courseTag,
-            ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP",
-            iv: "7c5afb00aaecb1a1",
-            notificationKey: ""
-          })
-          .then((docRef2) => {
-
-            /* ----------------- Create first message ----------------- */
-            db.collection("chat")
-            .doc(docRef2.id)
-            .collection("message")
             .add({
-              user: "system",
-              message: "AcNj1olXt82HULKQ8Wlgi6cQJ1+mIyZX31zXjTvkY0+n/WJtN5kZp1qccicLsC3YNNyVCQFd1xn/urlBcZuM/g==",
-              time: Date.now(),
-              files: ""
+              name: subjectName,
+              type: "oficial" + courseTag,
+              ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP",
+              iv: "7c5afb00aaecb1a1",
+              notificationKey: ""
+            })
+            .then((docRef2) => {
 
-            }).then((docRef3) => {
-              
-              console.log("chat id: " + docRef2.id)
-              console.log("teacher id: " + teacherID)
-
-              /* ----------------- Add teacher admin ----------------- */
+              /* ----------------- Create first message ----------------- */
               db.collection("chat")
-              .doc(docRef2.id)
-              .collection("user")
-              .doc(teacherID)
-              .set({
-                admin: true
-              }).then((docRef4) => {
-                form.reset();
-              });
+                .doc(docRef2.id)
+                .collection("message")
+                .add({
+                  user: "system",
+                  message: "AcNj1olXt82HULKQ8Wlgi6cQJ1+mIyZX31zXjTvkY0+n/WJtN5kZp1qccicLsC3YNNyVCQFd1xn/urlBcZuM/g==",
+                  time: firebase.firestore.Timestamp.fromDate(new Date()),
+                  files: ""
 
-              /* ----------------- Add all users in the course ----------------- */
+                }).then((docRef3) => {
 
-              db.collection("ipca_data")
-                .get()
-                .then((snap) => {
-                  snap.docs.forEach((doc) => {
+                  console.log("chat id: " + docRef2.id)
+                  console.log("teacher id: " + teacherID)
 
-                    db.collection("ipca_data")
-                    .doc(doc.id)
-                    .collection("course")
-                    .where("tag", "==", courseTag)
-                    .get()
-                    .then((snap2) => {
-                      snap2.docs.forEach(() => {
-                        
-                        db.collection("chat")
-                        .doc(docRef2.id)
-                        .collection("user")
-                        .doc(doc.id)
-                        .set({
-                          admin: false
-                        }).then(() => {
-                          console.log("user adicionado: " + doc.data());
-                        });
-
-                      });
-                    });
-                  });
                 });
 
-              /* The users are added durind the user creation or edition */
-
+              form.reset();
             });
 
-            form.reset();
-          });
-          
         });
 
     })
@@ -280,12 +239,12 @@ function editSubject(id) {
   console.log(previousTeacher)
 
   docRef = db.collection("course")
-  .doc(courseID)
-  .collection("subject")
-  .doc(id);
+    .doc(courseID)
+    .collection("subject")
+    .doc(id);
 
   // Change data in course
-  docRef.set({      
+  docRef.set({
       name: selectedName,
       teacher: selectedTeacher
     })
@@ -294,107 +253,84 @@ function editSubject(id) {
       // Change teacher
       if (selectedTeacher != previousTeacher) {
 
-        // Get subject chat
-        db.collection("chat")
-        .where("name", "==", previousSubjectName)
-        .get()
-        .then((snap) => {
-          snap.docs.forEach((doc) => {
+        console.log("previous teacher: " + previousTeacher);
+        console.log("id: " + id);
 
-            // Remove previous teacher in his data
-            db.collection("ipca_data")
-            .doc(previousTeacher)
-            .collection("subject")
-            .where("id", "==", id)
-            .get()
-            .then((snap) => {
-              snap.docs.forEach((doc2) => {
+        // Remove previous teacher in his data
+        db.collection("ipca_data")
+          .doc(previousTeacher)
+          .collection("subject")
+          .where("id", "==", id)
+          .get()
+          .then((snap) => {
+            snap.docs.forEach((doc2) => {
 
+                console.log("entrou: 2");
+
+                // Remove previous teacher in his data
                 db.collection("ipca_data")
-                .doc(previousTeacher)
-                .collection("subject")
-                .doc(doc2.id)
-                .delete(() => {
-                  recursive: true;
-                })
-                .then(() => {
-                  console.log("Document successfully deleted!");
-                })
-                .catch((error) => {
-                  console.error("Error removing document: ", error);
-                });
+                  .doc(previousTeacher)
+                  .collection("subject")
+                  .doc(doc2.id)
+                  .delete(() => {
+                    recursive: true;
+                  })
+                  .then(() => {
+                    console.log("Document successfully deleted!");
+                  })
+                  .catch((error) => {
+                    console.error("Error removing document: ", error);
+                  });
+
+                // add new teacher in his data
+                db.collection("ipca_data")
+                  .doc(selectedTeacher)
+                  .collection("subject")
+                  .add({
+                    id: id,
+                    name: selectedName,
+                    course: courseID
+                  })
+                  .then(() => {
+                    console.log("Document successfully added!");
+                  })
+                  .catch((error) => {
+                    console.error("Error adding document: ", error);
+                  });
+
+                
 
               });
-            });
-
-            // Remove previous teacher in chat data
-            db.collection("chat")
-            .doc(doc.id) // <---- oficial subject chat
-            .collection("user")
-            .doc(previousTeacher)
-            .delete(() => {
-              recursive: true;
-            })
-            .then(() => {
-              console.log("Document successfully deleted!");
-            })
-            .catch((error) => {
-              console.error("Error removing document: ", error);
-            });
-
-            // add new teacher in his data
-            db.collection("ipca_data")
-            .doc(selectedTeacher)
-            .collection("subject")
-            .add({
-              id: id
-            })
-            .then(() => {
-              console.log("Document successfully added!");
-            })
-            .catch((error) => {
-              console.error("Error adding document: ", error);
-            });
-
-            // add new teacher in chat as admin
-            db.collection("chat")
-              .doc(doc.id)
-              .collection("user")
-              .doc(selectedTeacher)
-              .set({
-                admin: true
-              }).then((docRef4) => {
-                console.log("Document successfully added!");
-              });
-
+          })
+          .catch((error) => {
+            console.error("Error adding document: ", error);
           });
-        });
-
-        console.log("New Subject successfully edited: ", docRef);
 
       }
 
       // Change name in chat as well
       if (selectedName != previousSubjectName) {
 
-         // Get subject chat
-         db.collection("chat")
-         .where("name", "==", previousSubjectName)
-         .get()
+        // Get subject chat
+        db.collection("chat")
+          .where("name", "==", previousSubjectName)
+          .get()
           .then((snap) => {
             snap.docs.forEach((doc) => {
 
               if (doc.data().type == "oficial" + courseTag) {
                 db.collection("chat")
-                .doc(doc.id)
-                .set({      
-                  name: selectedName,
-                  type: "oficial" + courseTag,
-                  ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP"
-                })
-                .then(() => {
-                  console.log("Document successfully added!");
-                });
+                  .doc(doc.id)
+                  .set({
+                    name: selectedName,
+                    type: "oficial" + courseTag,
+                    ox: "q4bEvvaluivDWvXJDNhaI9acCpNXi7dP",
+                    iv: "7c5afb00aaecb1a1",
+                    notificationKey: ""
+                  })
+                  .then(() => {
+                    console.log("Document successfully added!");
+                  });
               }
 
             });
@@ -422,71 +358,71 @@ function removeSubject(id) {
 
   // Remove the subject in course
   db.collection("course")
-  .doc(courseID)
-  .collection("subject")
-  .doc(id)
-  .delete(() => {
-    recursive: true;
-  })
-  .then(() => {
-    console.log("Document successfully deleted!");
+    .doc(courseID)
+    .collection("subject")
+    .doc(id)
+    .delete(() => {
+      recursive: true;
+    })
+    .then(() => {
+      console.log("Document successfully deleted!");
 
-    // Refresh List
-    refreshSubjectList()
-  })
-  .catch((error) => {
-    console.error("Error removing document: ", error);
-  });
+      // Refresh List
+      refreshSubjectList()
+    })
+    .catch((error) => {
+      console.error("Error removing document: ", error);
+    });
 
   // Remove subject in every teacher
   db.collection("ipca_data")
-  .doc(selectedTeacher)
-  .collection("subject")
-  .where("id", "==", id)
-  .get()
-  .then((snap) => {
-    snap.docs.forEach((doc2) => {
+    .doc(selectedTeacher)
+    .collection("subject")
+    .where("id", "==", id)
+    .get()
+    .then((snap) => {
+      snap.docs.forEach((doc2) => {
 
-      db.collection("ipca_data")
-      .doc(selectedTeacher)
-      .collection("subject")
-      .doc(doc2.id)
-      .delete(() => {
-        recursive: true;
-      })
-      .then(() => {
-        console.log("Document successfully deleted!");
-      })
-      .catch((error) => {
-        console.error("Error removing document: ", error);
+        db.collection("ipca_data")
+          .doc(selectedTeacher)
+          .collection("subject")
+          .doc(doc2.id)
+          .delete(() => {
+            recursive: true;
+          })
+          .then(() => {
+            console.log("Document successfully deleted!");
+          })
+          .catch((error) => {
+            console.error("Error removing document: ", error);
+          });
+
       });
-
     });
-  });
 
   // Remove oficial chat
   db.collection("chat")
-  .where("name", "==", selectedChatName)
-  .get()
-  .then((snap) => {
-    snap.docs.forEach((doc2) => {
+    .where("name", "==", selectedChatName)
+    .get()
+    .then((snap) => {
+      snap.docs.forEach((doc2) => {
 
-      if (doc2.data().type == "oficial" + courseTag) {
+        if (doc2.data().type == "oficial" + courseTag) {
 
-        db.collection("chat")
-        .doc(doc2.id)
-        .delete(() => {
-          recursive: true;
-        })
-        .then(() => {
-          console.log("Document successfully deleted!");
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error);
-        });
-      }
+          db.collection("chat")
+            .doc(doc2.id)
+            .delete(() => {
+              recursive: true;
+            })
+            .then(() => {
+              console.log("Document successfully deleted!");
+            })
+            .catch((error) => {
+              console.error("Error removing document: ", error);
+            });
+        }
 
+      });
     });
-  });
 
 }

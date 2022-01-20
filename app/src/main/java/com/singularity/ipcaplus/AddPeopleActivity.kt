@@ -21,7 +21,7 @@ import com.singularity.ipcaplus.models.Profile
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.utils.Utilis
 
-class AddPeopleActivity: AppCompatActivity() {
+class AddPeopleActivity : AppCompatActivity() {
 
     var users = arrayListOf<Profile>()
     var selectedUsers = arrayListOf<Profile>()
@@ -73,7 +73,7 @@ class AddPeopleActivity: AppCompatActivity() {
                         )
 
                         val selectedUsersIds = arrayListOf<String>()
-                        for(user in selectedUsers) {
+                        for (user in selectedUsers) {
                             selectedUsersIds.add(user.id!!)
                         }
 
@@ -97,7 +97,7 @@ class AddPeopleActivity: AppCompatActivity() {
             binding.fabCreateChat.setOnClickListener {
 
                 val selectedUsersIds = arrayListOf<String>()
-                for(user in selectedUsers) {
+                for (user in selectedUsers) {
                     selectedUsersIds.add(user.id!!)
                 }
 
@@ -149,7 +149,9 @@ class AddPeopleActivity: AppCompatActivity() {
                 val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
                 // Set data
-                Utilis.getFile(context, "profilePictures/${users[position].id}.png", "png") { bitmap ->
+                Utilis.getFile(context,
+                    "profilePictures/${users[position].id}.png",
+                    "png") { bitmap ->
                     imageViewUser.setImageBitmap(bitmap)
                 }
 
@@ -189,7 +191,9 @@ class AddPeopleActivity: AppCompatActivity() {
                 val imageViewUser = findViewById<ImageView>(R.id.imageViewProfile)
 
                 // Set data
-                Utilis.getFile(context,"profilePictures/${selectedUsers[position].id}.png", "png") { bitmap ->
+                Utilis.getFile(context,
+                    "profilePictures/${selectedUsers[position].id}.png",
+                    "png") { bitmap ->
                     imageViewUser.setImageBitmap(bitmap)
                 }
 

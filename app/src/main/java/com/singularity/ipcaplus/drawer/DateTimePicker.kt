@@ -17,20 +17,20 @@ class DateTimePicker : View {
     private var touchY = 0f
     private var _value = 0
 
-    var value : Int
+    var value: Int
         get() = _value
         set(newValue) {
             _value = newValue
 
-            touchY = height - (newValue/100F * height)
+            touchY = height - (newValue / 100F * height)
 
             onValueChanged?.invoke(_value)
             invalidate()
         }
 
-    private var onValueChanged : ((Int)->Unit)?=null
+    private var onValueChanged: ((Int) -> Unit)? = null
 
-    fun setOnValueChanged (callback:(Int)->Unit) {
+    fun setOnValueChanged(callback: (Int) -> Unit) {
         onValueChanged = callback
     }
 
@@ -42,14 +42,16 @@ class DateTimePicker : View {
         init(attrs, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context,
+        attrs,
+        defStyle) {
         init(attrs, defStyle)
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         // Load attributes
         val a = context.obtainStyledAttributes(
-                attrs, R.styleable.DateTimePicker, defStyle, 0)
+            attrs, R.styleable.DateTimePicker, defStyle, 0)
 
         a.recycle()
     }
@@ -87,11 +89,12 @@ class DateTimePicker : View {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
         val y = event?.y
-        when(event?.action){
+        when (event?.action) {
             MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_MOVE ->{
-                touchY = y?:0f
-                _value = 100 - ((touchY/height.toFloat())*100F).toInt()
+            MotionEvent.ACTION_MOVE,
+            -> {
+                touchY = y ?: 0f
+                _value = 100 - ((touchY / height.toFloat()) * 100F).toInt()
 
                 onValueChanged?.invoke(_value)
                 invalidate()
