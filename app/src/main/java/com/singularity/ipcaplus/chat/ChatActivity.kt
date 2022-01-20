@@ -135,7 +135,6 @@ class ChatActivity : ActivityImageHelper() {
             profilePicfromTop.setImageBitmap(bitmap)
         }
 
-        println("Current Date is: $formatted")
 
         // Send Message
 
@@ -168,9 +167,6 @@ class ChatActivity : ActivityImageHelper() {
 
                             GlobalScope.launch {
                                 withContext(Dispatchers.IO) {
-                                    //APA91bEKDInIYA242YofpahBmhB57pEI4gNT63DJJenWCccJGqeSYrWzj0BSruX49DhVp2vGSY5xJ2fEJk2vhtoraT3_bbjEKw4Nx3eJKj7tttVRPjQs0Uc_OPkrcj4twR70H5tAilnY
-                                    // APA91bGaOoMTjTD2s9MU63F1AvLqP6tkwdAFE0Mqs9jbghlSgcWlfe_38CboFiE2iiWFoKqNRwhF0G_TA5X9xegTL0_Tg0OGuFadJuBj1sGZqjqCcmF1EH2ZeRU7ySHosdNkmLmmOyFF
-                                    println("AVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" + savedText)
                                     getNotificationKey(chat_id) {
 
                                         Backend.getGroupChatById(chat_id){ chat->
@@ -295,7 +291,6 @@ class ChatActivity : ActivityImageHelper() {
             R.id.chatMore -> {
                 val intent = Intent(this, ChatMoreActivity::class.java)
                 intent.putExtra("chat_id", chat_id)
-                println("3------------------------------ " + currentUserIsAdmin)
                 intent.putExtra("is_admin", currentUserIsAdmin)
                 intent.putExtra("chat_name",
                     findViewById<TextView>(R.id.AppBarTittle).text.toString())
@@ -402,7 +397,6 @@ class ChatActivity : ActivityImageHelper() {
                     val storageRef = FirebaseStorage.getInstance()
                         .getReference(filePath)
 
-                    println("----------------------------------------------------------------------" + storageRef)
                     // compressing image
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                     val byteArrayOutputStream = ByteArrayOutputStream()
@@ -413,7 +407,6 @@ class ChatActivity : ActivityImageHelper() {
                         .addOnSuccessListener {
                             storageRef.downloadUrl.addOnSuccessListener {
 
-                                println("--------------------------------------- Entrou aqui")
                                 //uploading image url
                                 Utilis.uploadFile(result.uri, filePath)
 
@@ -652,7 +645,6 @@ class ChatActivity : ActivityImageHelper() {
                             it.toString())
 
                         textViewMessage?.text = message_decripted
-                        println(message_decripted)
                         if (position == messages.size - 1) {
                             val data = Utilis.getDate(
                                 messages[position].time.seconds * 1000,
@@ -705,9 +697,6 @@ class ChatActivity : ActivityImageHelper() {
                             val extensionArray =
                                 Pattern.compile("[.]").split(message_decripted.toString())
                             val extension = extensionArray[extensionArray.size - 1]
-                            println("--------------------------------------------------------------------------------")
-                            println(extension)
-                            println(message_decripted)
                             Utilis.getFile(context,
                                 message_decripted.toString(),
                                 extension) { bitmap ->

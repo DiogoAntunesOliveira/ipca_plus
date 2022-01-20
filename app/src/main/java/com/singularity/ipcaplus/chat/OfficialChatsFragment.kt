@@ -121,7 +121,6 @@ class OfficialChatsFragment : Fragment() {
                         lastMessageTime.text = Utilis.getHours(data) + ":" + Utilis.getMinutes(data)
 
                         val keygen = getMetaOx(context, chatIds[position])
-                        println("BLOCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK $keygen")
                         Backend.getIv(chatIds[position]) { iv ->
                             val message_decripted =
                                 decryptWithAESmeta(keygen.toString(), it.message, iv.toString())

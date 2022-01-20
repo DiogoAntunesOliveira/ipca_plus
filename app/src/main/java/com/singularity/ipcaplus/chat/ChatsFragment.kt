@@ -101,7 +101,6 @@ class ChatsFragment : Fragment() {
                             chatIds.add(document.id)
                         }
                     }
-                    println("CHAT " + chats)
                     mAdapter?.notifyDataSetChanged()
                 }
             }

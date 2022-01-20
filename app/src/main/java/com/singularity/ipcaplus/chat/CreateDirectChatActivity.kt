@@ -48,7 +48,6 @@ class CreateDirectChatActivity : ActivityImageHelper() {
         var memberIds = intent.getStringArrayListExtra("users")!!
         var tokens_adress = arrayListOf<String>()
 
-        println(memberIds)
         val ivGenerated = generateRandomIV()
 
         for (memberId in memberIds){
@@ -78,7 +77,6 @@ class CreateDirectChatActivity : ActivityImageHelper() {
 
 
                 chatName = it.name
-                println("Nome antes" + chatName)
 
                 // Chat data
                 var chat = Chat(
@@ -113,7 +111,6 @@ class CreateDirectChatActivity : ActivityImageHelper() {
                         for (member in memberIds) {
                             Backend.getUserProfile(memberIds[0]) {
                                 if (member == Firebase.auth.currentUser!!.uid) {
-                                    println("IF")
                                     // Chat data
                                     chat = Chat(
                                         it.name,

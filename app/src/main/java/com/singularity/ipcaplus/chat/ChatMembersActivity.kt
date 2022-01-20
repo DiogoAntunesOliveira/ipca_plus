@@ -103,7 +103,6 @@ class ChatMembersActivity : AppCompatActivity() {
                 val intent = Intent(this, AddPeopleActivity::class.java)
                 intent.putExtra("chat_id", chat_id)
                 startActivity(intent)
-                println("-------------------> adicionar")
                 return true
             }
         }
@@ -136,7 +135,6 @@ class ChatMembersActivity : AppCompatActivity() {
         }
         else if (item.title == "Remover do grupo") {
             Backend.removeUserFromChat(chat_id, selectedUser)
-            println("-------------------> remover $selectedUser")
         }
 
         refreshList()
