@@ -127,7 +127,7 @@
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat_members.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat_more.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_create_chat.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.28306159420289856" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.2" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.29528985507246375" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_profile.xml" value="0.29528985507246375" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.20520833333333333" />
@@ -146,8 +146,10 @@
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_home.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.28306159420289856" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_event.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2375" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="1.4901960784313726" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_subject.xml" value="0.67" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.14010416666666667" />

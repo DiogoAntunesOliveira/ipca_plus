@@ -668,6 +668,11 @@ class ChatActivity : ActivityImageHelper() {
 
                         if (otherUser) {
                             val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+
+                            /*Backend.getUserProfile(messages[position].user) { user ->
+                                textViewUsername.text = getFirstAndLastName(user.name)
+                            }*/
+
                             if (imageViewUser != null) {
                                 Utilis.getFile(context,
                                     "profilePictures/${messages[position].user}.png",
@@ -677,7 +682,6 @@ class ChatActivity : ActivityImageHelper() {
                                     imageViewUser.setOnLongClickListener {
                                         //messages[position].user
                                         openShortcut(bitmap,
-                                            textViewUsername.text.toString(),
                                             messages[position].user)
                                         true
                                     }
@@ -795,7 +799,7 @@ class ChatActivity : ActivityImageHelper() {
         Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
     }
 
-    private fun openShortcut(image: Bitmap, name: String, userId: String) {
+    private fun openShortcut(image: Bitmap, userId: String) {
 
         // Variables
         val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
