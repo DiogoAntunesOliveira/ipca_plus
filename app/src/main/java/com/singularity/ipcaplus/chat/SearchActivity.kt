@@ -1,6 +1,7 @@
 package com.singularity.ipcaplus.chat
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,17 +13,22 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.SearchView
+import androidx.annotation.RequiresApi
 import androidx.core.view.size
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.singularity.ipcaplus.utils.Backend
 import com.singularity.ipcaplus.R
+import com.singularity.ipcaplus.cryptography.decryptWithAESmeta
+import com.singularity.ipcaplus.cryptography.getMetaOx
+import com.singularity.ipcaplus.cryptography.saveKeygenOx
 import com.singularity.ipcaplus.databinding.ActivitySearchBinding
 import com.singularity.ipcaplus.models.Chat
 import com.singularity.ipcaplus.utils.Utilis
 import java.util.*
-
+import java.util.regex.Pattern
 
 
 class SearchActivity: AppCompatActivity() {
@@ -31,7 +37,6 @@ class SearchActivity: AppCompatActivity() {
     var chatIds = arrayListOf<String>()
     var tempArrayChats = arrayListOf<Chat>()
     var tempArrayChatsIds = arrayListOf<String>()
-
 
     private lateinit var binding: ActivitySearchBinding
 
@@ -137,6 +142,7 @@ class SearchActivity: AppCompatActivity() {
             )
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
             holder.v.apply {
@@ -148,22 +154,34 @@ class SearchActivity: AppCompatActivity() {
                 val lastMessageText = findViewById<TextView>(R.id.textViewLastMessage)
 
 
-                textViewMessage.text = tempArrayChats[position].name
+                // set name
+                textViewMessage.text = Utilis.getFirstAndLastName(tempArrayChats[position].name)
 
+                // sync data recieved form direbase with encrypted shared preferences (key -> 1x)
+                if (chats[position].ox.isNullOrBlank() || chats[position].ox.isNullOrEmpty()){
+                    chats[position].ox = getMetaOx(context, chatIds[position])
+                }
+                else{
+                    saveKeygenOx(context, chatIds[position], chats[position].ox.toString())
+                }
 
                 // Set Last Chat Message
                 Backend.getLastMessageByChatID(chatIds[position]) {
-                    lastMessageText.text = it?.message
+
+                    val keygen = getMetaOx(context, chatIds[position])
+                    Backend.getIv(chatIds[position]) { iv ->
+                        val message_decripted =
+                            decryptWithAESmeta(keygen.toString(), it?.message, iv.toString())
+                        lastMessageText.text = message_decripted
+                    }
+
                 }
 
-
-                Utilis.getFile(this.context, "chats/" + tempArrayChats[position].id + ".png", "png") { bitmap ->
+                // set image
+                Utilis.getFile(this.context, "chats/${chatIds[position]}/icon.png", "png") { bitmap ->
                     imageViewImage.setImageBitmap(bitmap)
                 }
 
-                imageViewImage.setImageResource(R.drawable.common_full_open_on_phone)
-
-                textViewMessage.text = tempArrayChats[position].name
             }
             holder.v.setOnClickListener {
                 val intent = Intent(this@SearchActivity, ChatActivity::class.java)
