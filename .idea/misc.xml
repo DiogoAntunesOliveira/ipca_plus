@@ -132,6 +132,7 @@
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_profile.xml" value="0.29528985507246375" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_schedule.xml" value="0.5" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_share_with_friends.xml" value="0.25" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_splash_screen.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_verify_security_number.xml" value="0.2375" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_welcome.xml" value="0.2375" />
@@ -142,6 +143,7 @@
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_notifications_manager.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_select_image.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_select_name.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_home.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.28306159420289856" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2375" />

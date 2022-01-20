@@ -46,7 +46,7 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
         binding = ActivityVerifySecurityNumberBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        // Custom action bar
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.custom_bar_layout)
         findViewById<TextView>(R.id.AppBarTittle).text = "Verificação de Segurança"
@@ -62,14 +62,17 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
 
         //keygenHash = binding.verifySecurity.toString()
         vQRCode = findViewById(R.id.qrImageView)
+
         //keygenHash = "662ede816988e58fb6d057d9d85605e0"
         val keyCall = getMetaOx(this, chat_id)
+
+        // Customize Ox key on TextView
         val keyCallSpace = blankSpaces(keyCall.toString())
         keygenHash = keyCall.toString()
         val keygenData = keygenHash.trim()
-
         hexaHashKey.text = keyCallSpace
 
+        // Animation
         hexaHashKey.animate().apply {
             duration = 1000
             rotationXBy(350f)
@@ -82,7 +85,7 @@ class VerifySecurityNumberActivity : AppCompatActivity() {
 
         if (keygenData.isNullOrEmpty()) {
             Snackbar.make(verifySecurity,
-                "You need to Sign Up with (ipca.pt) email!", Snackbar.LENGTH_SHORT).show()
+                "Please make sure you have a normal log in", Snackbar.LENGTH_SHORT).show()
 
         } else {
             val writer = QRCodeWriter()
