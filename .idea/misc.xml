@@ -111,7 +111,21 @@
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_pesquisa.xml" value="0.26268115942028986" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/drawable/button_green.xml" value="0.2203125" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/drawable/button_register.xml" value="0.2203125" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.6693333333333333" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.11367753623188406" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.33" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="1.0" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_file.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.5" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others_file.xml" value="0.33" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others_image.xml" value="0.5" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.25" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self_file.xml" value="0.67" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self_image.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.128125" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/all_rounded_corners_dialog.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/button_week_day.xml" value="1.0" />
