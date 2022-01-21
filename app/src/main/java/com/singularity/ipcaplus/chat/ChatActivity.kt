@@ -235,8 +235,6 @@ class ChatActivity : ActivityImageHelper() {
         binding.recycleViewChat.adapter = mAdapter
 
         binding.recycleViewChat.setItemViewCacheSize(20)
-        binding.recycleViewChat.isDrawingCacheEnabled = true
-        binding.recycleViewChat.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         mLayoutManager!!.reverseLayout = true
 
@@ -667,13 +665,16 @@ class ChatActivity : ActivityImageHelper() {
                         }
 
                         if (otherUser) {
-                            val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+                            var imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
 
                             /*Backend.getUserProfile(messages[position].user) { user ->
                                 textViewUsername.text = getFirstAndLastName(user.name)
                             }*/
 
                             if (imageViewUser != null) {
+
+                                println("------------- " + messages[position].user)
+
                                 Utilis.getFile(context,
                                     "profilePictures/${messages[position].user}.png",
                                     "png") { bitmap ->
@@ -723,6 +724,7 @@ class ChatActivity : ActivityImageHelper() {
 
                     }
 
+                    
                 } else if (messageType == "file") {
 
                     getIv(chat_id) {

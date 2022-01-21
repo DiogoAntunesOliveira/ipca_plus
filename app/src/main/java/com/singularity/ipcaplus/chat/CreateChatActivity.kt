@@ -122,7 +122,6 @@ class CreateChatActivity : ActivityImageHelper() {
                         // Getting all of tokens of  profile associated devices
                         Backend.getAllTokens(member) {
                             tokens_adress.addAll(it)
-                            println("TOUUUUUUUUU $tokens_adress")
                             docId = documentReference.id
                         }
                         if (member == Firebase.auth.currentUser!!.uid) {
@@ -147,8 +146,7 @@ class CreateChatActivity : ActivityImageHelper() {
                             updateNotificationKeyCamp(docId, noteKey)
 
                             println(docId)
-                            println("TOUUUUUUUUU FINALLL $tokens_adress")
-                            println("este $noteKey")
+
                             startActivity(intent)
                         }
                     }
