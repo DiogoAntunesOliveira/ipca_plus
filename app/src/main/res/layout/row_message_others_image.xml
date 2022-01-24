@@ -42,7 +42,8 @@
         android:textColor="@color/green_200"
         android:textSize="8sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/viewImageProfile"

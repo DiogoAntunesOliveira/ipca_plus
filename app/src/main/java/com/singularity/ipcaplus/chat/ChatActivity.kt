@@ -721,7 +721,31 @@ class ChatActivity : ActivityImageHelper() {
                                 imageView.setImageBitmap(bitmap)
                             }
                         }
+                        if (otherUser) {
+                            var imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
 
+                            /*Backend.getUserProfile(messages[position].user) { user ->
+                                textViewUsername.text = getFirstAndLastName(user.name)
+                            }*/
+
+                            if (imageViewUser != null) {
+
+                                println("------------- " + messages[position].user)
+
+                                Utilis.getFile(context,
+                                    "profilePictures/${messages[position].user}.png",
+                                    "png") { bitmap ->
+                                    imageViewUser.setImageBitmap(bitmap)
+
+                                    imageViewUser.setOnLongClickListener {
+                                        //messages[position].user
+                                        openShortcut(bitmap,
+                                            messages[position].user)
+                                        true
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     
@@ -750,6 +774,31 @@ class ChatActivity : ActivityImageHelper() {
                             downloadFileRequest("chats/$chat_id/messages/", str)
                         }
 
+                        if (otherUser) {
+                            var imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+
+                            /*Backend.getUserProfile(messages[position].user) { user ->
+                                textViewUsername.text = getFirstAndLastName(user.name)
+                            }*/
+
+                            if (imageViewUser != null) {
+
+                                println("------------- " + messages[position].user)
+
+                                Utilis.getFile(context,
+                                    "profilePictures/${messages[position].user}.png",
+                                    "png") { bitmap ->
+                                    imageViewUser.setImageBitmap(bitmap)
+
+                                    imageViewUser.setOnLongClickListener {
+                                        //messages[position].user
+                                        openShortcut(bitmap,
+                                            messages[position].user)
+                                        true
+                                    }
+                                }
+                            }
+                        }
                     }
 
                 }
