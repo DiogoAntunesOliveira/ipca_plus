@@ -36,7 +36,7 @@ function login(id) {
 
     setTimeout(function(){
 
-        if (pass.value == "!Root1793" && email.value == "admin@ipca.pt") 
+        if (pass.value == "Admin" && email.value == "admin@ipca.pt") 
             document.location.href = "pages/dashboard.html";
         else {
             pass.value = "none";

@@ -1,5 +1,7 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 h1 {
@@ -29,9 +31,16 @@ h1 {
  ****************************
 */
 
+.responsive {
+    height: auto;
+    width: 100%; 
+    padding: 20px;
+    
+}
+
 .sideBar {
     height: 100%;
-    width: 10%; 
+    width: 11%; 
 
     /* Stay in place */
     position: fixed;
@@ -42,19 +51,24 @@ h1 {
     background-color: #037B4A;
     /* Black*/
     overflow-x: hidden;
+    overflow-y: hidden;
     /* Disable horizontal scroll */
     padding-top: 60px;
-
+    padding-left: 20px;
+    padding-right: 10px;
+    
     /*border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;*/
+    box-shadow: 13px 2px 17px -12px rgba(0,0,0,0.52);
 }
 
 .sideBar a {
-    padding: 6px 8px 6px 16px;
+    
     text-decoration: none;
-    font-size: 25px;
+    font-size: 1vw;
     color: white;
     display: block;
+
 
 }
 
