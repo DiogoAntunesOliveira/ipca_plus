@@ -202,7 +202,7 @@ class ChatFilesActivity : AppCompatActivity() {
                     "Tens certeza que queres apagar este ficheiro?") {
 
                     fileRef.delete()
-                        .addOnSuccessListener {
+                        .addOnCompleteListener {
                             refreshList()
                         }
                 }
