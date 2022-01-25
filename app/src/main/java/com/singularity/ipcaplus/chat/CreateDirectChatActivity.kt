@@ -146,6 +146,7 @@ class CreateDirectChatActivity : ActivityImageHelper() {
                 }.addOnCompleteListener {
                     val intent = Intent(this, DrawerActivty::class.java)
                     startActivity(intent)
+                    finish()
                 }
 
         }

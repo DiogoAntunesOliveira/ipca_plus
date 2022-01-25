@@ -893,18 +893,20 @@ object Backend {
 
         var chatId: String? = null
 
-        for (id in chatIds) {
+        for (i in chatIds.indices) {
             db.collection("chat")
-                .document(id!!)
+                .document(chatIds[i]!!)
                 .collection("user")
                 .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         if (document.id == userId) {
-                            chatId = document.id
+                            chatId = chatIds[i]
                         }
                     }
-                    callBack(chatId)
+                    if (i == chatIds.size - 1){
+                        callBack(chatId)
+                    }
                 }
         }
 

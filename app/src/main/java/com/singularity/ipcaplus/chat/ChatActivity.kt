@@ -79,9 +79,6 @@ class ChatActivity : ActivityImageHelper() {
     var currentUserIsAdmin = false
     private lateinit var binding: ActivityChatBinding
     private lateinit var chat_id: String
-    var tokens_adress = arrayListOf<String>()
-    var chat_user_uids = arrayListOf<String>()
-    var chat_users = arrayListOf<Profile>()
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
 
@@ -102,6 +99,8 @@ class ChatActivity : ActivityImageHelper() {
 
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        println("CONAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.appbar_custom_layout_chat)
@@ -561,7 +560,10 @@ class ChatActivity : ActivityImageHelper() {
     // When the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
-        return true
+        val intent = Intent(this, DrawerActivty::class.java)
+        startActivity(intent)
+        finish()
+        return false
     }
 
 

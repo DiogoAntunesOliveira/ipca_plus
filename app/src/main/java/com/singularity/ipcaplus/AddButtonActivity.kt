@@ -30,11 +30,9 @@ class AddButtonActivity : AppCompatActivity() {
     var chats = arrayListOf<Chat>()
     var chatIds = arrayListOf<String?>()
     val userIds = arrayListOf<String>()
-    var directChat: String? = null
     val currentUser = Firebase.auth.currentUser!!.uid
 
     var currentUserchats = arrayListOf<String>()
-    var selectedUserchats = arrayListOf<String>()
 
     private lateinit var binding: ActivityAddButtonBinding
 
@@ -49,6 +47,8 @@ class AddButtonActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_button)
         binding = ActivityAddButtonBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        println("aqui")
 
         // finish de activity
         binding.backBtn.setOnClickListener() {
@@ -132,30 +132,38 @@ class AddButtonActivity : AppCompatActivity() {
             holder.v.setOnClickListener {
                 Backend.getAllDirectChatIdsByUser(currentUser) {
                     chatIds.addAll(it)
+                    println("aqui2")
 
                     if (chatIds.isNotEmpty()) {
-                        Backend.getDirectChatById(it, users[position].id.toString()) {
-                            directChat = it
 
-                            if (directChat.isNullOrEmpty()) {
+                        Backend.getDirectChatById(it, users[position].id.toString()) { chat ->
+                            println("CHAT $chat")
+
+                            if (chat.isNullOrEmpty()) {
+                                println("Criou")
                                 userIds.add(users[position].id.toString())
                                 userIds.add(currentUser)
 
-                                val intent = Intent(this@AddButtonActivity,
-                                    CreateDirectChatActivity::class.java)
+                                val intent =
+                                    Intent(this@AddButtonActivity, CreateDirectChatActivity::class.java)
                                 intent.putExtra("type", "chat")
                                 intent.putExtra("users", userIds)
                                 startActivity(intent)
+                                finish()
 
                             } else {
+                                println("Abriu")
                                 // Abrir chat ja criado
                                 val intent =
                                     Intent(this@AddButtonActivity, ChatActivity::class.java)
-                                intent.putExtra("chat_id", directChat)
+                                intent.putExtra("chat_id", chat)
                                 startActivity(intent)
+                                finish()
                             }
                         }
+
                     } else {
+                        println("Criou2")
                         userIds.add(users[position].id.toString())
                         userIds.add(currentUser)
 
@@ -164,6 +172,7 @@ class AddButtonActivity : AppCompatActivity() {
                         intent.putExtra("users", userIds)
                         intent.putExtra("type", "chat")
                         startActivity(intent)
+                        finish()
                     }
 
                 }
