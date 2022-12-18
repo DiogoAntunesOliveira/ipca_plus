@@ -1,5 +1,5 @@
 # IPCA-Plus
-Mobile app that aims to help IPCA teachers and students to have easier communication. With our software, students and professors will have a direct and exclusive means of communication regarding IPCA matters, thus making it easier to choose a communication application.
+Mobile app that aims to help IPCA teachers and students to have easier communication. With our software, students and professors will have a direct and exclusive means of communication regarding IPCA matters, thus making it easier to choose a communication applicationn.
 
 Group Elements
 
