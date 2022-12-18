@@ -40,17 +40,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-          android:src="@drawable/ic_logout"/>
+            android:src="@drawable/ic_logout"/>
 
         <TextView
             android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/poppins"
+            android:fontFamily="@font/poppins_semibold"
             android:gravity="start"
             android:text="Sair"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
       </LinearLayout>
 
     </com.google.android.material.navigation.NavigationView>

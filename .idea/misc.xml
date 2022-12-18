@@ -70,11 +70,8 @@
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_event.xml" value="0.7456647398843931" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_file.xml" value="0.5" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_file_self.xml" value="0.32563405797101447" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2375" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_others_file.xml" value="0.2390625" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.3546195652173913" />
-        <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_message_self_file.xml" value="0.2390625" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_search.xml" value="0.2375" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_subject.xml" value="0.3546195652173913" />
         <entry key="..\:/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/row_user.xml" value="0.2375" />
@@ -111,43 +108,31 @@
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/layout/row_pesquisa.xml" value="0.26268115942028986" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/ProjetosAndroid/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/drawable/button_green.xml" value="0.2203125" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/drawable/button_register.xml" value="0.2203125" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.6693333333333333" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.11367753623188406" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.33" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="1.0" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_file.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.5" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others_file.xml" value="0.33" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others_image.xml" value="0.5" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.25" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self_file.xml" value="0.67" />
+        <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self_image.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Asus/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.128125" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/all_rounded_corners_dialog.xml" value="0.22135416666666666" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/button_week_day.xml" value="1.0" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.22135416666666666" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/pop_up_round_corners.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/round_corner_drawer.xml" value="0.33" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/rounded_dialog.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/drawable/rounded_shape.xml" value="0.3828125" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_add_event.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_calendar.xml" value="0.29528985507246375" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_capture_portait.xml" value="0.35260416666666666" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.3982532751091703" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat_members.xml" value="0.24010416666666667" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_chat_more.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_create_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_drawer_activty.xml" value="0.28306159420289856" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_login.xml" value="0.29528985507246375" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_profile.xml" value="0.29528985507246375" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_register.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_schedule.xml" value="0.5" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_share_with_friends.xml" value="0.25" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_splash_screen.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_verify_security_number.xml" value="0.2375" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/activity_welcome.xml" value="0.2375" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/app_bar_main.xml" value="0.28306159420289856" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/appbar_custom_layout_chat.xml" value="0.24010416666666667" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/custom_bar_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_add_file.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_notifications_manager.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_select_image.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/dialog_select_name.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/fragment_home.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.28306159420289856" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.2375" />
-        <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="1.4901960784313726" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/diogo/Documents/GitHub/ipca_plus/app/src/main/res/menu/drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/i/AndroidStudioProjects/ipca_plus/app/src/main/res/layout/activity_chat.xml" value="0.14010416666666667" />
@@ -179,10 +164,13 @@
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/nav_header_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_chat.xml" value="0.33" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_event.xml" value="0.5" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others_file.xml" value="0.25407608695652173" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_others_image.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_message_self_file.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_pesquisa.xml" value="0.33" />
-        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_search.xml" value="0.5" />
+        <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_search.xml" value="0.25407608695652173" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_user.xml" value="0.33" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/layout/row_user_in_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/nunoi/Documents/GitHub/ipca_plus/app/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
@@ -197,9 +185,11 @@
         <entry key="app/src/main/res/drawable/round_corner_drawer.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/rounded_shape.xml" value="0.20208333333333334" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.1265625" />
+        <entry key="app/src/main/res/layout/activity_chat_more.xml" value="0.19739583333333333" />
         <entry key="app/src/main/res/layout/activity_drawer.xml" value="0.35104166666666664" />
-        <entry key="app/src/main/res/layout/activity_drawer_activty.xml" value="0.14402173913043478" />
+        <entry key="app/src/main/res/layout/activity_drawer_activty.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.19427083333333334" />
+        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.32563405797101447" />
         <entry key="app/src/main/res/layout/activity_tab.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_welcome.xml" value="0.33" />
@@ -207,6 +197,7 @@
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.1707193515704154" />
         <entry key="app/src/main/res/layout/content_drawer.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.32563405797101447" />
+        <entry key="app/src/main/res/layout/dialog_notifications_manager.xml" value="0.19739583333333333" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/fragment_official_chats.xml" value="0.32563405797101447" />
@@ -215,6 +206,7 @@
         <entry key="app/src/main/res/layout/notification.xml" value="0.5352697095435685" />
         <entry key="app/src/main/res/layout/row_chat.xml" value="0.32563405797101447" />
         <entry key="app/src/main/res/layout/row_message_self.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/row_message_self_file.xml" value="0.33" />
         <entry key="app/src/main/res/menu/activity_drawer.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/menu/drawer.xml" value="0.325" />
       </map>

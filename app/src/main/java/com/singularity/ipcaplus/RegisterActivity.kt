@@ -33,7 +33,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val pattern: Pattern =
             Pattern.compile("^" +
-                    "(?=.*[@#$%^&+=])" +
+                    "(?=.*[@#$%^&+=£.!,#])" +
                     "(?=.*[A-Z])" +
                     "(?=\\S+$)" +
                     ".{8,}" +

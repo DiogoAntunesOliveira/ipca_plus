@@ -1,7 +1,8 @@
 // Get data
 
 // Get selected course id
-let courseID = getParameterByName("id", window.location.href);
+//let courseID = getParameterByName("id", window.location.href);
+let courseID = localStorage.getItem("id");
 let courseTag = "";
 let courseName = "";
 let previousTeacher = "";

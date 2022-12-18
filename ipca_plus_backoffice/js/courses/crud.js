@@ -46,8 +46,9 @@ function addCourseToList(doc) {
 
 
 function forSubjectPage(id) {
-  console.log(id)
-  document.location.href = "subjects.html?id=" + id + "";
+  console.log(id);
+  localStorage.setItem("id", id);
+  document.location.href = "subjects.html";
 }
 
 

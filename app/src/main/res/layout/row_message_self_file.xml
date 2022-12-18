@@ -8,10 +8,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout8"
         android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="195dp"
+        android:layout_height="80dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/rounded_shape"
         android:backgroundTint="@color/green_200"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,15 +20,18 @@
 
         <TextView
             android:id="@+id/timeLastMessage2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_width="159dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="1dp"
             android:layout_marginTop="39dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="39dp"
-            android:text="Name File"
+            android:text="."
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewSend2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageViewSend"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,9 +67,10 @@
         android:id="@+id/timeLastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="26dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
         android:text="Time"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout8" />
 

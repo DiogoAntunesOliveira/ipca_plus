@@ -120,6 +120,7 @@ class ChatMoreActivity : ActivityImageHelper() {
             startActivity(intent)
         }
 
+        binding.notifications.visibility = View.GONE
         binding.notifications.setOnClickListener {
             openNotificationsDialog(tokens_adress, tokens_adress_user)
 

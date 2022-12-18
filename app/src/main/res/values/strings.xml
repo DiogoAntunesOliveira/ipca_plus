@@ -30,7 +30,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="perfil">Perfil</string>
     <string name="contactos">Contactos</string>
-    <string name="info_key">Para verificar a seguranca da sua encriptacao com este\n utilizador, compare os numeros acima com o dispositivo do outro utilizador\n Tambem pode digitalizar o codigo atraves do codigo QR no telemovel de outra pessoa</string>
+    <string name="info_key">Para verificar a segurança da sua encriptação com este utilizador, compare os numeros acima com o dispositivo do outro. Tambem pode digitalizar o codigo através do codigo QR no telemóvel de outra pessoa</string>
     <string name="marcar_como_verificado">Marcar como verificado!</string>
     <string name="Oxr_ex">00000 00000 00000\n 00000 00000 00000\n 00000 00000 00000</string>
     <string name="toque_para_ler">Toque para ler</string>

@@ -79,9 +79,6 @@ class ChatActivity : ActivityImageHelper() {
     var currentUserIsAdmin = false
     private lateinit var binding: ActivityChatBinding
     private lateinit var chat_id: String
-    var tokens_adress = arrayListOf<String>()
-    var chat_user_uids = arrayListOf<String>()
-    var chat_users = arrayListOf<Profile>()
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: LinearLayoutManager? = null
 
@@ -102,6 +99,8 @@ class ChatActivity : ActivityImageHelper() {
 
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        println("CONAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.appbar_custom_layout_chat)
@@ -235,8 +234,6 @@ class ChatActivity : ActivityImageHelper() {
         binding.recycleViewChat.adapter = mAdapter
 
         binding.recycleViewChat.setItemViewCacheSize(20)
-        binding.recycleViewChat.isDrawingCacheEnabled = true
-        binding.recycleViewChat.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         mLayoutManager!!.reverseLayout = true
 
@@ -563,7 +560,10 @@ class ChatActivity : ActivityImageHelper() {
     // When the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
-        return true
+        val intent = Intent(this, DrawerActivty::class.java)
+        startActivity(intent)
+        finish()
+        return false
     }
 
 
@@ -667,8 +667,16 @@ class ChatActivity : ActivityImageHelper() {
                         }
 
                         if (otherUser) {
-                            val imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+                            var imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+
+                            /*Backend.getUserProfile(messages[position].user) { user ->
+                                textViewUsername.text = getFirstAndLastName(user.name)
+                            }*/
+
                             if (imageViewUser != null) {
+
+                                println("------------- " + messages[position].user)
+
                                 Utilis.getFile(context,
                                     "profilePictures/${messages[position].user}.png",
                                     "png") { bitmap ->
@@ -677,7 +685,6 @@ class ChatActivity : ActivityImageHelper() {
                                     imageViewUser.setOnLongClickListener {
                                         //messages[position].user
                                         openShortcut(bitmap,
-                                            textViewUsername.text.toString(),
                                             messages[position].user)
                                         true
                                     }
@@ -716,9 +723,34 @@ class ChatActivity : ActivityImageHelper() {
                                 imageView.setImageBitmap(bitmap)
                             }
                         }
+                        if (otherUser) {
+                            var imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
 
+                            /*Backend.getUserProfile(messages[position].user) { user ->
+                                textViewUsername.text = getFirstAndLastName(user.name)
+                            }*/
+
+                            if (imageViewUser != null) {
+
+                                println("------------- " + messages[position].user)
+
+                                Utilis.getFile(context,
+                                    "profilePictures/${messages[position].user}.png",
+                                    "png") { bitmap ->
+                                    imageViewUser.setImageBitmap(bitmap)
+
+                                    imageViewUser.setOnLongClickListener {
+                                        //messages[position].user
+                                        openShortcut(bitmap,
+                                            messages[position].user)
+                                        true
+                                    }
+                                }
+                            }
+                        }
                     }
 
+                    
                 } else if (messageType == "file") {
 
                     getIv(chat_id) {
@@ -744,6 +776,31 @@ class ChatActivity : ActivityImageHelper() {
                             downloadFileRequest("chats/$chat_id/messages/", str)
                         }
 
+                        if (otherUser) {
+                            var imageViewUser = findViewById<ImageView?>(R.id.imageViewUser)
+
+                            /*Backend.getUserProfile(messages[position].user) { user ->
+                                textViewUsername.text = getFirstAndLastName(user.name)
+                            }*/
+
+                            if (imageViewUser != null) {
+
+                                println("------------- " + messages[position].user)
+
+                                Utilis.getFile(context,
+                                    "profilePictures/${messages[position].user}.png",
+                                    "png") { bitmap ->
+                                    imageViewUser.setImageBitmap(bitmap)
+
+                                    imageViewUser.setOnLongClickListener {
+                                        //messages[position].user
+                                        openShortcut(bitmap,
+                                            messages[position].user)
+                                        true
+                                    }
+                                }
+                            }
+                        }
                     }
 
                 }
@@ -795,7 +852,7 @@ class ChatActivity : ActivityImageHelper() {
         Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
     }
 
-    private fun openShortcut(image: Bitmap, name: String, userId: String) {
+    private fun openShortcut(image: Bitmap, userId: String) {
 
         // Variables
         val dialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)

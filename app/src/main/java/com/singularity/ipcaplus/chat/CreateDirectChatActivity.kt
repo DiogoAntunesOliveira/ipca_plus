@@ -28,10 +28,7 @@ import com.singularity.ipcaplus.utils.Utilis.buildSystemMessage
 import com.singularity.ipcaplus.utils.Utilis.createNotificationGroup
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class CreateDirectChatActivity : ActivityImageHelper() {
 
@@ -146,10 +143,11 @@ class CreateDirectChatActivity : ActivityImageHelper() {
                 }
                 .addOnFailureListener { e ->
                     Log.w(ContentValues.TAG, "Error adding document", e)
+                }.addOnCompleteListener {
+                    val intent = Intent(this, DrawerActivty::class.java)
+                    startActivity(intent)
+                    finish()
                 }
-
-            val intent = Intent(this, DrawerActivty::class.java)
-            startActivity(intent)
 
         }
 

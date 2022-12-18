@@ -138,6 +138,21 @@ class CalendarActivity : AppCompatActivity() {
         binding.recycleViewEvents.adapter = eventAdapter
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Get All Events This Month
+        if (chat_id == "none") {
+            addAllMonthEvents(binding.monthTitle.text.toString())
+            placeCustomCalendarPinsGeneral()
+        } else {
+            addAllChatMonthEvents(binding.monthTitle.text.toString(), chat_id)
+            placeCustomCalendarPinsChat()
+        }
+
+    }
+
+
     // When the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
